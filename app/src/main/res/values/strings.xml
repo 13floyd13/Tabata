@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Tabata</string>
+    <string name="titre">TABATA</string>
+    <string name="modifier">Modifier un Entrainement</string>
+    <string name="nouveau">Nouvel Entrainement</string>
+    <string name="preparation">Preparation</string>
+    <string name="sequence">Sequence</string>
+    <string name="cycle">Cycle</string>
+    <string name="travail">Travail</string>
+    <string name="repos">Repos</string>
+    <string name="reposLong">Repos Long</string>
+    <string name="choisirEntrainement">Choisir un entrainement</string>
+</resources>
