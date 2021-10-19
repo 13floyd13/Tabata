@@ -10,4 +10,6 @@
     <string name="repos">Repos</string>
     <string name="reposLong">Repos Long</string>
     <string name="choisirEntrainement">Choisir un entrainement</string>
+    <string name="creerEntrainement">Créer un Entrainement</string>
+    <string name="historique">Historique</string>
 </resources>

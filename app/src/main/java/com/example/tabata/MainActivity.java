@@ -2,6 +2,7 @@ package com.example.tabata;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,5 +15,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onChoixEntrainement(View view) {
+
+        Intent goToChoixEntrainement = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(goToChoixEntrainement);
+    }
+
+    public void onCreationEntrainement(View view) {
+        Intent goToCreationEntrainement = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(goToCreationEntrainement);
+    }
+
+    public void onHistorique(View view) {
     }
 }
