@@ -1,9 +1,11 @@
-package com.example.tabata;
+package controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.tabata.R;
 
 public class MainActivity extends AppCompatActivity {
 
