@@ -1,4 +1,4 @@
-package modele;
+package data;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -9,12 +9,15 @@ import androidx.room.Update;
 
 import java.util.List;
 
+import modele.Cycle;
+import modele.CycleAvecTravails;
+
 @Dao
 public interface CycleDao {
 
     @Transaction
     @Query("SELECT * FROM Cycle")
-    List<Travail> getAll();
+    List<CycleAvecTravails> getAll();
 
     @Insert
     void insert(Cycle cycle);

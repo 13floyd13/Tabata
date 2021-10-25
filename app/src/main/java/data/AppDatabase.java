@@ -1,8 +1,10 @@
-package modele;
+package data;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
+import modele.Cycle;
+import modele.Travail;
 
 
 @Database(entities = {Travail.class, Cycle.class}, version = 1, exportSchema = false)

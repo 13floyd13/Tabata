@@ -50,7 +50,7 @@ public class Travail implements Serializable {
         return travailId;
     }
 
-    public void setId(int id) {
+    public void setTravailId(int id) {
         this.travailId = id;
     }
 

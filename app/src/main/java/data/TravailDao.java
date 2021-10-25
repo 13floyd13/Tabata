@@ -1,4 +1,4 @@
-package modele;
+package data;
 
 
 import androidx.room.Dao;
@@ -9,6 +9,8 @@ import androidx.room.Update;
 
 
 import java.util.List;
+
+import modele.Travail;
 
 @Dao
 public interface TravailDao {

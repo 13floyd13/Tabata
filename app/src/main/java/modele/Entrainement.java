@@ -1,37 +1,38 @@
 package modele;
 
 import androidx.room.ColumnInfo;
-import androidx.room.PrimaryKey;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 @Entity
-public class Sequence {
+public class Entrainement {
 
     //Attributs
     @PrimaryKey(autoGenerate = true)
-    private int sequenceId;
+    private int entrainementId;
 
     @ColumnInfo(name = "nom")
     private String nom;
 
-    @ColumnInfo(name = "tempsReposLong")
-    private int tempsReposLong;
+    @ColumnInfo(name = "tempsPreparation")
+    private int tempsPreparation;
 
     @ColumnInfo(name = "description")
     private String description;
 
     //Constructeur
-    public Sequence(String nom){
+    public Entrainement(String nom){
         this.nom = nom;
     }
 
     //Getters et Setters
-    public int getSequenceId() {
-        return sequenceId;
+
+    public int getEntrainementId() {
+        return entrainementId;
     }
 
-    public void setSequenceId(int sequenceId) {
-        this.sequenceId = sequenceId;
+    public void setEntrainementId(int entrainementId) {
+        entrainementId = entrainementId;
     }
 
     public String getNom() {
@@ -42,12 +43,12 @@ public class Sequence {
         this.nom = nom;
     }
 
-    public int getTempsReposLong() {
-        return tempsReposLong;
+    public int getTempsPreparation() {
+        return tempsPreparation;
     }
 
-    public void setTempsReposLong(int tempsReposLong) {
-        this.tempsReposLong = tempsReposLong;
+    public void setTempsPreparation(int tempsPreparation) {
+        this.tempsPreparation = tempsPreparation;
     }
 
     public String getDescription() {
