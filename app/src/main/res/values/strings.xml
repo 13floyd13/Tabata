@@ -3,7 +3,7 @@
     <string name="titre">TABATA</string>
     <string name="modifier">Modifier un Entrainement</string>
     <string name="nouveau">Nouvel Entrainement</string>
-    <string name="preparation">Preparation</string>
+    <string name="preparation">Temps de Preparation :</string>
     <string name="sequence">Sequence</string>
     <string name="cycle">Cycle</string>
     <string name="travail">Travail</string>
@@ -12,4 +12,8 @@
     <string name="choisirEntrainement">Choisir un entrainement</string>
     <string name="creerEntrainement">Créer un Entrainement</string>
     <string name="historique">Historique</string>
+    <string name="creationEntrainement">Création Entrainement</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="space"> </string>
+    <string name="creer">Créer</string>
 </resources>

@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tabata">
         <activity
+            android:name="controller.CreationEntrainement"
+            android:exported="true" />
+        <activity
             android:name="controller.MainActivity"
             android:exported="true">
             <intent-filter>
