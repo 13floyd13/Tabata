@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.2" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonChoisirEntrainement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
@@ -31,14 +31,30 @@
         app:layout_constraintTop_toBottomOf="@+id/textView"></Button>
 
     <Button
+        android:id="@+id/buttonCreationEntrainement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
+        android:onClick="onCreationEntrainement"
+        android:text="@string/creerEntrainement"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="100dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button">
+        android:layout_marginEnd="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/buttonChoisirEntrainement"
+        app:layout_constraintTop_toBottomOf="@+id/buttonChoisirEntrainement">
+    </Button>
 
+    <Button
+        android:id="@+id/historique"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="50dp"
+        android:onClick="onHistorique"
+        android:text="@string/historique"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
     </Button>
 
