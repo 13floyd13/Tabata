@@ -16,29 +16,67 @@
         android:id="@+id/titrePage"/>
 
     <TextView
+        android:id="@+id/textNomEntrainement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/nom"
+        app:layout_constraintTop_toBottomOf="@+id/titrePage"
+        tools:ignore="MissingConstraints"/>
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toRightOf="@+id/textNomEntrainement"
+        app:layout_constraintTop_toBottomOf="@+id/titrePage"
+        android:id="@+id/nomEntrainement"
+        />
+
+    <TextView
+        android:id="@+id/textDescriptionEntrainement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/description"
+        app:layout_constraintTop_toBottomOf="@+id/textNomEntrainement"
+        tools:ignore="MissingConstraints"/>
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toRightOf="@+id/textDescriptionEntrainement"
+        app:layout_constraintTop_toBottomOf="@+id/textNomEntrainement"
+        android:id="@+id/descriptionEntrainement"
+        />
+
+    <TextView
         android:id="@+id/textTempsPreparation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="@string/preparation"
-        app:layout_constraintTop_toBottomOf="@+id/titrePage"
+        app:layout_constraintTop_toBottomOf="@+id/textDescriptionEntrainement"
         tools:ignore="MissingConstraints"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:inputType="numberSigned"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         app:layout_constraintLeft_toRightOf="@+id/textTempsPreparation"
-        app:layout_constraintTop_toBottomOf="@+id/titrePage"
+        app:layout_constraintTop_toBottomOf="@+id/textDescriptionEntrainement"
         android:id="@+id/tempsPreparation"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/titrePage"
+        app:layout_constraintTop_toBottomOf="@+id/textDescriptionEntrainement"
         app:layout_constraintLeft_toRightOf="@+id/tempsPreparation"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="5dp"
@@ -68,12 +106,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="@string/preparation"
+        android:text="@string/tempsReposLong"
         app:layout_constraintTop_toBottomOf="@+id/buttonCreerSequence"
         tools:ignore="MissingConstraints"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:inputType="numberSigned"
         android:layout_marginLeft="5dp"
@@ -91,6 +129,22 @@
         android:layout_marginTop="30dp"
         android:layout_marginLeft="5dp"
         android:text="secondes"></TextView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tempsRepos"
+        android:layout_marginTop="30dp"
+        android:text="@string/save"
+        android:id="@+id/buttonSave"
+        android:onClick="onSave"></Button>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSave"
+        android:layout_marginTop="30dp"
+        android:id="@+id/listSequence"></ListView>
 
 
 

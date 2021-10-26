@@ -16,4 +16,8 @@
     <string name="ajouter">Ajouter</string>
     <string name="space"> </string>
     <string name="creer">Créer</string>
+    <string name="nom">Nom</string>
+    <string name="description">Description</string>
+    <string name="tempsReposLong">Temps de repos long</string>
+    <string name="save">sauvegarder</string>
 </resources>
