@@ -13,13 +13,19 @@ import android.widget.Toast;
 
 import com.example.tabata.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import data.DatabaseClient;
 import modele.Entrainement;
+import modele.EntrainementAvecSequences;
 import modele.Sequence;
 
 public class CreationEntrainement extends AppCompatActivity {
 
     String nomEntrainement;
+    DatabaseClient mDb;
+    List<Sequence> listSequence;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +33,7 @@ public class CreationEntrainement extends AppCompatActivity {
 
 
         //Récupération du DatabaseClient
-        //mDb = DatabaseClient.getInstance(getApplicationContext());
+        mDb = DatabaseClient.getInstance(getApplicationContext());
 
         //On récupère des strings en ressources à concatener
         String ajouter = getResources().getString(R.string.ajouter);
@@ -51,6 +57,7 @@ public class CreationEntrainement extends AppCompatActivity {
     }
 
     public void onAjouterSequence(View view) {
+
     }
 
     public void onCreerSequence(View view) {
@@ -59,41 +66,66 @@ public class CreationEntrainement extends AppCompatActivity {
     public void onSave(View view) {
         //récupération du nom de la séquence
         EditText eNomEntrainement = findViewById(R.id.nomEntrainement);
-         this.nomEntrainement = eNomEntrainement.getText().toString();
+        this.nomEntrainement = eNomEntrainement.getText().toString();
+        Entrainement entrainement = new Entrainement(this.nomEntrainement);
 
         //récupération de la liste des séquences ajoutées
-        ListView listSequence = findViewById(R.id.listSequence);
+        ListView listViewSequence = findViewById(R.id.listSequence);
+
+        //initialisation d'une List de l'objet Sequence
+        for (int i = 0; i < listViewSequence.getCount(); i++) {
+
+            Sequence sequence = (Sequence) listViewSequence.getItemAtPosition(i);
+            //ajout de la sequence dans une liste
+            listSequence.add(sequence);
+        }
+
 
         //On vérifie que le nom de la séquence de soit pas vide
-        if (this.nomEntrainement.isEmpty()){
-
-            Toast toast = Toast.makeText(CreationEntrainement.this, "Nom de Sequence obligatoire", Toast.LENGTH_LONG);
+        if (this.nomEntrainement.isEmpty()) {
+            Toast toast = Toast.makeText(CreationEntrainement.this, "Nom de séquence obligatoire", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
             toast.show();
 
             //on vérifie qu'au moins une séquence soit ajoutée
-        }else if(listSequence.getCount() == 0){
+        } else if (listViewSequence.getCount() == 0) {
             Toast toast = Toast.makeText(CreationEntrainement.this, "Vous devez ajouter au moins une séquence", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
             toast.show();
-        }else{
+
+            // sauvegarder
+        } else {
+
+
+
 
         }
 
-    }
 
-    //Création d'une classe asynchrone pour sauvegarder la tache donnée par l'utilisateur
+        class SaveEntrainement extends AsyncTask<Void, Void, EntrainementAvecSequences> {
 
-    class SaveEntrainement extends AsyncTask<Void,Void, Entrainement> {
+            @Override
+            protected EntrainementAvecSequences doInBackground(Void... voids) {
 
+                // Création de l'entrainementAvecSequence
+                EntrainementAvecSequences entrainementAvecSequences = new EntrainementAvecSequences(entrainement, listSequence);
 
-        @Override
-        protected Entrainement doInBackground(Void... voids) {
-            return null;
+                // Enregistrement de l'objet en BDD
+                mDb.getAppDatabase()
+                        .EntrainementDao()
+                        .insert(eAvecS);
 
-            // création d'un Entrainement
+                return;
+            }
 
+            @Override
+            protected onPostExecute() {
+                // nothing
+            }
         }
+        SaveEntrainement saveEntrainement = new SaveEntrainement();
+        saveEntrainement.execute();
+        //new SaveEntrainement.execute(entrainementAvecSequences);
     }
 /*
     /* mettre dans OnCreate: Récupération du DatabaseClient

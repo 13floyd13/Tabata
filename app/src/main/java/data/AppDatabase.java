@@ -12,4 +12,5 @@ public abstract class AppDatabase  extends RoomDatabase{
 
     public abstract TravailDao travailDao();
     public abstract CycleDao cycleDao();
+    public abstract EntrainementDao EntrainementDao();
 }

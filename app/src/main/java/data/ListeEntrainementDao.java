@@ -15,6 +15,7 @@ import modele.ListeEntrainementAvecEntrainements;
 
 @Dao
 public interface ListeEntrainementDao {
+
     @Transaction
     @Query("SELECT * FROM ListeEntrainement")
     List<ListeEntrainementAvecEntrainements> getAll();

@@ -22,7 +22,7 @@ public interface EntrainementDao {
     List<EntrainementAvecSequences> getAll();
 
     @Insert
-    void insert(Entrainement entrainement);
+    void insert(EntrainementAvecSequences entrainementAvecSequences);
 
     @Delete
     void delete(Entrainement entrainement);
