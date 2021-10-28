@@ -64,10 +64,13 @@ public class CreationEntrainement extends AppCompatActivity {
     }
 
     public void onSave(View view) {
-        //récupération du nom de la séquence
+
+        //récupération du nom de l'entrainement
         EditText eNomEntrainement = findViewById(R.id.nomEntrainement);
         this.nomEntrainement = eNomEntrainement.getText().toString();
-        Entrainement entrainement = new Entrainement(this.nomEntrainement);
+
+
+
 
         //récupération de la liste des séquences ajoutées
         ListView listViewSequence = findViewById(R.id.listSequence);
@@ -86,46 +89,49 @@ public class CreationEntrainement extends AppCompatActivity {
             Toast toast = Toast.makeText(CreationEntrainement.this, "Nom de séquence obligatoire", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
             toast.show();
+            return;
+        }
 
             //on vérifie qu'au moins une séquence soit ajoutée
-        } else if (listViewSequence.getCount() == 0) {
+         if (listViewSequence.getCount() == 0) {
             Toast toast = Toast.makeText(CreationEntrainement.this, "Vous devez ajouter au moins une séquence", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
             toast.show();
+            return;
+         }
 
-            // sauvegarder
-        } else {
+            // Création d'une classe asynchrone pour sauvegarder l'entrainementAvecSequences dans la base de donnée
+            class SaveEntrainement extends AsyncTask<Void, Void, EntrainementAvecSequences> {
 
+                @Override
+                protected EntrainementAvecSequences doInBackground(Void... voids) {
 
+                    //Création de l'objet Entrainement
+                    Entrainement entrainement = new Entrainement(nomEntrainement);
 
+                    // Création de l'entrainementAvecSequence
+                    EntrainementAvecSequences entrainementAvecSequences = new EntrainementAvecSequences(entrainement, listSequence);
 
-        }
+                    // Enregistrement de l'objet en BDD avec la méthode insert du Dao
+                    mDb.getAppDatabase()
+                            .EntrainementDao()
+                            .insert(entrainementAvecSequences);
 
+                    return entrainementAvecSequences;
+                }
 
-        class SaveEntrainement extends AsyncTask<Void, Void, EntrainementAvecSequences> {
-
-            @Override
-            protected EntrainementAvecSequences doInBackground(Void... voids) {
-
-                // Création de l'entrainementAvecSequence
-                EntrainementAvecSequences entrainementAvecSequences = new EntrainementAvecSequences(entrainement, listSequence);
-
-                // Enregistrement de l'objet en BDD
-                mDb.getAppDatabase()
-                        .EntrainementDao()
-                        .insert(eAvecS);
-
-                return;
+                @Override
+                protected void onPostExecute(EntrainementAvecSequences entrainementAvecSequences) {
+                    // nothing
+                    super.onPostExecute(entrainementAvecSequences);
+                    finish();
+                }
             }
 
-            @Override
-            protected onPostExecute() {
-                // nothing
-            }
-        }
+
+        //appel de la classe asynchrone et execution de l'insertion en base de donnée
         SaveEntrainement saveEntrainement = new SaveEntrainement();
         saveEntrainement.execute();
-        //new SaveEntrainement.execute(entrainementAvecSequences);
     }
 /*
     /* mettre dans OnCreate: Récupération du DatabaseClient
