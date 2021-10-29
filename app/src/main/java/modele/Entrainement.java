@@ -20,6 +20,9 @@ public class Entrainement {
     @ColumnInfo(name = "description")
     private String description;
 
+    @ColumnInfo(name = "tempsRepos")
+    private int tempsRepos;
+
     //Constructeur
     public Entrainement(String nom){
         this.nom = nom;
@@ -57,5 +60,13 @@ public class Entrainement {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getTempsRepos() {
+        return tempsRepos;
+    }
+
+    public void setTempsRepos(int tempsRepos) {
+        this.tempsRepos = tempsRepos;
     }
 }

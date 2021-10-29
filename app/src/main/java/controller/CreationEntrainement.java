@@ -23,9 +23,11 @@ import modele.Sequence;
 
 public class CreationEntrainement extends AppCompatActivity {
 
-    String nomEntrainement;
-    DatabaseClient mDb;
-    List<Sequence> listSequence;
+    private String nomEntrainement;
+    private DatabaseClient mDb;
+    private List<Sequence> listSequence;
+    int tempsPreparation;
+    int tempsReposLong;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +52,6 @@ public class CreationEntrainement extends AppCompatActivity {
         //récupération du bouton de création de séquence pour ajouter le texte concaténé
         Button buttonCreateSequence = findViewById(R.id.buttonCreerSequence);
         buttonCreateSequence.setText(createSequence);
-
-
-
-
     }
 
     public void onAjouterSequence(View view) {
@@ -69,11 +67,24 @@ public class CreationEntrainement extends AppCompatActivity {
         EditText eNomEntrainement = findViewById(R.id.nomEntrainement);
         this.nomEntrainement = eNomEntrainement.getText().toString();
 
-
-
+        //On vérifie que le nom de l'entrainement de soit pas vide
+        if (this.nomEntrainement.isEmpty()) {
+            Toast toast = Toast.makeText(CreationEntrainement.this, "Nom de séquence obligatoire", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
+            toast.show();
+            return;
+        }
 
         //récupération de la liste des séquences ajoutées
         ListView listViewSequence = findViewById(R.id.listSequence);
+
+        //on vérifie qu'au moins une séquence soit ajoutée
+        if (listViewSequence.getCount() == 0) {
+            Toast toast = Toast.makeText(CreationEntrainement.this, "Vous devez ajouter au moins une séquence", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
+            toast.show();
+            return;
+        }
 
         //initialisation d'une List de l'objet Sequence
         for (int i = 0; i < listViewSequence.getCount(); i++) {
@@ -83,22 +94,32 @@ public class CreationEntrainement extends AppCompatActivity {
             listSequence.add(sequence);
         }
 
+        //récupération du temps de préparation
+        EditText eTempsPreparation = findViewById(R.id.tempsPreparation);
+        String strTempsPreparation = eTempsPreparation.getText().toString();
 
-        //On vérifie que le nom de la séquence de soit pas vide
-        if (this.nomEntrainement.isEmpty()) {
-            Toast toast = Toast.makeText(CreationEntrainement.this, "Nom de séquence obligatoire", Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
-            toast.show();
-            return;
+        //on vérifie que le temps de préparation soit rempli sinon on le met à 10 secondes par défaut
+        if(strTempsPreparation.isEmpty()){
+            tempsPreparation = 10;
+        }else{
+            tempsPreparation = Integer.parseInt(strTempsPreparation);
         }
 
-            //on vérifie qu'au moins une séquence soit ajoutée
-         if (listViewSequence.getCount() == 0) {
-            Toast toast = Toast.makeText(CreationEntrainement.this, "Vous devez ajouter au moins une séquence", Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
-            toast.show();
-            return;
-         }
+        //récupération du temps de repos Long
+        EditText eTempsReposLong = findViewById(R.id.tempsRepos);
+        String strTempsReposLog = eTempsReposLong.getText().toString();
+
+        //on vérifie si le temps de repos est rempli sinon on le met à 60 secondes par défaut
+        if(strTempsPreparation.isEmpty()){
+            tempsReposLong = 60;
+        }else{
+            tempsReposLong = Integer.parseInt(strTempsReposLog);
+        }
+
+        //récupération de la description de l'entrainement
+        EditText eDescription = findViewById(R.id.descriptionEntrainement);
+        String description = eDescription.getText().toString();
+
 
             // Création d'une classe asynchrone pour sauvegarder l'entrainementAvecSequences dans la base de donnée
             class SaveEntrainement extends AsyncTask<Void, Void, EntrainementAvecSequences> {
@@ -108,6 +129,11 @@ public class CreationEntrainement extends AppCompatActivity {
 
                     //Création de l'objet Entrainement
                     Entrainement entrainement = new Entrainement(nomEntrainement);
+
+                    //Ajout de la description et du temps de prépration et repos
+                    entrainement.setDescription(description);
+                    entrainement.setTempsPreparation(tempsPreparation);
+                    entrainement.setTempsRepos(tempsReposLong);
 
                     // Création de l'entrainementAvecSequence
                     EntrainementAvecSequences entrainementAvecSequences = new EntrainementAvecSequences(entrainement, listSequence);

@@ -20,4 +20,6 @@
     <string name="description">Description</string>
     <string name="tempsReposLong">Temps de repos long</string>
     <string name="save">sauvegarder</string>
+    <string name="temps"></string>
+    <string name="secondes">secondes</string>
 </resources>
