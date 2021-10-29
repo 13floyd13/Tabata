@@ -2,6 +2,7 @@ package controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.example.tabata.R;
 
 import data.DatabaseClient;
+import modele.Travail;
 
 public class CreationTravail extends AppCompatActivity {
 
@@ -81,7 +83,33 @@ public class CreationTravail extends AppCompatActivity {
             tempsRepos = Integer.parseInt(strTempsRepos);
         }
 
+        //Création d'une classe asynchrone pour sauvegarder le Travail
+        class SaveTravail extends AsyncTask<Void, Void, Travail>{
 
+            @Override
+            protected Travail doInBackground(Void... voids) {
 
+                //Création de l'objet Travail
+                Travail travail = new Travail(nomTravail,tempsTravail,tempsRepos);
+
+                //Enregistrement de l'objet en BDD avec la méthode insert du Dao
+                mDb.getAppDatabase()
+                        .travailDao()
+                        .insert(travail);
+                
+                return travail;
+
+            }
+
+            @Override
+            protected void onPostExecute(Travail travail) {
+
+                super.onPostExecute(travail);
+                finish();
+            }
+        }
+
+        SaveTravail saveTravail = new SaveTravail();
+        saveTravail.execute();
     }
 }

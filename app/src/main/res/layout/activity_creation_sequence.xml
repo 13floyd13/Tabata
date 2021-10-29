@@ -4,20 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="controller.CreationTravail">
-
+    tools:context="controller.CreationSequence">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/creationTravail"
+        android:text="@string/creationSequence"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="20dp"
         android:id="@+id/titrePage"/>
 
     <TextView
-        android:id="@+id/textNomTravail"
+        android:id="@+id/textNomSequence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -30,48 +29,56 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintLeft_toRightOf="@+id/textNomTravail"
+        app:layout_constraintLeft_toRightOf="@+id/textNomSequence"
         app:layout_constraintTop_toBottomOf="@+id/titrePage"
-        android:id="@+id/nomTravail"
+        android:id="@+id/nomSequence"
         />
 
     <TextView
-        android:id="@+id/textTempsTravail"
+        android:id="@+id/textDescriptionSequence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text=""
-        app:layout_constraintTop_toBottomOf="@+id/textNomTravail"
+        android:text="@string/description"
+        app:layout_constraintTop_toBottomOf="@+id/textNomSequence"
         tools:ignore="MissingConstraints"/>
 
     <EditText
-        android:layout_width="50dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:inputType="numberSigned"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintLeft_toRightOf="@+id/textTempsTravail"
-        app:layout_constraintTop_toBottomOf="@+id/textNomTravail"
-        android:id="@+id/tempsTravail"
+        app:layout_constraintLeft_toRightOf="@+id/textDescriptionSequence"
+        app:layout_constraintTop_toBottomOf="@+id/textNomSequence"
+        android:id="@+id/descriptionSequence"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/textNomTravail"
-        app:layout_constraintLeft_toRightOf="@+id/tempsTravail"
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@+id/textDescriptionSequence"
         android:layout_marginTop="30dp"
-        android:layout_marginLeft="5dp"
-        android:text="@string/secondes">
-    </TextView>
+        android:id="@+id/buttonAjouterCycle"
+        android:onClick="onAjouterCycle"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@+id/buttonAjouterCycle"
+        android:layout_marginTop="30dp"
+        android:id="@+id/buttonCreerCycle"
+        android:onClick="onCreerCycle"
+        />
 
     <TextView
         android:id="@+id/textTempsRepos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text=""
-        app:layout_constraintTop_toBottomOf="@+id/textTempsTravail"
+        android:text="@string/tempsReposLong"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCreerCycle"
         tools:ignore="MissingConstraints"/>
 
     <EditText
@@ -81,18 +88,18 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         app:layout_constraintLeft_toRightOf="@+id/textTempsRepos"
-        app:layout_constraintTop_toBottomOf="@+id/textTempsTravail"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCreerCycle"
         android:id="@+id/tempsRepos"
         />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/textTempsTravail"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCreerCycle"
         app:layout_constraintLeft_toRightOf="@+id/tempsRepos"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="5dp"
-        android:text="@string/secondes">
-    </TextView>
+        android:text="@string/secondes"></TextView>
 
     <Button
         android:layout_width="match_parent"
@@ -101,8 +108,14 @@
         android:layout_marginTop="30dp"
         android:text="@string/save"
         android:id="@+id/buttonSave"
-        android:onClick="onSave">
-    </Button>
+        android:onClick="onSave"></Button>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSave"
+        android:layout_marginTop="30dp"
+        android:id="@+id/listCycles"></ListView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

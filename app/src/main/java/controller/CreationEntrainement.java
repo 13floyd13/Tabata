@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.example.tabata.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import data.DatabaseClient;
@@ -28,6 +27,7 @@ public class CreationEntrainement extends AppCompatActivity {
     private List<Sequence> listSequence;
     int tempsPreparation;
     int tempsReposLong;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +69,7 @@ public class CreationEntrainement extends AppCompatActivity {
 
         //On vérifie que le nom de l'entrainement de soit pas vide
         if (this.nomEntrainement.isEmpty()) {
-            Toast toast = Toast.makeText(CreationEntrainement.this, "Nom de séquence obligatoire", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(CreationEntrainement.this, "Nom d'entrainement' obligatoire", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
             toast.show();
             return;
@@ -91,7 +91,7 @@ public class CreationEntrainement extends AppCompatActivity {
 
             Sequence sequence = (Sequence) listViewSequence.getItemAtPosition(i);
             //ajout de la sequence dans une liste
-            listSequence.add(sequence);
+            this.listSequence.add(sequence);
         }
 
         //récupération du temps de préparation
@@ -107,13 +107,13 @@ public class CreationEntrainement extends AppCompatActivity {
 
         //récupération du temps de repos Long
         EditText eTempsReposLong = findViewById(R.id.tempsRepos);
-        String strTempsReposLog = eTempsReposLong.getText().toString();
+        String strTempsReposLong = eTempsReposLong.getText().toString();
 
         //on vérifie si le temps de repos est rempli sinon on le met à 60 secondes par défaut
-        if(strTempsPreparation.isEmpty()){
+        if(strTempsReposLong.isEmpty()){
             tempsReposLong = 60;
         }else{
-            tempsReposLong = Integer.parseInt(strTempsReposLog);
+            tempsReposLong = Integer.parseInt(strTempsReposLong);
         }
 
         //récupération de la description de l'entrainement
@@ -121,7 +121,7 @@ public class CreationEntrainement extends AppCompatActivity {
         String description = eDescription.getText().toString();
 
 
-            // Création d'une classe asynchrone pour sauvegarder l'entrainementAvecSequences dans la base de donnée
+            // Création d'une classe asynchrone pour sauvegarder l'entrainement et les sequences associés dans la base de donnée
             class SaveEntrainement extends AsyncTask<Void, Void, EntrainementAvecSequences> {
 
                 @Override
@@ -140,15 +140,20 @@ public class CreationEntrainement extends AppCompatActivity {
 
                     // Enregistrement de l'objet en BDD avec la méthode insert du Dao
                     mDb.getAppDatabase()
-                            .EntrainementDao()
-                            .insert(entrainementAvecSequences);
+                            .entrainementDao()
+                            .insert(entrainement);
+
+                    //enregistrement des sequences dans la table Entrainement
+                    mDb.getAppDatabase()
+                            .entrainementDao()
+                            .insertSequences(listSequence);
 
                     return entrainementAvecSequences;
                 }
 
                 @Override
                 protected void onPostExecute(EntrainementAvecSequences entrainementAvecSequences) {
-                    // nothing
+
                     super.onPostExecute(entrainementAvecSequences);
                     finish();
                 }

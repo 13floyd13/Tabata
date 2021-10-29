@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_creation_entrainement.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_creation_sequence.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_creation_travail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.29483695652173914" />
       </map>

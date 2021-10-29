@@ -61,4 +61,5 @@ public class Travail implements Serializable {
     public void setRepos(int repos) {
         this.repos = repos;
     }
+
 }

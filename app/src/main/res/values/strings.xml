@@ -22,4 +22,7 @@
     <string name="save">sauvegarder</string>
     <string name="temps"></string>
     <string name="secondes">secondes</string>
+    <string name="creationTravail">Création Travail</string>
+    <string name="creationSequence">Création Sequence</string>
+    <string name="creationCycle">Création Cycle</string>
 </resources>

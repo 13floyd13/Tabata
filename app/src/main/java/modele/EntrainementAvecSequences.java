@@ -1,9 +1,11 @@
 package modele;
 
 import androidx.room.Embedded;
+import androidx.room.Entity;
 import androidx.room.Relation;
 
 import java.util.List;
+
 
 public class EntrainementAvecSequences {
     @Embedded
@@ -14,7 +16,7 @@ public class EntrainementAvecSequences {
             parentColumn = "entrainementId",
             entityColumn = "sequenceId"
     )
-    public List<Sequence> sequences ;
+    private List<Sequence> sequences ;
 
     //Constructeur
     public EntrainementAvecSequences(Entrainement entrainement, List<Sequence> sequences){

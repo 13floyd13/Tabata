@@ -12,17 +12,22 @@ import java.util.List;
 
 import modele.Entrainement;
 import modele.EntrainementAvecSequences;
+import modele.Sequence;
 
 
 @Dao
 public interface EntrainementDao {
 
     @Transaction
-    @Query("SELECT * FROM Entrainement")
-    List<EntrainementAvecSequences> getAll();
+    @Query("SELECT * FROM  Entrainement")
+    List<Entrainement> getAll();
+
+    @Transaction
+    @Insert
+    void insert(Entrainement entrainement);
 
     @Insert
-    void insert(EntrainementAvecSequences entrainementAvecSequences);
+    void insertSequences(List<Sequence> sequences);
 
     @Delete
     void delete(Entrainement entrainement);

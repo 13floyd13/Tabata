@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCreationEntrainement(View view) {
-        Intent goToCreationEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
+        Intent goToCreationEntrainement = new Intent(getApplicationContext(), CreationTravail.class);
         startActivity(goToCreationEntrainement);
     }
 
