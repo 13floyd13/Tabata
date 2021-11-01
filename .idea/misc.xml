@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_creation_cycle.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_creation_entrainement.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_creation_sequence.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_creation_travail.xml" value="0.25" />

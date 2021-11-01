@@ -11,16 +11,21 @@ import java.util.List;
 
 import modele.Cycle;
 import modele.CycleAvecTravails;
+import modele.Travail;
 
 @Dao
 public interface CycleDao {
 
     @Transaction
     @Query("SELECT * FROM Cycle")
-    List<CycleAvecTravails> getAll();
+    List<Cycle> getAll();
 
+    @Transaction
     @Insert
     void insert(Cycle cycle);
+
+    @Insert
+    void insertTravails(List<Travail> travails);
 
     @Delete
     void delete(Cycle cycle);

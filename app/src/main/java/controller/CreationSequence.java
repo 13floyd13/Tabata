@@ -77,7 +77,7 @@ public class CreationSequence extends AppCompatActivity {
         //récupération de la liste des cycles ajoutées
         ListView listViewCycle = findViewById(R.id.listCycles);
 
-        //on vérigie qu'au moins un cycle soit ajoutée
+        //on vérifie qu'au moins un cycle soit ajoutée
         if (listViewCycle.getCount() == 0){
             Toast toast = Toast.makeText(CreationSequence.this, "Vous devez ajouter au moins un cycle", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
