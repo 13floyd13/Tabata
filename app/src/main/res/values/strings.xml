@@ -25,4 +25,5 @@
     <string name="creationTravail">Création Travail</string>
     <string name="creationSequence">Création Sequence</string>
     <string name="creationCycle">Création Cycle</string>
+    <string name="liste">Liste</string>
 </resources>

@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tabata">
         <activity
+            android:name="controller.ListeTravail"
+            android:exported="true" />
+        <activity
             android:name="controller.CreationCycle"
             android:exported="true" />
         <activity
