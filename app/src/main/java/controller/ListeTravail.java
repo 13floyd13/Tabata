@@ -3,20 +3,25 @@ package controller;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.tabata.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import data.AppDatabase;
 import data.DatabaseClient;
 import modele.Travail;
+import modele.TravailListAdapter;
 
 public class ListeTravail extends AppCompatActivity {
 
     private AppDatabase mDb;
-    List<Travail> travails;
+    private TravailListAdapter adapter;
+    private ListView listTravail;
+
 
 
     @Override
@@ -28,30 +33,59 @@ public class ListeTravail extends AppCompatActivity {
         String liste = getResources().getString(R.string.liste);
         String space = " ";
         String travail = getResources().getString(R.string.travail);
-
         String strListeTravail = liste+space+travail;
-
 
         //récupération du TextView de temps de travail pour ajouter la string
         TextView titrePage = findViewById(R.id.titrePage);
         titrePage.setText(strListeTravail);
 
+        //récupération du ListView
+        listTravail = findViewById(R.id.listTravails);
 
         // Récupération du DatabaseClient
         mDb = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase();
 
-        //execution de la récupération des travails en base de donnée
-        new RecupererTravailAsync().execute();
+        //Liaison de l'adapder au listView
+        adapter = new TravailListAdapter(this, new ArrayList<Travail>());
+        listTravail.setAdapter(adapter);
 
 
     }
 
-    public class RecupererTravailAsync extends android.os.AsyncTask<Void, Void, List<Travail>>{
+    private void getTravails() {
 
-        @Override
-        protected List<Travail> doInBackground(Void... voids) {
-            travails = mDb.travailDao().getAll();
-            return travails;
+        class RecupererTravailAsync extends android.os.AsyncTask<Void, Void, List<Travail>> {
+
+            @Override
+            protected List<Travail> doInBackground(Void... voids) {
+                List<Travail> travailList = mDb
+                        .travailDao()
+                        .getAll();
+                return travailList;
+            }
+
+            @Override
+            protected void onPostExecute(List<Travail> travails){
+                super.onPostExecute(travails);
+
+                //Mise à jour de l'adapteur avec la liste des travails
+                adapter.clear();
+                adapter.addAll(travails);
+                adapter.notifyDataSetChanged();
+            }
+
         }
+
+        //execution de la demande asynchrone
+        RecupererTravailAsync recup = new RecupererTravailAsync();
+        recup.execute();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        //mise à jour des travails
+        getTravails();
     }
 }
