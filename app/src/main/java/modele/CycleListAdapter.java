@@ -29,7 +29,7 @@ public class CycleListAdapter extends ArrayAdapter<CycleAvecTravails> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.adapter_view_layout_cycle, parent, false);
 
-        //récupération des objets fraphiques
+        //récupération des objets graphiques
         TextView textViewNom = (TextView) rowView.findViewById(R.id.adapter_nomCycle);
 
         //on remplit le text

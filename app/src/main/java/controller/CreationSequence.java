@@ -3,6 +3,7 @@ package controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -14,24 +15,36 @@ import android.widget.Toast;
 
 import com.example.tabata.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import data.DatabaseClient;
 import modele.Cycle;
+import modele.CycleAvecTravails;
+import modele.CycleListAdapter;
 import modele.Sequence;
 
 public class CreationSequence extends AppCompatActivity {
 
+    private static final boolean SEQUENCE_KEY=true;
     private String nomSequence;
     private DatabaseClient mDb;
-    private List<Cycle> listeCycle;
+    private ArrayList<CycleAvecTravails> cyclesAvecTravails = new ArrayList<CycleAvecTravails>();
     int tempsReposLong;
     private String description;
+    private ListView listCycleClicked;
+    private CycleListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creation_sequence);
+
+        //récupération des cycles ajoutés
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            cyclesAvecTravails = extras.getParcelableArrayList("arrayListCycleClicked");
+        }
 
         //Récupération du DatabaseClient
         mDb = DatabaseClient.getInstance(getApplicationContext());
@@ -52,12 +65,30 @@ public class CreationSequence extends AppCompatActivity {
         //récupération du bouton de création de cycle pour ajouter la string
         Button buttonCreateCycle = findViewById(R.id.buttonCreerCycle);
         buttonCreateCycle.setText(strCreateCycle);
+
+        //récupération de la listView de cycles ajoutés
+        listCycleClicked = findViewById(R.id.listCycles);
+
+        if (cyclesAvecTravails != null && !cyclesAvecTravails.isEmpty()){
+
+            //Liaison de l'adapter au listView
+            adapter = new CycleListAdapter(this, new ArrayList<CycleAvecTravails>());
+            adapter.clear();
+            adapter.addAll(cyclesAvecTravails);
+            listCycleClicked.setAdapter(adapter);
+        }
     }
 
     public void onAjouterCycle(View view) {
+        Intent goToListCycle = new Intent(getApplicationContext(), ListeCycle.class);
+        goToListCycle.putExtra("SEQUENCE_KEY", true);
+        goToListCycle.putParcelableArrayListExtra("arrayListCycles", cyclesAvecTravails);
+        startActivity(goToListCycle);
     }
 
     public void onCreerCycle(View view) {
+        Intent goToCreateCycle = new Intent(getApplicationContext(), CreationCycle.class);
+        startActivity(goToCreateCycle);
     }
 
     public void onSave(View view) {
@@ -86,11 +117,11 @@ public class CreationSequence extends AppCompatActivity {
         }
 
         //remplissage de la List de Cycle
-        for (int i = 0; i < listViewCycle.getCount(); i++){
+        /*for (int i = 0; i < listViewCycle.getCount(); i++){
 
         Cycle cycle = (Cycle) listViewCycle.getItemAtPosition(i);
         listeCycle.add(cycle);
-        }
+        }*/
 
         //récupération du temps de repos long
         EditText eTempsReposLong = findViewById(R.id.tempsRepos);
@@ -127,10 +158,13 @@ public class CreationSequence extends AppCompatActivity {
                         .insert(sequence);
 
                 //enregistrement des cycles dans la table Sequence
+                ArrayList cycles = new ArrayList<Cycle>();
+                for (int i = 0; i<cyclesAvecTravails.size(); i++){
+                    cycles.add(cyclesAvecTravails.get(i).getCycle());
+                }
                 mDb.getAppDatabase()
                         .sequenceDao()
-                        .insertCycles(listeCycle);
-
+                        .insertCycles(cycles);
 
                 return sequence;
             }

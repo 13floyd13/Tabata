@@ -27,7 +27,7 @@ public class ListeCycle extends AppCompatActivity {
     private AppDatabase mDb;
     private CycleListAdapter adapter;
     private ListView listCycle;
-    private boolean sequence=false;
+    private boolean sequence = false;
     private ArrayList<CycleAvecTravails> cycles = new ArrayList<CycleAvecTravails>();
 
     @Override
@@ -37,7 +37,7 @@ public class ListeCycle extends AppCompatActivity {
 
         //récupération du boolean si on vient de sequence
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
+        if (extras != null){
             sequence = extras.getBoolean("SEQUENCE_KEY");
             cycles = extras.getParcelableArrayList("arrayListCycles");
         }
@@ -48,7 +48,7 @@ public class ListeCycle extends AppCompatActivity {
         String cycle = getResources().getString(R.string.cycle);
         String strListeCycle = liste+space+cycle;
 
-        //récupération du TextView de temps de travail pour ajouter la string
+        //récupération du TextView pour ajouter la string
         TextView titrePage = findViewById(R.id.titrePage);
         titrePage.setText(strListeCycle);
 
@@ -71,7 +71,7 @@ public class ListeCycle extends AppCompatActivity {
 
                     //Récupération du travail cliqué pour l'envoyer à la création du cycle dans un arayList de travail
                     CycleAvecTravails cycleClicked = adapter.getItem(position);
-                    Intent goBacktoSequence = new Intent(getApplicationContext(), CreationCycle.class);
+                    Intent goBacktoSequence = new Intent(getApplicationContext(), CreationSequence.class);
                     cycles.add(cycleClicked);
                     goBacktoSequence.putParcelableArrayListExtra("arrayListCycleClicked", cycles);
                     goBacktoSequence.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

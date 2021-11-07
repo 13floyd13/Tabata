@@ -40,8 +40,7 @@ public class CreationCycle extends AppCompatActivity {
 
         //récupération des travails ajoutés
         Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-
+        if (extras != null) {
             travails = extras.getParcelableArrayList("arrayListTravailsClicked");
         }
 
@@ -68,10 +67,10 @@ public class CreationCycle extends AppCompatActivity {
         //récupération de la listView de travail ajoutés
         listTravailClicked = findViewById(R.id.listTravails);
 
-        if(travails !=null && !travails.isEmpty()){
+        if (travails != null && !travails.isEmpty()){
             //Liaison à l'adapter au listView
             adapter = new TravailListAdapter(this, new ArrayList<Travail>());
-            //adapter.clear();
+            adapter.clear();
             adapter.addAll(travails);
             listTravailClicked.setAdapter(adapter);
         }
@@ -116,11 +115,11 @@ public class CreationCycle extends AppCompatActivity {
         }
 
         //remplissage de la List de Travail
-        for (int i = 0; i < listViewTravail.getCount(); i++){
+        /*for (int i = 0; i < listViewTravail.getCount(); i++){
 
             Travail travail = (Travail) listViewTravail.getItemAtPosition(i);
             travails.add(travail);
-        }
+        }*/
 
         //Création classe asynchrone pour sauvegarder le cycle
         class SaveCycle extends AsyncTask<Void, Void, Cycle>{

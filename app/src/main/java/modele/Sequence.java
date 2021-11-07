@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey;
 import androidx.room.Entity;
 
 @Entity
-public class Sequence {
+public class Sequence implements {
 
     //Attributs
     @PrimaryKey(autoGenerate = true)
