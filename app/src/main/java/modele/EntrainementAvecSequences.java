@@ -1,5 +1,8 @@
 package modele;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Relation;
@@ -7,7 +10,7 @@ import androidx.room.Relation;
 import java.util.List;
 
 
-public class EntrainementAvecSequences {
+public class EntrainementAvecSequences implements Parcelable {
     @Embedded
     public Entrainement entrainement;
 
@@ -25,6 +28,22 @@ public class EntrainementAvecSequences {
     }
 
     //Méthodes
+
+    protected EntrainementAvecSequences(Parcel in) {
+        sequences = in.createTypedArrayList(Sequence.CREATOR);
+    }
+
+    public static final Creator<EntrainementAvecSequences> CREATOR = new Creator<EntrainementAvecSequences>() {
+        @Override
+        public EntrainementAvecSequences createFromParcel(Parcel in) {
+            return new EntrainementAvecSequences(in);
+        }
+
+        @Override
+        public EntrainementAvecSequences[] newArray(int size) {
+            return new EntrainementAvecSequences[size];
+        }
+    };
 
     //Ajout d'une séquence à un entrainement
     public void addSequence(Sequence sequence){
@@ -44,5 +63,15 @@ public class EntrainementAvecSequences {
 
     public List<Sequence> getSequences() {
         return sequences;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(sequences);
     }
 }

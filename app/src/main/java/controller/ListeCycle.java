@@ -62,7 +62,7 @@ public class ListeCycle extends AppCompatActivity {
         adapter = new CycleListAdapter(this, new ArrayList<CycleAvecTravails>());
         listCycle.setAdapter(adapter);
 
-        if(sequence) { //on ajoute un evenement click uniquement si on vient d'un cycle
+        if(sequence) { //on ajoute un evenement click uniquement si on vient d'une sequence
 
             //ajout d'un évenement click à la listeView
             listCycle.setOnItemClickListener(new AdapterView.OnItemClickListener() {

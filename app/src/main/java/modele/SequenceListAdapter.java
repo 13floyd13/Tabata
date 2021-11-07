@@ -26,10 +26,10 @@ public class SequenceListAdapter extends ArrayAdapter<SequenceAvecCycles> {
         //récupération de la séquence
         final SequenceAvecCycles sequenceAvecCycles = getItem(position);
 
-        //on charle le xml à inflate
+        //on charge le xml à inflate
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View rowView = inflater.inflate(R.layout.adapter_view_layout_cycle, parent, false);
+        final View rowView = inflater.inflate(R.layout.adapter_view_layout_sequence, parent, false);
 
         //récupération des objets graphiques
         TextView textViewNom = (TextView) rowView.findViewById(R.id.adapter_nomSequence);
@@ -46,7 +46,7 @@ public class SequenceListAdapter extends ArrayAdapter<SequenceAvecCycles> {
 
         textViewNom.setText(sequence.getNom());
         textViewDescription.setText(sequence.getDescription());
-        textViewTempsReposLong.setText(strTemps + space + strRepos + sequence.getTempsReposLong() + space + strSecondes);
+        textViewTempsReposLong.setText(strTemps + space + strRepos + space + sequence.getTempsReposLong() + space + strSecondes);
 
 
 

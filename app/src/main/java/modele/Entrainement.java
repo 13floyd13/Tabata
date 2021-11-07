@@ -1,11 +1,14 @@
 package modele;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Entrainement {
+public class Entrainement implements Parcelable {
 
     //Attributs
     @PrimaryKey(autoGenerate = true)
@@ -29,6 +32,26 @@ public class Entrainement {
     }
 
     //Getters et Setters
+
+    protected Entrainement(Parcel in) {
+        entrainementId = in.readInt();
+        nom = in.readString();
+        tempsPreparation = in.readInt();
+        description = in.readString();
+        tempsRepos = in.readInt();
+    }
+
+    public static final Creator<Entrainement> CREATOR = new Creator<Entrainement>() {
+        @Override
+        public Entrainement createFromParcel(Parcel in) {
+            return new Entrainement(in);
+        }
+
+        @Override
+        public Entrainement[] newArray(int size) {
+            return new Entrainement[size];
+        }
+    };
 
     public int getEntrainementId() {
         return entrainementId;
@@ -68,5 +91,19 @@ public class Entrainement {
 
     public void setTempsRepos(int tempsRepos) {
         this.tempsRepos = tempsRepos;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(entrainementId);
+        dest.writeString(nom);
+        dest.writeInt(tempsPreparation);
+        dest.writeString(description);
+        dest.writeInt(tempsRepos);
     }
 }

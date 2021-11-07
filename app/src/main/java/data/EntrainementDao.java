@@ -20,7 +20,7 @@ public interface EntrainementDao {
 
     @Transaction
     @Query("SELECT * FROM  Entrainement")
-    List<Entrainement> getAll();
+    List<EntrainementAvecSequences> getAll();
 
     @Transaction
     @Insert

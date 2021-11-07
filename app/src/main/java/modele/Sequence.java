@@ -1,11 +1,14 @@
 package modele;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.PrimaryKey;
 import androidx.room.Entity;
 
 @Entity
-public class Sequence implements {
+public class Sequence implements Parcelable {
 
     //Attributs
     @PrimaryKey(autoGenerate = true)
@@ -24,6 +27,25 @@ public class Sequence implements {
     public Sequence(String nom){
         this.nom = nom;
     }
+
+    protected Sequence(Parcel in) {
+        sequenceId = in.readInt();
+        nom = in.readString();
+        tempsReposLong = in.readInt();
+        description = in.readString();
+    }
+
+    public static final Creator<Sequence> CREATOR = new Creator<Sequence>() {
+        @Override
+        public Sequence createFromParcel(Parcel in) {
+            return new Sequence(in);
+        }
+
+        @Override
+        public Sequence[] newArray(int size) {
+            return new Sequence[size];
+        }
+    };
 
     //Getters et Setters
     public int getSequenceId() {
@@ -56,5 +78,18 @@ public class Sequence implements {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(sequenceId);
+        dest.writeString(nom);
+        dest.writeInt(tempsReposLong);
+        dest.writeString(description);
     }
 }

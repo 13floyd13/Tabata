@@ -26,7 +26,7 @@ import modele.Sequence;
 
 public class CreationSequence extends AppCompatActivity {
 
-    private static final boolean SEQUENCE_KEY=true;
+    private static final boolean SEQUENCE_KEY = true;
     private String nomSequence;
     private DatabaseClient mDb;
     private ArrayList<CycleAvecTravails> cyclesAvecTravails = new ArrayList<CycleAvecTravails>();
@@ -81,7 +81,7 @@ public class CreationSequence extends AppCompatActivity {
 
     public void onAjouterCycle(View view) {
         Intent goToListCycle = new Intent(getApplicationContext(), ListeCycle.class);
-        goToListCycle.putExtra("SEQUENCE_KEY", true);
+        goToListCycle.putExtra("SEQUENCE_KEY", SEQUENCE_KEY);
         goToListCycle.putParcelableArrayListExtra("arrayListCycles", cyclesAvecTravails);
         startActivity(goToListCycle);
     }
@@ -159,7 +159,7 @@ public class CreationSequence extends AppCompatActivity {
 
                 //enregistrement des cycles dans la table Sequence
                 ArrayList cycles = new ArrayList<Cycle>();
-                for (int i = 0; i<cyclesAvecTravails.size(); i++){
+                for (int i = 0; i < cyclesAvecTravails.size(); i++){
                     cycles.add(cyclesAvecTravails.get(i).getCycle());
                 }
                 mDb.getAppDatabase()

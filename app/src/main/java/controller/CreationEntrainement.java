@@ -2,6 +2,7 @@ package controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -13,26 +14,38 @@ import android.widget.Toast;
 
 import com.example.tabata.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import data.DatabaseClient;
 import modele.Entrainement;
 import modele.EntrainementAvecSequences;
 import modele.Sequence;
+import modele.SequenceAvecCycles;
+import modele.SequenceListAdapter;
 
 public class CreationEntrainement extends AppCompatActivity {
 
+
+    private static final boolean ENTRAINEMENT_KEY = true;
     private String nomEntrainement;
     private DatabaseClient mDb;
-    private List<Sequence> listSequence;
     int tempsPreparation;
     int tempsReposLong;
+    private ArrayList<SequenceAvecCycles> sequenceAvecCycles = new ArrayList<SequenceAvecCycles>();
+    private ListView listSequenceClicked;
+    private SequenceListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creation_entrainement);
 
+        //récupération des sequences ajoutés
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            sequenceAvecCycles = extras.getParcelableArrayList("arrayListSequenceClicked");
+        }
 
         //Récupération du DatabaseClient
         mDb = DatabaseClient.getInstance(getApplicationContext());
@@ -52,13 +65,31 @@ public class CreationEntrainement extends AppCompatActivity {
         //récupération du bouton de création de séquence pour ajouter le texte concaténé
         Button buttonCreateSequence = findViewById(R.id.buttonCreerSequence);
         buttonCreateSequence.setText(createSequence);
+
+        //récupération de la listView de sequences ajoutés
+        listSequenceClicked = findViewById(R.id.listSequence);
+
+        if (sequenceAvecCycles != null && !sequenceAvecCycles.isEmpty()){
+
+            //Liaison de l'adapter au listView
+            adapter = new SequenceListAdapter(this, new ArrayList<SequenceAvecCycles>());
+            adapter.clear();
+            adapter.addAll(sequenceAvecCycles);
+            listSequenceClicked.setAdapter(adapter);
+        }
     }
 
     public void onAjouterSequence(View view) {
+        Intent goToListSequence = new Intent(getApplicationContext(), ListeSequence.class);
+        goToListSequence.putExtra("ENTRAINEMENT_KEY", ENTRAINEMENT_KEY);
+        goToListSequence.putParcelableArrayListExtra("arrayListSequences", sequenceAvecCycles);
+        startActivity(goToListSequence);
 
     }
 
     public void onCreerSequence(View view) {
+        Intent goToCreateSequence = new Intent(getApplicationContext(), CreationSequence.class);
+        startActivity(goToCreateSequence);
     }
 
     public void onSave(View view) {
@@ -87,12 +118,12 @@ public class CreationEntrainement extends AppCompatActivity {
         }
 
         //initialisation d'une List de l'objet Sequence
-        for (int i = 0; i < listViewSequence.getCount(); i++) {
+        /*for (int i = 0; i < listViewSequence.getCount(); i++) {
 
             Sequence sequence = (Sequence) listViewSequence.getItemAtPosition(i);
             //ajout de la sequence dans une liste
             this.listSequence.add(sequence);
-        }
+        }*/
 
         //récupération du temps de préparation
         EditText eTempsPreparation = findViewById(R.id.tempsPreparation);
@@ -122,10 +153,10 @@ public class CreationEntrainement extends AppCompatActivity {
 
 
             // Création d'une classe asynchrone pour sauvegarder l'entrainement et les sequences associés dans la base de donnée
-            class SaveEntrainement extends AsyncTask<Void, Void, EntrainementAvecSequences> {
+            class SaveEntrainement extends AsyncTask<Void, Void, Entrainement> {
 
                 @Override
-                protected EntrainementAvecSequences doInBackground(Void... voids) {
+                protected Entrainement doInBackground(Void... voids) {
 
                     //Création de l'objet Entrainement
                     Entrainement entrainement = new Entrainement(nomEntrainement);
@@ -135,8 +166,6 @@ public class CreationEntrainement extends AppCompatActivity {
                     entrainement.setTempsPreparation(tempsPreparation);
                     entrainement.setTempsRepos(tempsReposLong);
 
-                    // Création de l'entrainementAvecSequence
-                    EntrainementAvecSequences entrainementAvecSequences = new EntrainementAvecSequences(entrainement, listSequence);
 
                     // Enregistrement de l'objet en BDD avec la méthode insert du Dao
                     mDb.getAppDatabase()
@@ -144,18 +173,15 @@ public class CreationEntrainement extends AppCompatActivity {
                             .insert(entrainement);
 
                     //enregistrement des sequences dans la table Entrainement
+                    ArrayList sequences = new ArrayList<Sequence>();
+                    for (int i = 0; i < sequenceAvecCycles.size(); i++){
+                        sequences.add(sequenceAvecCycles.get(i).getSequence());
+                    }
                     mDb.getAppDatabase()
                             .entrainementDao()
-                            .insertSequences(listSequence);
+                            .insertSequences(sequences);
 
-                    return entrainementAvecSequences;
-                }
-
-                @Override
-                protected void onPostExecute(EntrainementAvecSequences entrainementAvecSequences) {
-
-                    super.onPostExecute(entrainementAvecSequences);
-                    finish();
+                    return entrainement;
                 }
             }
 

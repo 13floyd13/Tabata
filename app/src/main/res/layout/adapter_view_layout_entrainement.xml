@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:id="@+id/adapter_nomEntrainement"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/adapter_nomEntrainement"
+        android:id="@+id/adapter_descriptionEntrainement"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/adapter_descriptionEntrainement"
+        android:id="@+id/adapter_tempsPreparation"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/adapter_tempsPreparation"
+        android:id="@+id/adapter_tempsRepos"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

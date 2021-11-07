@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onChoixEntrainement(View view) {
 
-        Intent goToChoixEntrainement = new Intent(getApplicationContext(), ListeCycle.class);
+        Intent goToChoixEntrainement = new Intent(getApplicationContext(), ListeSequence.class);
         startActivity(goToChoixEntrainement);
     }
 

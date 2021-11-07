@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tabata">
         <activity
+            android:name="controller.ListeEntrainement"
+            android:exported="true" />
+        <activity
             android:name="controller.ListeSequence"
             android:exported="true" />
         <activity
