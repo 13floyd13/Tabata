@@ -18,7 +18,7 @@ public interface CycleDao {
 
     @Transaction
     @Query("SELECT * FROM Cycle")
-    List<Cycle> getAll();
+    List<CycleAvecTravails> getAll();
 
     @Transaction
     @Insert

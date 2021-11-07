@@ -2,6 +2,7 @@ package controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -13,22 +14,36 @@ import android.widget.Toast;
 
 import com.example.tabata.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import data.DatabaseClient;
 import modele.Cycle;
 import modele.Travail;
+import modele.TravailListAdapter;
 
 public class CreationCycle extends AppCompatActivity {
 
+    private static final boolean CYCLE_KEY=true;
     private String nomCycle;
     private DatabaseClient mDb;
-    private List<Travail> travails;
+    private ArrayList<Travail> travails = new ArrayList<Travail>();
+    private ListView listTravailClicked;
+    private TravailListAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creation_cycle);
+
+
+        //récupération des travails ajoutés
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+
+            travails = extras.getParcelableArrayList("arrayListTravailsClicked");
+        }
 
         //Récupération du DatabaseClient
         mDb = DatabaseClient.getInstance(getApplicationContext());
@@ -49,14 +64,30 @@ public class CreationCycle extends AppCompatActivity {
         //récupération du bouton de création de cycle pour ajouter la string
         Button buttonCreateTravail = findViewById(R.id.buttonCreerTravail);
         buttonCreateTravail.setText(strCreateTravail);
+
+        //récupération de la listView de travail ajoutés
+        listTravailClicked = findViewById(R.id.listTravails);
+
+        if(travails !=null && !travails.isEmpty()){
+            //Liaison à l'adapter au listView
+            adapter = new TravailListAdapter(this, new ArrayList<Travail>());
+            //adapter.clear();
+            adapter.addAll(travails);
+            listTravailClicked.setAdapter(adapter);
+        }
+
     }
 
-
-
     public void onAjouterTravail(View view) {
+        Intent goToListeTravail = new Intent(getApplicationContext(), ListeTravail.class);
+        goToListeTravail.putExtra("CYCLE_KEY",true);
+        goToListeTravail.putParcelableArrayListExtra("arrayListTravails", travails);
+        startActivity(goToListeTravail);
     }
 
     public void onCreerTravail(View view) {
+        Intent goToCreateTravail = new Intent(getApplicationContext(), CreationTravail.class);
+        startActivity(goToCreateTravail);
     }
 
     public void onSave(View view) {
@@ -119,19 +150,5 @@ public class CreationCycle extends AppCompatActivity {
         saveCycle.execute();
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

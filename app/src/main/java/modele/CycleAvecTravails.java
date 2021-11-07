@@ -1,11 +1,14 @@
 package modele;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
 import java.util.List;
 
-public class CycleAvecTravails {
+public class CycleAvecTravails implements Parcelable {
     @Embedded
     public Cycle cycle;
 
@@ -23,6 +26,23 @@ public class CycleAvecTravails {
     }
 
     //Méthodes
+
+    protected CycleAvecTravails(Parcel in) {
+        cycle = in.readParcelable(Cycle.class.getClassLoader());
+        travails = in.createTypedArrayList(Travail.CREATOR);
+    }
+
+    public static final Creator<CycleAvecTravails> CREATOR = new Creator<CycleAvecTravails>() {
+        @Override
+        public CycleAvecTravails createFromParcel(Parcel in) {
+            return new CycleAvecTravails(in);
+        }
+
+        @Override
+        public CycleAvecTravails[] newArray(int size) {
+            return new CycleAvecTravails[size];
+        }
+    };
 
     //Ajout d'un travail au cycle
     public void addTravail(Travail travail){
@@ -44,4 +64,14 @@ public class CycleAvecTravails {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(cycle, flags);
+        dest.writeTypedList(travails);
+    }
 }

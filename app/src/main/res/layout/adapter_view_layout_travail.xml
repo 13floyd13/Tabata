@@ -13,8 +13,7 @@
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="20dp"
-        android:id="@+id/adapter_nomTravail"
-        />
+        android:id="@+id/adapter_nomTravail" />
 
     <TextView
         android:layout_width="match_parent"
@@ -33,6 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/adapter_tempsTravail"
         android:id="@+id/adapter_tempsRepos"
         />
+
 
 
 

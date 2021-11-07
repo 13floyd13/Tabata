@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="controller.ListeTravail">
-
+    tools:context="controller.ListeCycle">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="titre"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="20dp"
@@ -21,7 +20,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/titrePage"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:id="@+id/listTravails"></ListView>
-
+        android:id="@+id/listCycles"></ListView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

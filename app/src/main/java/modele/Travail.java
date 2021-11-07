@@ -1,5 +1,8 @@
 package modele;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -7,7 +10,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity
-public class Travail implements Serializable {
+public class Travail implements Parcelable {
 
     //Attributs
     @PrimaryKey(autoGenerate = true)
@@ -28,6 +31,25 @@ public class Travail implements Serializable {
         this.temps = temps;
         this.repos = repos;
     }
+
+    protected Travail(Parcel in) {
+        travailId = in.readInt();
+        nom = in.readString();
+        temps = in.readInt();
+        repos = in.readInt();
+    }
+
+    public static final Creator<Travail> CREATOR = new Creator<Travail>() {
+        @Override
+        public Travail createFromParcel(Parcel in) {
+            return new Travail(in);
+        }
+
+        @Override
+        public Travail[] newArray(int size) {
+            return new Travail[size];
+        }
+    };
 
     //Getters et Setters
     public String getNom() {
@@ -62,4 +84,16 @@ public class Travail implements Serializable {
         this.repos = repos;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(travailId);
+        dest.writeString(nom);
+        dest.writeInt(temps);
+        dest.writeInt(repos);
+    }
 }
