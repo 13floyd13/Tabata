@@ -26,4 +26,5 @@
     <string name="creationSequence">Création Sequence</string>
     <string name="creationCycle">Création Cycle</string>
     <string name="liste">Liste</string>
+    <string name="entrainement">Entrainement</string>
 </resources>

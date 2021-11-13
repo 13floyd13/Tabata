@@ -149,8 +149,14 @@ public class CreationSequence extends AppCompatActivity {
                 Sequence sequence = new Sequence(nomSequence);
 
                 //Ajout de la description et du temps de Repos Long
+                if(strTempsReposLong.isEmpty()){
+                    sequence.setTempsReposLong(60);
+                }else{
+                    sequence.setTempsReposLong(Integer.parseInt(strTempsReposLong));
+                    //tempsReposLong = Integer.parseInt(strTempsReposLong);
+                }
                 sequence.setDescription(description);
-                sequence.setTempsReposLong(tempsReposLong);
+                //sequence.setTempsReposLong(tempsReposLong);
 
                 // enregistrement de sequence en bdd
                 mDb.getAppDatabase()

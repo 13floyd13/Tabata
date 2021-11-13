@@ -23,7 +23,7 @@ import modele.SequenceListAdapter;
 
 public class ListeSequence extends AppCompatActivity {
 
-
+    //Attributs
     private AppDatabase mDb;
     private SequenceListAdapter adapter;
     private ListView listSequence;
