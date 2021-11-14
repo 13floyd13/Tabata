@@ -28,7 +28,8 @@ public class ListeSequence extends AppCompatActivity {
     private SequenceListAdapter adapter;
     private ListView listSequence;
     private boolean entrainement = false;
-    private ArrayList<SequenceAvecCycles> sequences = new ArrayList<SequenceAvecCycles>();
+    private ArrayList<SequenceAvecCycles> sequences = new ArrayList<>();
+    private ArrayList<SequenceAvecCycles> seq = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +74,10 @@ public class ListeSequence extends AppCompatActivity {
                     //Récupération de la séquence cliqué
                     SequenceAvecCycles sequenceClicked = adapter.getItem(position);
                     Intent goBacktoEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
-                    sequences.add(sequenceClicked);
-                    String s = "test";
-                    goBacktoEntrainement.putParcelableArrayListExtra("arrayListSequenceClicked", sequences);
+                    seq.add(sequenceClicked);
+                    //sequences.add(sequenceClicked);
+
+                    goBacktoEntrainement.putParcelableArrayListExtra("arrayListSequenceClicked", seq);
                     goBacktoEntrainement.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(goBacktoEntrainement);
                 }
