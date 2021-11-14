@@ -20,6 +20,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/titrePage"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:id="@+id/listSequence"></ListView>
+        android:id="@+id/listEntrainement"></ListView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

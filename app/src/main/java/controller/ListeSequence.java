@@ -70,10 +70,11 @@ public class ListeSequence extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    //Récupération du travail cliqué pour l'envoyer à la création du cycle dans un arayList de travail
+                    //Récupération de la séquence cliqué
                     SequenceAvecCycles sequenceClicked = adapter.getItem(position);
                     Intent goBacktoEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
                     sequences.add(sequenceClicked);
+                    String s = "test";
                     goBacktoEntrainement.putParcelableArrayListExtra("arrayListSequenceClicked", sequences);
                     goBacktoEntrainement.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(goBacktoEntrainement);

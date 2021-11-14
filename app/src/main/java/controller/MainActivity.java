@@ -18,12 +18,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void onChoixEntrainement(View view) {
 
-        Intent goToChoixEntrainement = new Intent(getApplicationContext(), ListeSequence.class);
+        Intent goToChoixEntrainement = new Intent(getApplicationContext(), ListeEntrainement.class);
         startActivity(goToChoixEntrainement);
     }
 
     public void onCreationEntrainement(View view) {
-        Intent goToCreationEntrainement = new Intent(getApplicationContext(), CreationSequence.class);
+        Intent goToCreationEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
         startActivity(goToCreationEntrainement);
     }
 
