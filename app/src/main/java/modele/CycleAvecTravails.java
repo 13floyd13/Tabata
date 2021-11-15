@@ -15,7 +15,7 @@ public class CycleAvecTravails implements Parcelable {
     //Relation de type one-to-many entre cycle et travail
     @Relation(
             parentColumn = "cycleId",
-            entityColumn = "travailId"
+            entityColumn = "cycleId"
     )
     public List<Travail> travails;
 

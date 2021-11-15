@@ -22,7 +22,7 @@ public interface CycleDao {
 
     @Transaction
     @Insert
-    void insert(Cycle cycle);
+    long insert(Cycle cycle);
 
     @Insert
     void insertTravails(List<Travail> travails);

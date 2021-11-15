@@ -132,9 +132,14 @@ public class CreationCycle extends AppCompatActivity {
                 Cycle cycle = new Cycle(nomCycle);
 
                 //enregistrement du cycle en bdd
-                mDb.getAppDatabase()
+                long cycleId = mDb.getAppDatabase()
                         .cycleDao()
                         .insert(cycle);
+
+                //mise à jour de l'id du cycle sur les travails
+                for ( int i = 0; i < travails.size(); i++){
+                    travails.get(i).setCycleId(cycleId);
+                }
 
                 //enregistrements des travails dans la table cycle
                 mDb.getAppDatabase()

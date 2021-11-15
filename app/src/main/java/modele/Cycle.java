@@ -15,7 +15,7 @@ public class Cycle implements Parcelable {
 
     //Attributs
     @PrimaryKey(autoGenerate = true)
-    private int cycleId;
+    private long cycleId;
 
     @ColumnInfo(name = "nom")
     private String nom;
@@ -25,7 +25,7 @@ public class Cycle implements Parcelable {
     }
 
     protected Cycle(Parcel in) {
-        cycleId = in.readInt();
+        cycleId = in.readLong();
         nom = in.readString();
     }
 
@@ -49,11 +49,11 @@ public class Cycle implements Parcelable {
         this.nom = nom;
     }
 
-    public int getCycleId() {
+    public long getCycleId() {
         return cycleId;
     }
 
-    public void setCycleId(int id) {
+    public void setCycleId(long id) {
         this.cycleId = id;
     }
 
@@ -64,7 +64,7 @@ public class Cycle implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(cycleId);
+        dest.writeLong(cycleId);
         dest.writeString(nom);
     }
 }

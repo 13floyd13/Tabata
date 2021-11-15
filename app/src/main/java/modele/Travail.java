@@ -16,6 +16,9 @@ public class Travail implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private int travailId;
 
+    @ColumnInfo(name = "cycleId")
+    private long cycleId;
+
     @ColumnInfo(name = "nom")
     private String nom;
 
@@ -82,6 +85,14 @@ public class Travail implements Parcelable {
 
     public void setRepos(int repos) {
         this.repos = repos;
+    }
+
+    public long getCycleId() {
+        return cycleId;
+    }
+
+    public void setCycleId(long cycleId) {
+        this.cycleId = cycleId;
     }
 
     @Override
