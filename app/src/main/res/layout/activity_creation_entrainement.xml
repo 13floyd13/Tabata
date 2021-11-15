@@ -144,7 +144,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/buttonSave"
         android:layout_marginTop="30dp"
-        android:id="@+id/listSequence"></ListView>
+        android:id="@+id/listSequence"
+        android:scrollingCache="true"></ListView>
 
 
 

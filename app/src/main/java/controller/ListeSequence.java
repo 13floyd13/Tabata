@@ -23,12 +23,13 @@ import modele.SequenceListAdapter;
 
 public class ListeSequence extends AppCompatActivity {
 
-
+    //Attributs
     private AppDatabase mDb;
     private SequenceListAdapter adapter;
     private ListView listSequence;
     private boolean entrainement = false;
-    private ArrayList<SequenceAvecCycles> sequences = new ArrayList<SequenceAvecCycles>();
+    private ArrayList<SequenceAvecCycles> sequences = new ArrayList<>();
+    private ArrayList<SequenceAvecCycles> seq = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +71,13 @@ public class ListeSequence extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    //Récupération du travail cliqué pour l'envoyer à la création du cycle dans un arayList de travail
+                    //Récupération de la séquence cliqué
                     SequenceAvecCycles sequenceClicked = adapter.getItem(position);
                     Intent goBacktoEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
-                    sequences.add(sequenceClicked);
-                    goBacktoEntrainement.putParcelableArrayListExtra("arrayListSequenceClicked", sequences);
+                    seq.add(sequenceClicked);
+                    //sequences.add(sequenceClicked);
+
+                    goBacktoEntrainement.putParcelableArrayListExtra("arrayListSequenceClicked", seq);
                     goBacktoEntrainement.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(goBacktoEntrainement);
                 }
