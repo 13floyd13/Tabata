@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tabata">
         <activity
-            android:name="controller.MenuSupression"
+            android:name="controller.MenuSuppression"
             android:exported="true" />
         <activity
             android:name="controller.MenuCreation"

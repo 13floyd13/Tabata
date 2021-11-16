@@ -23,5 +23,6 @@ public class Edition extends AppCompatActivity {
 
     public void onMenuSuppression(View view) {
         Intent goToMenuSuppression = new Intent(getApplicationContext(), MenuSuppression.class);
+        startActivity(goToMenuSuppression);
     }
 }
