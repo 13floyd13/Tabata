@@ -24,7 +24,7 @@ public interface SequenceDao {
 
         @Transaction
         @Insert
-        void insert(Sequence sequence);
+        long insert(Sequence sequence);
 
         @Insert
         void insertCycles(List<Cycle> cycles);

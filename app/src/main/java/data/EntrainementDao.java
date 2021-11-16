@@ -24,7 +24,7 @@ public interface EntrainementDao {
 
     @Transaction
     @Insert
-    void insert(Entrainement entrainement);
+    long insert(Entrainement entrainement);
 
     @Insert
     void insertSequences(List<Sequence> sequences);

@@ -14,10 +14,10 @@ public class Travail implements Parcelable {
 
     //Attributs
     @PrimaryKey(autoGenerate = true)
-    private int travailId;
+    private long travailId;
 
-    @ColumnInfo(name = "cycleId")
-    private long cycleId;
+    //@ColumnInfo(name = "cycleId")
+    //private long cycleId;
 
     @ColumnInfo(name = "nom")
     private String nom;
@@ -36,7 +36,7 @@ public class Travail implements Parcelable {
     }
 
     protected Travail(Parcel in) {
-        travailId = in.readInt();
+        travailId = in.readLong();
         nom = in.readString();
         temps = in.readInt();
         repos = in.readInt();
@@ -71,11 +71,11 @@ public class Travail implements Parcelable {
         this.temps = temps;
     }
 
-    public int getTravailId() {
+    public long getTravailId() {
         return travailId;
     }
 
-    public void setTravailId(int id) {
+    public void setTravailId(long id) {
         this.travailId = id;
     }
 
@@ -87,13 +87,13 @@ public class Travail implements Parcelable {
         this.repos = repos;
     }
 
-    public long getCycleId() {
-        return cycleId;
-    }
+    //public long getCycleId() {
+     //   return cycleId;
+    //}
 
-    public void setCycleId(long cycleId) {
-        this.cycleId = cycleId;
-    }
+    //public void setCycleId(long cycleId) {
+      //  this.cycleId = cycleId;
+    //}
 
     @Override
     public int describeContents() {
@@ -102,7 +102,7 @@ public class Travail implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(travailId);
+        dest.writeLong(travailId);
         dest.writeString(nom);
         dest.writeInt(temps);
         dest.writeInt(repos);

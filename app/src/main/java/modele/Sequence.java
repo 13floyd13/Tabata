@@ -12,7 +12,7 @@ public class Sequence implements Parcelable {
 
     //Attributs
     @PrimaryKey(autoGenerate = true)
-    private int sequenceId;
+    private long sequenceId;
 
     @ColumnInfo(name = "nom")
     private String nom;
@@ -29,7 +29,7 @@ public class Sequence implements Parcelable {
     }
 
     protected Sequence(Parcel in) {
-        sequenceId = in.readInt();
+        sequenceId = in.readLong();
         nom = in.readString();
         tempsReposLong = in.readInt();
         description = in.readString();
@@ -48,11 +48,11 @@ public class Sequence implements Parcelable {
     };
 
     //Getters et Setters
-    public int getSequenceId() {
+    public long getSequenceId() {
         return sequenceId;
     }
 
-    public void setSequenceId(int sequenceId) {
+    public void setSequenceId(long sequenceId) {
         this.sequenceId = sequenceId;
     }
 
@@ -87,7 +87,7 @@ public class Sequence implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(sequenceId);
+        dest.writeLong(sequenceId);
         dest.writeString(nom);
         dest.writeInt(tempsReposLong);
         dest.writeString(description);

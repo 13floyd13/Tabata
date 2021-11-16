@@ -93,7 +93,7 @@ public class CreationTravail extends AppCompatActivity {
                 Travail travail = new Travail(nomTravail,tempsTravail,tempsRepos);
 
                 //Enregistrement de l'objet en BDD avec la méthode insert du Dao
-                mDb.getAppDatabase()
+                Long travailId = mDb.getAppDatabase()
                         .travailDao()
                         .insert(travail);
                 
@@ -111,5 +111,6 @@ public class CreationTravail extends AppCompatActivity {
 
         SaveTravail saveTravail = new SaveTravail();
         saveTravail.execute();
+        finish();
     }
 }

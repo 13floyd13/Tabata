@@ -11,6 +11,7 @@ import java.util.List;
 
 import modele.Cycle;
 import modele.CycleAvecTravails;
+import modele.CycleTravailCrossRef;
 import modele.Travail;
 
 @Dao
@@ -26,6 +27,9 @@ public interface CycleDao {
 
     @Insert
     void insertTravails(List<Travail> travails);
+
+    @Insert
+    void insertCycleTravail(CycleTravailCrossRef cycleTravailCrossRef);
 
     @Delete
     void delete(Cycle cycle);

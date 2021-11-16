@@ -23,6 +23,7 @@ import modele.Cycle;
 import modele.CycleAvecTravails;
 import modele.CycleListAdapter;
 import modele.Sequence;
+import modele.SequenceCycleCrossRef;
 
 public class CreationSequence extends AppCompatActivity {
 
@@ -82,6 +83,8 @@ public class CreationSequence extends AppCompatActivity {
     public void onAjouterCycle(View view) {
         Intent goToListCycle = new Intent(getApplicationContext(), ListeCycle.class);
         goToListCycle.putExtra("SEQUENCE_KEY", SEQUENCE_KEY);
+
+        //envoie des cycles déja ajoutés au préalable dans la séquence
         goToListCycle.putParcelableArrayListExtra("arrayListCycles", cyclesAvecTravails);
         startActivity(goToListCycle);
     }
@@ -116,12 +119,6 @@ public class CreationSequence extends AppCompatActivity {
             return;
         }
 
-        //remplissage de la List de Cycle
-        /*for (int i = 0; i < listViewCycle.getCount(); i++){
-
-        Cycle cycle = (Cycle) listViewCycle.getItemAtPosition(i);
-        listeCycle.add(cycle);
-        }*/
 
         //récupération du temps de repos long
         EditText eTempsReposLong = findViewById(R.id.tempsRepos);
@@ -153,24 +150,24 @@ public class CreationSequence extends AppCompatActivity {
                     sequence.setTempsReposLong(60);
                 }else{
                     sequence.setTempsReposLong(Integer.parseInt(strTempsReposLong));
-                    //tempsReposLong = Integer.parseInt(strTempsReposLong);
                 }
                 sequence.setDescription(description);
-                //sequence.setTempsReposLong(tempsReposLong);
 
                 // enregistrement de sequence en bdd
-                mDb.getAppDatabase()
+                long sequenceId = mDb.getAppDatabase()
                         .sequenceDao()
                         .insert(sequence);
 
-                //enregistrement des cycles dans la table Sequence
+                //enregistrement dans la table commune entre sequence et cycle (many to many)
                 ArrayList cycles = new ArrayList<Cycle>();
                 for (int i = 0; i < cyclesAvecTravails.size(); i++){
-                    cycles.add(cyclesAvecTravails.get(i).getCycle());
+                    SequenceCycleCrossRef sequenceCycleCrossRef = new SequenceCycleCrossRef();
+                    sequenceCycleCrossRef.sequenceId = sequenceId;
+                    sequenceCycleCrossRef.cycleId = cyclesAvecTravails.get(i).getCycle().getCycleId();
+                    mDb.getAppDatabase()
+                            .sequenceCycleCrossRefDao()
+                            .insert(sequenceCycleCrossRef);
                 }
-                mDb.getAppDatabase()
-                        .sequenceDao()
-                        .insertCycles(cycles);
 
                 return sequence;
             }
@@ -178,6 +175,7 @@ public class CreationSequence extends AppCompatActivity {
 
         SaveSequence saveSequence = new SaveSequence();
         saveSequence.execute();
+        finish();
 
     }
 }

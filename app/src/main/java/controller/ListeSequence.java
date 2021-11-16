@@ -28,8 +28,8 @@ public class ListeSequence extends AppCompatActivity {
     private SequenceListAdapter adapter;
     private ListView listSequence;
     private boolean entrainement = false;
-    private ArrayList<SequenceAvecCycles> sequences = new ArrayList<>();
-    private ArrayList<SequenceAvecCycles> seq = new ArrayList<>();
+    private ArrayList<SequenceAvecCycles> sequences = new ArrayList<SequenceAvecCycles>();
+    //private ArrayList<SequenceAvecCycles> seq = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class ListeSequence extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null){
             entrainement = extras.getBoolean("ENTRAINEMENT_KEY");
-            sequences = extras.getParcelableArrayList("arrayListSequence");
+            sequences = extras.getParcelableArrayList("arrayListSequences");
         }
 
         //on récupère les strings à concaténer
@@ -74,10 +74,8 @@ public class ListeSequence extends AppCompatActivity {
                     //Récupération de la séquence cliqué
                     SequenceAvecCycles sequenceClicked = adapter.getItem(position);
                     Intent goBacktoEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
-                    seq.add(sequenceClicked);
-                    //sequences.add(sequenceClicked);
-
-                    goBacktoEntrainement.putParcelableArrayListExtra("arrayListSequenceClicked", seq);
+                    sequences.add(sequenceClicked);
+                    goBacktoEntrainement.putParcelableArrayListExtra("arrayListSequenceClicked", sequences);
                     goBacktoEntrainement.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(goBacktoEntrainement);
                 }

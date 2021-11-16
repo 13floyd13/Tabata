@@ -12,7 +12,7 @@ public class Entrainement implements Parcelable {
 
     //Attributs
     @PrimaryKey(autoGenerate = true)
-    private int entrainementId;
+    private long entrainementId;
 
     @ColumnInfo(name = "nom")
     private String nom;
@@ -34,7 +34,7 @@ public class Entrainement implements Parcelable {
     //Getters et Setters
 
     protected Entrainement(Parcel in) {
-        entrainementId = in.readInt();
+        entrainementId = in.readLong();
         nom = in.readString();
         tempsPreparation = in.readInt();
         description = in.readString();
@@ -53,11 +53,11 @@ public class Entrainement implements Parcelable {
         }
     };
 
-    public int getEntrainementId() {
+    public long getEntrainementId() {
         return entrainementId;
     }
 
-    public void setEntrainementId(int entrainementId) {
+    public void setEntrainementId(long entrainementId) {
         entrainementId = entrainementId;
     }
 
@@ -100,7 +100,7 @@ public class Entrainement implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(entrainementId);
+        dest.writeLong(entrainementId);
         dest.writeString(nom);
         dest.writeInt(tempsPreparation);
         dest.writeString(description);

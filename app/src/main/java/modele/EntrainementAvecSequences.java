@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.Junction;
 import androidx.room.Relation;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public class EntrainementAvecSequences implements Parcelable {
     //Relation de type one-to-many entre Entrainement et Sequence
     @Relation(
             parentColumn = "entrainementId",
-            entityColumn = "sequenceId"
+            entityColumn = "sequenceId",
+            associateBy = @Junction(EntrainementSequenceCrossRef.class)
     )
     private List<Sequence> sequences ;
 

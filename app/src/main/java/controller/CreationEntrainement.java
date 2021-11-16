@@ -20,6 +20,7 @@ import java.util.List;
 import data.DatabaseClient;
 import modele.Entrainement;
 import modele.EntrainementAvecSequences;
+import modele.EntrainementSequenceCrossRef;
 import modele.Sequence;
 import modele.SequenceAvecCycles;
 import modele.SequenceListAdapter;
@@ -82,6 +83,8 @@ public class CreationEntrainement extends AppCompatActivity {
     public void onAjouterSequence(View view) {
         Intent goToListSequence = new Intent(getApplicationContext(), ListeSequence.class);
         goToListSequence.putExtra("ENTRAINEMENT_KEY", ENTRAINEMENT_KEY);
+
+        //envoie des sequences déja ajoutés au préalable
         goToListSequence.putParcelableArrayListExtra("arrayListSequences", sequenceAvecCycles);
         startActivity(goToListSequence);
 
@@ -168,18 +171,19 @@ public class CreationEntrainement extends AppCompatActivity {
 
 
                     // Enregistrement de l'objet en BDD avec la méthode insert du Dao
-                    mDb.getAppDatabase()
+                    long entrainementId = mDb.getAppDatabase()
                             .entrainementDao()
                             .insert(entrainement);
 
-                    //enregistrement des sequences dans la table Entrainement
-                    ArrayList sequences = new ArrayList<Sequence>();
+                    //Enregistrement de la relation entre entrainement et sequence dans la table commune (many to many)
                     for (int i = 0; i < sequenceAvecCycles.size(); i++){
-                        sequences.add(sequenceAvecCycles.get(i).getSequence());
+                        EntrainementSequenceCrossRef entrainementSequenceCrossRef = new EntrainementSequenceCrossRef();
+                        entrainementSequenceCrossRef.entrainementId = entrainementId;
+                        entrainementSequenceCrossRef.sequenceId = sequenceAvecCycles.get(i).getSequence().getSequenceId();
+                        mDb.getAppDatabase()
+                                .entrainementSequenceCrossRefDao()
+                                .insert(entrainementSequenceCrossRef);
                     }
-                    mDb.getAppDatabase()
-                            .entrainementDao()
-                            .insertSequences(sequences);
 
                     return entrainement;
                 }
@@ -189,6 +193,7 @@ public class CreationEntrainement extends AppCompatActivity {
         //appel de la classe asynchrone et execution de l'insertion en base de donnée
         SaveEntrainement saveEntrainement = new SaveEntrainement();
         saveEntrainement.execute();
+        finish();
     }
 /*
     /* mettre dans OnCreate: Récupération du DatabaseClient

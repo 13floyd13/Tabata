@@ -20,7 +20,7 @@ public interface TravailDao {
     List<Travail> getAll();
 
     @Insert
-    void insert(Travail travail);
+    long insert(Travail travail);
 
     @Delete
     void delete(Travail travail);

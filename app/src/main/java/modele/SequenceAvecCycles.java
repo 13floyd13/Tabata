@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.room.Embedded;
+import androidx.room.Junction;
 import androidx.room.Relation;
 
 import java.util.List;
@@ -15,7 +16,8 @@ public class SequenceAvecCycles implements Parcelable {
     //Relation de type one-to-many entre Sequence et Cycle
     @Relation(
             parentColumn = "sequenceId",
-            entityColumn = "cycleId"
+            entityColumn = "cycleId",
+            associateBy = @Junction(SequenceCycleCrossRef.class)
     )
     public List<Cycle> cycles;
 

@@ -19,6 +19,7 @@ import java.util.List;
 
 import data.DatabaseClient;
 import modele.Cycle;
+import modele.CycleTravailCrossRef;
 import modele.Travail;
 import modele.TravailListAdapter;
 
@@ -30,6 +31,7 @@ public class CreationCycle extends AppCompatActivity {
     private ArrayList<Travail> travails = new ArrayList<Travail>();
     private ListView listTravailClicked;
     private TravailListAdapter adapter;
+    private boolean sequence;
 
 
     @Override
@@ -80,6 +82,8 @@ public class CreationCycle extends AppCompatActivity {
     public void onAjouterTravail(View view) {
         Intent goToListeTravail = new Intent(getApplicationContext(), ListeTravail.class);
         goToListeTravail.putExtra("CYCLE_KEY",true);
+
+        //envoie de la liste de travails déja ajouté
         goToListeTravail.putParcelableArrayListExtra("arrayListTravails", travails);
         startActivity(goToListeTravail);
     }
@@ -114,12 +118,6 @@ public class CreationCycle extends AppCompatActivity {
             return;
         }
 
-        //remplissage de la List de Travail
-        /*for (int i = 0; i < listViewTravail.getCount(); i++){
-
-            Travail travail = (Travail) listViewTravail.getItemAtPosition(i);
-            travails.add(travail);
-        }*/
 
         //Création classe asynchrone pour sauvegarder le cycle
         class SaveCycle extends AsyncTask<Void, Void, Cycle>{
@@ -136,15 +134,16 @@ public class CreationCycle extends AppCompatActivity {
                         .cycleDao()
                         .insert(cycle);
 
-                //mise à jour de l'id du cycle sur les travails
-                for ( int i = 0; i < travails.size(); i++){
-                    travails.get(i).setCycleId(cycleId);
-                }
 
-                //enregistrements des travails dans la table cycle
-                mDb.getAppDatabase()
-                        .cycleDao()
-                        .insertTravails(travails);
+                //mise à jour de la base commune entre cycle et travail (many to many)
+                for (int i = 0; i < travails.size(); i++){
+                    CycleTravailCrossRef cycleTravailCrossRef = new CycleTravailCrossRef();
+                    cycleTravailCrossRef.cycleId = cycleId;
+                    cycleTravailCrossRef.travailId = travails.get(i).getTravailId();
+                    mDb.getAppDatabase()
+                            .cycleTravailCrossRefDao()
+                            .insert(cycleTravailCrossRef);
+                }
 
                 return cycle;
             }
@@ -152,6 +151,7 @@ public class CreationCycle extends AppCompatActivity {
 
         SaveCycle saveCycle = new SaveCycle();
         saveCycle.execute();
+        finish();
 
     }
 
