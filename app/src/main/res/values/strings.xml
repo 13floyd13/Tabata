@@ -27,4 +27,7 @@
     <string name="creationCycle">Création Cycle</string>
     <string name="liste">Liste</string>
     <string name="entrainement">Entrainement</string>
+    <string name="creation">Menu Creation</string>
+    <string name="suppression">Menu Supression</string>
+    <string name="edition">Menu Edition</string>
 </resources>

@@ -5,14 +5,17 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.20989583333333334" />
         <entry key="app/src/main/res/layout/activity_creation_cycle.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_creation_entrainement.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_creation_entrainement.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_creation_sequence.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_creation_travail.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_edition.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_liste_cycle.xml" value="0.1707193515704154" />
         <entry key="app/src/main/res/layout/activity_liste_entrainement.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_liste_sequence.xml" value="0.1707193515704154" />
         <entry key="app/src/main/res/layout/activity_liste_travail.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.29483695652173914" />
+        <entry key="app/src/main/res/layout/activity_menu_creation.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_menu_supression.xml" value="0.2125" />
         <entry key="app/src/main/res/layout/adapter_view_layout_cycle.xml" value="0.1707193515704154" />
         <entry key="app/src/main/res/layout/adapter_view_layout_entrainement.xml" value="0.1" />
         <entry key="app/src/main/res/layout/adapter_view_layout_sequence.xml" value="0.1707193515704154" />

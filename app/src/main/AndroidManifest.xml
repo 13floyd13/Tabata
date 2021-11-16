@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tabata">
         <activity
+            android:name="controller.MenuSupression"
+            android:exported="true" />
+        <activity
+            android:name="controller.MenuCreation"
+            android:exported="true" />
+        <activity
+            android:name="controller.Edition"
+            android:exported="true" />
+        <activity
             android:name="controller.ListeEntrainement"
             android:exported="true" />
         <activity

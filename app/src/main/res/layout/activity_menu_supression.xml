@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="controller.MenuSuppression">
+
+    <TextView
+        android:id="@+id/titrePage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/creation"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="100dp" />
+
+    <Button
+        android:id="@+id/btnSuppressionEntrainement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@+id/titrePage"
+        android:layout_marginTop="150dp"
+        android:onClick="onSuppressionEntrainement" />
+
+    <Button
+        android:id="@+id/btnSuppressionSequence"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@+id/titrePage"
+        android:layout_marginTop="200dp"
+        android:onClick="onSuppressionSequence" />
+
+    <Button
+        android:id="@+id/btnSuppressionCycle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@+id/titrePage"
+        android:layout_marginTop="250dp"
+        android:onClick="onSuppressionCycle" />
+
+    <Button
+        android:id="@+id/btnSuppressionTravail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@+id/titrePage"
+        android:layout_marginTop="300dp"
+        android:onClick="onSuppressionTravail" />
+</androidx.constraintlayout.widget.ConstraintLayout>

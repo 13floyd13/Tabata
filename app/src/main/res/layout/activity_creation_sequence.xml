@@ -110,12 +110,18 @@
         android:id="@+id/buttonSave"
         android:onClick="onSave"></Button>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSave">
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSave"
         android:layout_marginTop="30dp"
         android:id="@+id/listCycles"></ListView>
+
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

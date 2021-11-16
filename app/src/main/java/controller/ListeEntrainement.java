@@ -3,6 +3,8 @@ package controller;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ public class ListeEntrainement extends AppCompatActivity {
     private EntrainementListAdapter adapter;
     private ListView listEntrainement;
     private ArrayList<EntrainementAvecSequences> entrainements = new ArrayList<EntrainementAvecSequences>();
+    private boolean suppression = false;
 
 
     @Override
@@ -31,6 +34,10 @@ public class ListeEntrainement extends AppCompatActivity {
         setContentView(R.layout.activity_liste_entrainement);
 
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+            suppression = extras.getBoolean("SUPPRESSION_KEY");
+        }
 
         //on récupère les strings à concaténer
         String liste = getResources().getString(R.string.liste);
@@ -53,6 +60,34 @@ public class ListeEntrainement extends AppCompatActivity {
         listEntrainement.setAdapter(adapter);
 
         //ajout d'un évenement click à la listView
+        if (suppression){
+            listEntrainement.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+
+                    EntrainementAvecSequences entrainementAvecSequences = adapter.getItem(position);
+
+
+                    class SupprimerEntrainementAsync extends android.os.AsyncTask<Void, Void, Void>{
+
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            mDb.entrainementDao()
+                                    .delete(entrainementAvecSequences.getEntrainement());
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid){
+                            super.onPostExecute(aVoid);
+                            adapter.notifyDataSetChanged();
+
+                        }
+                    }
+                }
+            });
+        }
+
 
 
 
