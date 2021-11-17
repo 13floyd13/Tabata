@@ -20,6 +20,10 @@ public interface SequenceCycleCrossRefDao {
     @Query("Select * FROM Sequence")
     List<SequenceAvecCycles> getSequenceCycle();
 
+    @Transaction
+    @Query("SELECT cycleId FROM SEQUENCECYCLECROSSREF WHERE sequenceId = :sequenceId ")
+    List<Long> getCyclesId(long sequenceId);
+
     @Insert
     long insert(SequenceCycleCrossRef sequenceCycleCrossRef);
 

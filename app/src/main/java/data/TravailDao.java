@@ -19,6 +19,9 @@ public interface TravailDao {
     @Query("SELECT * FROM Travail")
     List<Travail> getAll();
 
+    @Query("SELECT * FROM Travail WHERE travailId IN (:ids)")
+    List<Travail> getTravails(List<Long> ids);
+
     @Insert
     long insert(Travail travail);
 

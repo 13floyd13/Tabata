@@ -7,6 +7,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import modele.Cycle;
@@ -20,6 +21,10 @@ public interface CycleDao {
     @Transaction
     @Query("SELECT * FROM Cycle")
     List<CycleAvecTravails> getAll();
+
+    @Transaction
+    @Query("SELECT * FROM Cycle WHERE cycleId In (:cycleIds)")
+    List<Cycle> getCycles(List<Long> cycleIds);
 
     @Transaction
     @Insert
