@@ -20,6 +20,7 @@
         <entry key="app/src/main/res/layout/adapter_view_layout_entrainement.xml" value="0.1" />
         <entry key="app/src/main/res/layout/adapter_view_layout_sequence.xml" value="0.1707193515704154" />
         <entry key="app/src/main/res/layout/adapter_view_layout_travail.xml" value="0.25" />
+        <entry key="app/src/main/res/xml/network_security_config.xml" value="0.190625" />
       </map>
     </option>
   </component>

@@ -2,6 +2,7 @@ package controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,7 +36,7 @@ public class ListeEntrainement extends AppCompatActivity {
 
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null){
+        if (extras != null) {
             suppression = extras.getBoolean("SUPPRESSION_KEY");
         }
 
@@ -43,7 +44,7 @@ public class ListeEntrainement extends AppCompatActivity {
         String liste = getResources().getString(R.string.liste);
         String space = " ";
         String entrainement = getResources().getString(R.string.entrainement);
-        String strListeEntrainement = liste+space+entrainement;
+        String strListeEntrainement = liste + space + entrainement;
 
         //récupération du TextView pour ajouter la string
         TextView titrePage = findViewById(R.id.titrePage);
@@ -60,15 +61,15 @@ public class ListeEntrainement extends AppCompatActivity {
         listEntrainement.setAdapter(adapter);
 
         //ajout d'un évenement click à la listView
-        if (suppression){
+        if (suppression) {
             listEntrainement.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     EntrainementAvecSequences entrainementAvecSequences = adapter.getItem(position);
 
 
-                    class SupprimerEntrainementAsync extends android.os.AsyncTask<Void, Void, Void>{
+                    class SupprimerEntrainementAsync extends android.os.AsyncTask<Void, Void, Void> {
 
                         @Override
                         protected Void doInBackground(Void... voids) {
@@ -78,19 +79,30 @@ public class ListeEntrainement extends AppCompatActivity {
                         }
 
                         @Override
-                        protected void onPostExecute(Void aVoid){
+                        protected void onPostExecute(Void aVoid) {
                             super.onPostExecute(aVoid);
                             adapter.notifyDataSetChanged();
 
                         }
                     }
+
+                    SupprimerEntrainementAsync supprimerEntrainementAsync = new SupprimerEntrainementAsync();
+                    supprimerEntrainementAsync.execute();
+                }
+            });
+        } else {
+            listEntrainement.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    EntrainementAvecSequences entrainementAvecSequences = adapter.getItem(position);
+                    Intent goToPlay = new Intent(getApplicationContext(), Play.class);
+                    goToPlay.putExtra("entrainementAvecSequences", entrainementAvecSequences);
+                    startActivity(goToPlay);
+
                 }
             });
         }
-
-
-
-
     }
 
         private void getEntrainements(){
