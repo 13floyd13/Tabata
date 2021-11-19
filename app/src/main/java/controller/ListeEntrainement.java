@@ -16,6 +16,7 @@ import java.util.List;
 
 import data.AppDatabase;
 import data.DatabaseClient;
+import modele.Entrainement;
 import modele.EntrainementAvecSequences;
 import modele.EntrainementListAdapter;
 
@@ -67,6 +68,7 @@ public class ListeEntrainement extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     EntrainementAvecSequences entrainementAvecSequences = adapter.getItem(position);
+                    Entrainement entrainement = entrainementAvecSequences.getEntrainement();
 
 
                     class SupprimerEntrainementAsync extends android.os.AsyncTask<Void, Void, Void> {
@@ -74,7 +76,7 @@ public class ListeEntrainement extends AppCompatActivity {
                         @Override
                         protected Void doInBackground(Void... voids) {
                             mDb.entrainementDao()
-                                    .delete(entrainementAvecSequences.getEntrainement());
+                                    .delete(entrainement);
                             return null;
                         }
 
@@ -88,6 +90,7 @@ public class ListeEntrainement extends AppCompatActivity {
 
                     SupprimerEntrainementAsync supprimerEntrainementAsync = new SupprimerEntrainementAsync();
                     supprimerEntrainementAsync.execute();
+                    finish();
                 }
             });
         } else {
@@ -111,8 +114,8 @@ public class ListeEntrainement extends AppCompatActivity {
                 @Override
                 protected List<EntrainementAvecSequences> doInBackground(Void... voids) {
                     List<EntrainementAvecSequences> entrainementList = mDb
-                            .entrainementDao()
-                            .getAll();
+                            .entrainementSequenceCrossRefDao()
+                            .getEntrainementSequence();
                     return entrainementList;
                 }
 

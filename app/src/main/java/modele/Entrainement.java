@@ -58,7 +58,7 @@ public class Entrainement implements Parcelable {
     }
 
     public void setEntrainementId(long entrainementId) {
-        entrainementId = entrainementId;
+        this.entrainementId = entrainementId;
     }
 
     public String getNom() {

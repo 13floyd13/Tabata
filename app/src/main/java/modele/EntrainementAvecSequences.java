@@ -15,7 +15,7 @@ public class EntrainementAvecSequences implements Parcelable {
     @Embedded
     public Entrainement entrainement;
 
-    //Relation de type one-to-many entre Entrainement et Sequence
+    //Relation de type many-to-many entre Entrainement et Sequence
     @Relation(
             parentColumn = "entrainementId",
             entityColumn = "sequenceId",

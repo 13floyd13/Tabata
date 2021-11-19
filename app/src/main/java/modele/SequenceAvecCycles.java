@@ -13,7 +13,7 @@ public class SequenceAvecCycles implements Parcelable {
     @Embedded
     public Sequence sequence;
 
-    //Relation de type one-to-many entre Sequence et Cycle
+    //Relation de type many-to-many entre Sequence et Cycle
     @Relation(
             parentColumn = "sequenceId",
             entityColumn = "cycleId",

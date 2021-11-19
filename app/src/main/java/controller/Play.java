@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import data.AppDatabase;
+import data.DatabaseClient;
 import modele.Cycle;
 import modele.Entrainement;
 import modele.EntrainementAvecSequences;
@@ -26,13 +27,16 @@ public class Play extends AppCompatActivity {
     private List<Travail> travails;
     private List<Long> cycleIds;
     private List<Long> travailIds;
-    private int tempsTotal;
+    private int tempsTotal = 0;
     private HashMap<String, Integer> mapTimer = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+
+        // Récupération du DatabaseClient
+        mDb = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase();
         Bundle extras = getIntent().getExtras();
         if (extras != null){
 
@@ -41,11 +45,13 @@ public class Play extends AppCompatActivity {
             sequences = entrainementAvecSequences.getSequences();
 
         }
+
+        majTimer();
     }
 
     public void getCycles(Sequence sequence) {
 
-        class GetCyclesAsync extends android.os.AsyncTask<Sequence, Void, List<Cycle>>{
+        class GetCyclesAsync extends android.os.AsyncTask<Void, Void, List<Cycle>>{
 
             /*@Override
             protected List<Cycle> doInBackground(Void... voids) {
@@ -66,17 +72,28 @@ public class Play extends AppCompatActivity {
             }*/
 
             @Override
-            protected List<Cycle> doInBackground(Sequence... sequences) {
+            protected List<Cycle> doInBackground(Void... voids) {
                 //for (int i = 0; i < sequences.length; i++) {
+                Long idCy = sequence.getSequenceId();
                     cycleIds = mDb
-                            .sequenceCycleCrossRefDao().getCyclesId(sequence.getSequenceId());
+                            .sequenceCycleCrossRefDao()
+                            .getCyclesId(sequence.getSequenceId());
                             //.getCyclesId(sequences[i].getSequenceId());
                 //}
-                cycles = mDb
+                List<Cycle> listCycles = mDb
                         .cycleDao()
                         .getCycles(cycleIds);
 
-                return cycles;
+                cycles = listCycles;
+                return listCycles;
+            }
+
+            @Override
+            protected void onPostExecute(List<Cycle> listCycles){
+                super.onPostExecute(listCycles);
+
+                //Mise à jour de l'adapter avec la liste d'entrainements
+                cycles = listCycles;
             }
         }
         GetCyclesAsync getCyclesAsync = new GetCyclesAsync();
@@ -85,10 +102,10 @@ public class Play extends AppCompatActivity {
 
     public void getTravails(Cycle cycle){
 
-        class GetTravailsAsync extends android.os.AsyncTask<List<Long>, Void, List<Travail>>{
+        class GetTravailsAsync extends android.os.AsyncTask<Void, Void, List<Travail>>{
 
             @Override
-            protected List<Travail> doInBackground(List<Long>... lists) {
+            protected List<Travail> doInBackground(Void... voids) {
                 /*for (int i = 0; i < lists.length; i++){
                     List<Long> ids = mDb
                             .cycleTravailCrossRefDao()
@@ -109,12 +126,13 @@ public class Play extends AppCompatActivity {
 
     public void majTimer(){
 
-        int tempsPrepa = entrainement.getTempsPreparation();
-        tempsTotal += tempsPrepa;
-        mapTimer.put(entrainement.getNom(), tempsPrepa);
+        //int tempsPrepa = entrainement.getTempsPreparation();
+        //tempsTotal += tempsPrepa;
+        //mapTimer.put(entrainement.getNom(), tempsPrepa);
         for (int i = 0; i < sequences.size(); i++){
             getCycles(sequences.get(i));
 
+            List<Long> cy = cycleIds;
             for (int j = 0; j < cycles.size(); i++){
                 getTravails(cycles.get(i));
 
@@ -150,4 +168,5 @@ public class Play extends AppCompatActivity {
 
 
     }
+
 }

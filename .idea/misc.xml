@@ -16,6 +16,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.29483695652173914" />
         <entry key="app/src/main/res/layout/activity_menu_creation.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_menu_supression.xml" value="0.2125" />
+        <entry key="app/src/main/res/layout/activity_play.xml" value="0.25" />
         <entry key="app/src/main/res/layout/adapter_view_layout_cycle.xml" value="0.1707193515704154" />
         <entry key="app/src/main/res/layout/adapter_view_layout_entrainement.xml" value="0.1" />
         <entry key="app/src/main/res/layout/adapter_view_layout_sequence.xml" value="0.1707193515704154" />
