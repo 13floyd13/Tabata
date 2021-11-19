@@ -3,6 +3,7 @@ package controller;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.example.tabata.R;
 
@@ -29,6 +30,12 @@ public class Play extends AppCompatActivity {
     private List<Long> travailIds;
     private int tempsTotal = 0;
     private HashMap<String, Integer> mapTimer = new HashMap<>();
+    private String travail = getResources().getString(R.string.travail);
+    private String repos = getResources().getString(R.string.repos);
+    private String space = " ";
+    private Sequence sequenceEnCours;
+    private Cycle cycleEnCours;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,8 @@ public class Play extends AppCompatActivity {
         }
 
         majTimer();
+        TextView tview = findViewById(R.id.textView2);
+
     }
 
     public void getCycles(Sequence sequence) {
@@ -94,6 +103,7 @@ public class Play extends AppCompatActivity {
 
                 //Mise à jour de l'adapter avec la liste d'entrainements
                 cycles = listCycles;
+                majCycle(listCycles);
             }
         }
         GetCyclesAsync getCyclesAsync = new GetCyclesAsync();
@@ -119,22 +129,32 @@ public class Play extends AppCompatActivity {
                         .getTravails(travailIds);
                 return travails;
             }
+
+            @Override
+            protected void onPostExecute(List<Travail> listTravails){
+                super.onPostExecute(listTravails);
+
+                //Mise à jour de l'adapter avec la liste d'entrainements
+                travails = listTravails;
+                majTravail(listTravails);
+            }
         }
         GetTravailsAsync getTravailsAsync = new GetTravailsAsync();
         getTravailsAsync.execute();
     }
 
-    public void majTimer(){
+    public void majTimer() {
 
-        //int tempsPrepa = entrainement.getTempsPreparation();
-        //tempsTotal += tempsPrepa;
-        //mapTimer.put(entrainement.getNom(), tempsPrepa);
-        for (int i = 0; i < sequences.size(); i++){
+        int tempsPrepa = entrainement.getTempsPreparation();
+        tempsTotal += tempsPrepa;
+        mapTimer.put(entrainement.getNom(), tempsPrepa);
+        for (int i = 0; i < sequences.size(); i++) {
+            sequenceEnCours = sequences.get(i);
             getCycles(sequences.get(i));
 
-            List<Long> cy = cycleIds;
-            for (int j = 0; j < cycles.size(); i++){
-                getTravails(cycles.get(i));
+           /* List<Long> cy = cycleIds;
+            //for (int j = 0; j < cycles.size(); j++){
+                //getTravails(cycles.get(j));
 
                 for (int k = 0; k < travails.size(); i++){
                     String nomTravail = travails.get(i).getNom();
@@ -153,8 +173,11 @@ public class Play extends AppCompatActivity {
             String nomSequence = sequences.get(i).getNom();
             int tempsReposLong = sequences.get(i).getTempsReposLong();
             mapTimer.put(nomSequence, tempsReposLong);
-            tempsTotal += tempsReposLong;
+            tempsTotal += tempsReposLong;*/
         }
+    }
+
+
 
         /*for sequences
                 timer.add temps prepa
@@ -167,6 +190,32 @@ public class Play extends AppCompatActivity {
 
 
 
+    public void majCycle(List<Cycle> lcycles){
+
+        for (int j = 0; j < lcycles.size(); j++){
+            cycleEnCours = lcycles.get(j);
+            getTravails(lcycles.get(j));
+        }
     }
+
+    public void majTravail(List<Travail> ltravails){
+        for (int i = 0; i < ltravails.size(); i++){
+            String nomTravail = travails.get(i).getNom();
+            int tempsTravail = travails.get(i).getTemps();
+            int tempsRepos = travails.get(i).getRepos();
+            mapTimer.put(nomTravail+space+travail, tempsTravail);
+            mapTimer.put(nomTravail+space+repos, tempsRepos);
+            tempsTotal += tempsTravail;
+            tempsTotal += tempsRepos;
+        }
+
+        String nomSequence = sequenceEnCours.getNom();
+        int tempsReposLong = sequenceEnCours.getTempsReposLong();
+        mapTimer.put(nomSequence, tempsReposLong);
+        tempsTotal += tempsReposLong;
+
+
+    }
+
 
 }
