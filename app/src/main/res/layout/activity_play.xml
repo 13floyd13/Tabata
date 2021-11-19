@@ -7,11 +7,98 @@
     tools:context="controller.Play">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/nomEntrainement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Temps Total"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="50dp"
+        app:layout_constraintTop_toTopOf="@id/nomEntrainement"
+        android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:id="@+id/tempsTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Temps Total"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="100dp"
+        app:layout_constraintTop_toTopOf="@+id/nomEntrainement"
+        android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:id="@+id/nomSequence"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="@id/tempsTotal"
+        android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:id="@+id/nomCycle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="@+id/nomSequence"
+        android:layout_marginTop="50dp" />
+
+    <TextView
+        android:id="@+id/nomTravail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/nomCycle"
+        android:layout_marginTop="50dp" />
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/nomTravail"
+        android:layout_marginTop="50dp" />
+
+    <Button
+        android:id="@+id/reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
-        tools:layout_editor_absoluteX="197dp"
-        tools:layout_editor_absoluteY="116dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/timer"
+        android:layout_marginTop="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="75dp"/>
+
+    <Button
+        android:id="@+id/pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@+id/timer"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="75dp"/>
+
+    <Button
+        android:id="@+id/suivant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@+id/pause"
+        android:layout_marginTop="50dp"
+        />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

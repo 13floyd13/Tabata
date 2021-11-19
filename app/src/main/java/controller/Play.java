@@ -3,6 +3,7 @@ package controller;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.tabata.R;
@@ -42,6 +43,14 @@ public class Play extends AppCompatActivity {
     private Sequence sequenceEnCours;
     private Cycle cycleEnCours;
     private List<Compteur> compteurs;
+    TextView tvNomEntrainement;
+    TextView tvTimerTotal;
+    TextView tvNomSequence;
+    TextView tvNomCycle;
+    TextView tvNomTravail;
+    TextView tvTimer;
+    Button btnPause;
+    Button btnSuivant;
 
 
 
@@ -72,7 +81,19 @@ public class Play extends AppCompatActivity {
         }
 
         majTimer();
-        TextView tview = findViewById(R.id.textView2);
+
+        //Récupération des vues
+        tvTimerTotal = findViewById(R.id.tempsTotal);
+        tvNomSequence = findViewById(R.id.nomSequence);
+        tvNomCycle = findViewById(R.id.nomCycle);
+        tvNomTravail = findViewById(R.id.nomTravail);
+        tvTimer = findViewById(R.id.timer);
+        btnPause = findViewById(R.id.pause);
+        btnSuivant = findViewById(R.id.suivant);
+
+        tvNomEntrainement.setText(entrainement.getNom());
+
+
 
     }
 
@@ -195,6 +216,17 @@ public class Play extends AppCompatActivity {
         compteurs.add(reposLongCompteur);
 
 
+    }
+
+    public void lancerEntrainement(){
+
+        for (int i = 0; i < compteurs.size(); i++){
+            Compteur compteur = compteurs.get(i);
+
+            tvN
+
+
+        }
     }
 
 
