@@ -13,6 +13,7 @@ import java.util.List;
 
 import data.AppDatabase;
 import data.DatabaseClient;
+import modele.Compteur;
 import modele.Cycle;
 import modele.Entrainement;
 import modele.EntrainementAvecSequences;
@@ -36,8 +37,12 @@ public class Play extends AppCompatActivity {
     private String strTravail;
     private String strRepos;
     private String space = " ";
+    private String strTempsReposLong;
+    private String strTempsPreparation;
     private Sequence sequenceEnCours;
     private Cycle cycleEnCours;
+    private List<Compteur> compteurs;
+
 
 
     @Override
@@ -54,6 +59,9 @@ public class Play extends AppCompatActivity {
         strCycle = getResources().getString(R.string.cycle);
         strTravail = getResources().getString(R.string.travail);
         strRepos = getResources().getString(R.string.repos);
+        strTempsReposLong = getResources().getString(R.string.reposLong);
+        strTempsPreparation = getResources().getString(R.string.preparation);
+
         if (extras != null){
 
             EntrainementAvecSequences entrainementAvecSequences = extras.getParcelable("entrainementAvecSequences");
@@ -135,6 +143,9 @@ public class Play extends AppCompatActivity {
         int tempsPrepa = entrainement.getTempsPreparation();
         tempsTotal += tempsPrepa;
         mapTimer.put(strEntrainement+space+entrainement.getNom(), tempsPrepa);
+        Compteur tempsPrepaCompteur = new Compteur(tempsPrepa);
+        tempsPrepaCompteur.setNomTravail(strTempsPreparation);
+        compteurs.add(tempsPrepaCompteur);
         for (int i = 0; i < sequences.size(); i++) {
             sequenceEnCours = sequences.get(i);
             getCycles(sequences.get(i));
@@ -158,12 +169,30 @@ public class Play extends AppCompatActivity {
             mapTimer.put(nomTravail+space+strRepos, tempsRepos);
             tempsTotal += tempsTravail;
             tempsTotal += tempsRepos;
+            Compteur travailCompteur = new Compteur(tempsTravail);
+            travailCompteur.setNomSequence(sequenceEnCours.getNom());
+            travailCompteur.setNomCycle(cycleEnCours.getNom());
+            travailCompteur.setNomTravail(nomTravail);
+            compteurs.add(travailCompteur);
+
+            Compteur reposCompteur = new Compteur(tempsRepos);
+            reposCompteur.setNomSequence(sequenceEnCours.getNom());
+            reposCompteur.setNomCycle(cycleEnCours.getNom());
+            reposCompteur.setNomTravail(strRepos);
+            compteurs.add(reposCompteur);
+
         }
 
         String nomSequence = sequenceEnCours.getNom();
         int tempsReposLong = sequenceEnCours.getTempsReposLong();
         mapTimer.put(strSequence+space+nomSequence, tempsReposLong);
         tempsTotal += tempsReposLong;
+
+        Compteur reposLongCompteur = new Compteur(tempsReposLong);
+        reposLongCompteur.setNomSequence(sequenceEnCours.getNom());
+        reposLongCompteur.setNomCycle(cycleEnCours.getNom());
+        reposLongCompteur.setNomTravail(strTempsReposLong);
+        compteurs.add(reposLongCompteur);
 
 
     }

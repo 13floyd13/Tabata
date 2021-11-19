@@ -11,10 +11,14 @@ public class Compteur extends UpdateSource{
     // DATA
     private long updatedTime = INITIAL_TIME;
     private CountDownTimer timer;   // https://developer.android.com/reference/android/os/CountDownTimer.html
+    private String nomSequence;
+    private String nomCycle;
+    private String nomTravail;
 
 
-    public Compteur() {
-        updatedTime = INITIAL_TIME;
+
+    public Compteur(long time) {
+        updatedTime = time;
     }
 
     // Lancer le compteur
@@ -95,4 +99,29 @@ public class Compteur extends UpdateSource{
     public int getMillisecondes() {
         return (int) (updatedTime % 1000);
     }
+
+    public String getNomCycle() {
+        return nomCycle;
+    }
+
+    public String getNomSequence() {
+        return nomSequence;
+    }
+
+    public String getNomTravail() {
+        return nomTravail;
+    }
+
+    public void setNomSequence(String nomSequence) {
+        this.nomSequence = nomSequence;
+    }
+
+    public void setNomCycle(String nomCycle) {
+        this.nomCycle = nomCycle;
+    }
+
+    public void setNomTravail(String nomTravail) {
+        this.nomTravail = nomTravail;
+    }
 }
+
