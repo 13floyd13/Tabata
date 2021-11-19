@@ -30,8 +30,11 @@ public class Play extends AppCompatActivity {
     private List<Long> travailIds;
     private int tempsTotal = 0;
     private HashMap<String, Integer> mapTimer = new HashMap<>();
-    private String travail = getResources().getString(R.string.travail);
-    private String repos = getResources().getString(R.string.repos);
+    private String strEntrainement;
+    private String strSequence;
+    private String strCycle;
+    private String strTravail;
+    private String strRepos;
     private String space = " ";
     private Sequence sequenceEnCours;
     private Cycle cycleEnCours;
@@ -45,11 +48,18 @@ public class Play extends AppCompatActivity {
         // Récupération du DatabaseClient
         mDb = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase();
         Bundle extras = getIntent().getExtras();
+
+        strEntrainement = getResources().getString(R.string.entrainement);
+        strSequence = getResources().getString(R.string.sequence);
+        strCycle = getResources().getString(R.string.cycle);
+        strTravail = getResources().getString(R.string.travail);
+        strRepos = getResources().getString(R.string.repos);
         if (extras != null){
 
             EntrainementAvecSequences entrainementAvecSequences = extras.getParcelable("entrainementAvecSequences");
-            entrainement = entrainementAvecSequences.getEntrainement();
+            //entrainement = entrainementAvecSequences.getEntrainement();
             sequences = entrainementAvecSequences.getSequences();
+            entrainement = extras.getParcelable("entrainement");
 
         }
 
@@ -62,33 +72,15 @@ public class Play extends AppCompatActivity {
 
         class GetCyclesAsync extends android.os.AsyncTask<Void, Void, List<Cycle>>{
 
-            /*@Override
-            protected List<Cycle> doInBackground(Void... voids) {
-                for (int i = 0; i < sequences.size(); i++){
-                    List<Long> ids = mDb
-                            .sequenceCycleCrossRefDao()
-                            .getCyclesId(sequences.get(i).getSequenceId());
-
-                    cycleIds.addAll(ids);
-                }
-
-                cycles = mDb
-                        .cycleDao()
-                        .getCycles(cycleIds);
-
-                return cycles;
-
-            }*/
 
             @Override
             protected List<Cycle> doInBackground(Void... voids) {
-                //for (int i = 0; i < sequences.length; i++) {
+
                 Long idCy = sequence.getSequenceId();
                     cycleIds = mDb
                             .sequenceCycleCrossRefDao()
                             .getCyclesId(sequence.getSequenceId());
-                            //.getCyclesId(sequences[i].getSequenceId());
-                //}
+
                 List<Cycle> listCycles = mDb
                         .cycleDao()
                         .getCycles(cycleIds);
@@ -116,12 +108,7 @@ public class Play extends AppCompatActivity {
 
             @Override
             protected List<Travail> doInBackground(Void... voids) {
-                /*for (int i = 0; i < lists.length; i++){
-                    List<Long> ids = mDb
-                            .cycleTravailCrossRefDao()
-                            .getTravailIds(lists[i]);
-                    travailIds.addAll(ids);
-                }*/
+
                 travailIds = mDb.cycleTravailCrossRefDao().getTravailIds(cycle.getCycleId());
 
                 travails = mDb
@@ -147,48 +134,12 @@ public class Play extends AppCompatActivity {
 
         int tempsPrepa = entrainement.getTempsPreparation();
         tempsTotal += tempsPrepa;
-        mapTimer.put(entrainement.getNom(), tempsPrepa);
+        mapTimer.put(strEntrainement+space+entrainement.getNom(), tempsPrepa);
         for (int i = 0; i < sequences.size(); i++) {
             sequenceEnCours = sequences.get(i);
             getCycles(sequences.get(i));
-
-           /* List<Long> cy = cycleIds;
-            //for (int j = 0; j < cycles.size(); j++){
-                //getTravails(cycles.get(j));
-
-                for (int k = 0; k < travails.size(); i++){
-                    String nomTravail = travails.get(i).getNom();
-                    String space = " ";
-                    String travail = getResources().getString(R.string.travail);
-                    String repos = getResources().getString(R.string.repos);
-                    int tempsTravail = travails.get(i).getTemps();
-                    int tempsRepos = travails.get(i).getRepos();
-                    mapTimer.put(nomTravail+space+travail, tempsTravail);
-                    mapTimer.put(nomTravail+space+repos, tempsRepos);
-                    tempsTotal += tempsTravail;
-                    tempsTotal += tempsRepos;
-                }
-                String nomCycle = cycles.get(i).getNom();
-            }
-            String nomSequence = sequences.get(i).getNom();
-            int tempsReposLong = sequences.get(i).getTempsReposLong();
-            mapTimer.put(nomSequence, tempsReposLong);
-            tempsTotal += tempsReposLong;*/
         }
     }
-
-
-
-        /*for sequences
-                timer.add temps prepa
-                get cycles
-                        for cycles
-                get travails
-                        for travails
-                timer.add travail 1
-                timer.add travail 2*/
-
-
 
     public void majCycle(List<Cycle> lcycles){
 
@@ -203,15 +154,15 @@ public class Play extends AppCompatActivity {
             String nomTravail = travails.get(i).getNom();
             int tempsTravail = travails.get(i).getTemps();
             int tempsRepos = travails.get(i).getRepos();
-            mapTimer.put(nomTravail+space+travail, tempsTravail);
-            mapTimer.put(nomTravail+space+repos, tempsRepos);
+            mapTimer.put(nomTravail+space+strTravail, tempsTravail);
+            mapTimer.put(nomTravail+space+strRepos, tempsRepos);
             tempsTotal += tempsTravail;
             tempsTotal += tempsRepos;
         }
 
         String nomSequence = sequenceEnCours.getNom();
         int tempsReposLong = sequenceEnCours.getTempsReposLong();
-        mapTimer.put(nomSequence, tempsReposLong);
+        mapTimer.put(strSequence+space+nomSequence, tempsReposLong);
         tempsTotal += tempsReposLong;
 
 

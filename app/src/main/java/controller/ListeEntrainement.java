@@ -101,6 +101,7 @@ public class ListeEntrainement extends AppCompatActivity {
                     EntrainementAvecSequences entrainementAvecSequences = adapter.getItem(position);
                     Intent goToPlay = new Intent(getApplicationContext(), Play.class);
                     goToPlay.putExtra("entrainementAvecSequences", entrainementAvecSequences);
+                    goToPlay.putExtra("entrainement", entrainementAvecSequences.getEntrainement());
                     startActivity(goToPlay);
 
                 }
