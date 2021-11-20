@@ -3,6 +3,7 @@ package controller;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -20,8 +21,9 @@ import modele.Entrainement;
 import modele.EntrainementAvecSequences;
 import modele.Sequence;
 import modele.Travail;
+import modele.OnUpdateListener;
 
-public class Play extends AppCompatActivity {
+public class Play extends AppCompatActivity implements OnUpdateListener {
 
     private AppDatabase mDb;
     private Entrainement entrainement;
@@ -51,6 +53,11 @@ public class Play extends AppCompatActivity {
     TextView tvTimer;
     Button btnPause;
     Button btnSuivant;
+    private Compteur compteurTravailEnCours;
+    private Compteur compteurTempsTotal;
+    private boolean start;
+    private String strStart;
+    private String strPause;
 
 
 
@@ -70,6 +77,8 @@ public class Play extends AppCompatActivity {
         strRepos = getResources().getString(R.string.repos);
         strTempsReposLong = getResources().getString(R.string.reposLong);
         strTempsPreparation = getResources().getString(R.string.preparation);
+        strStart = getResources().getString(R.string.start);
+        strPause = getResources().getString(R.string.pause);
 
         if (extras != null){
 
@@ -80,21 +89,25 @@ public class Play extends AppCompatActivity {
 
         }
 
-        majTimer();
+        boolean suite = majTimer();
 
-        //Récupération des vues
-        tvTimerTotal = findViewById(R.id.tempsTotal);
-        tvNomSequence = findViewById(R.id.nomSequence);
-        tvNomCycle = findViewById(R.id.nomCycle);
-        tvNomTravail = findViewById(R.id.nomTravail);
-        tvTimer = findViewById(R.id.timer);
-        btnPause = findViewById(R.id.pause);
-        btnSuivant = findViewById(R.id.suivant);
+        if(suite) {
 
-        tvNomEntrainement.setText(entrainement.getNom());
+            //Récupération des vues
+            tvTimerTotal = findViewById(R.id.tempsTotal);
+            tvNomSequence = findViewById(R.id.nomSequence);
+            tvNomCycle = findViewById(R.id.nomCycle);
+            tvNomTravail = findViewById(R.id.nomTravail);
+            tvTimer = findViewById(R.id.timer);
+            btnPause = findViewById(R.id.pause);
+            btnSuivant = findViewById(R.id.suivant);
+
+            tvNomEntrainement.setText(entrainement.getNom());
 
 
 
+
+        }
     }
 
     public void getCycles(Sequence sequence) {
@@ -159,7 +172,7 @@ public class Play extends AppCompatActivity {
         getTravailsAsync.execute();
     }
 
-    public void majTimer() {
+    public boolean majTimer() {
 
         int tempsPrepa = entrainement.getTempsPreparation();
         tempsTotal += tempsPrepa;
@@ -171,6 +184,7 @@ public class Play extends AppCompatActivity {
             sequenceEnCours = sequences.get(i);
             getCycles(sequences.get(i));
         }
+        return true;
     }
 
     public void majCycle(List<Cycle> lcycles){
@@ -220,14 +234,53 @@ public class Play extends AppCompatActivity {
 
     public void lancerEntrainement(){
 
+        compteurTempsTotal = new Compteur(tempsTotal);
+
         for (int i = 0; i < compteurs.size(); i++){
-            Compteur compteur = compteurs.get(i);
+            compteurTravailEnCours= compteurs.get(i);
 
-            tvN
+            tvNomSequence.setText(compteurTravailEnCours.getNomSequence());
+            tvNomCycle.setText(compteurTravailEnCours.getNomCycle());
+            tvNomTravail.setText(compteurTravailEnCours.getNomTravail());
+            compteurTravailEnCours.addOnUpdateListener(this);
 
+            majCompteur();
+            compteurTempsTotal.start();
+            compteurTravailEnCours.start();
+            start = true;
+            btnPause.setText(strPause);
 
         }
     }
 
+    private void majCompteur() {
+        // Affichage des informations du compteur
+        tvTimer.setText("" + compteurTravailEnCours.getMinutes() + ":"
+                + String.format("%02d", compteurTravailEnCours.getSecondes()) + ":"
+                + String.format("%03d", compteurTravailEnCours.getMillisecondes()));
 
+        tvTimerTotal.setText("" + compteurTempsTotal.getMinutes() + ":"
+                + String.format("%02d", compteurTempsTotal.getSecondes()) + ":"
+                + String.format("%03d", compteurTempsTotal.getMillisecondes()));
+    }
+
+
+    @Override
+    public void onUpdate() {
+        majCompteur();
+    }
+
+    public void onPause(View view) {
+        if (start) {
+            compteurTravailEnCours.pause();
+            compteurTempsTotal.pause();
+            start = false;
+            btnPause.setText(strStart);
+        }else {
+            compteurTravailEnCours.start();
+            compteurTempsTotal.start();
+            start = true;
+            btnPause.setText(strPause);
+        }
+    }
 }

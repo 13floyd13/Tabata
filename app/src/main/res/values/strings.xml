@@ -31,5 +31,7 @@
     <string name="suppression">Menu Supression</string>
     <string name="edition">Menu Edition</string>
     <string name="delete">Supprimer</string>
+    <string name="start">Start</string>
+    <string name="pause">Pause</string>
 
 </resources>
