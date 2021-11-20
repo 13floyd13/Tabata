@@ -1,7 +1,9 @@
 package controller;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -44,7 +46,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
     private String strTempsPreparation;
     private Sequence sequenceEnCours;
     private Cycle cycleEnCours;
-    private List<Compteur> compteurs;
+    private ArrayList<Compteur> compteurs = new ArrayList<>();
     TextView tvNomEntrainement;
     TextView tvTimerTotal;
     TextView tvNomSequence;
@@ -58,6 +60,8 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
     private boolean start;
     private String strStart;
     private String strPause;
+    private Play activity;
+    private boolean go = false;
 
 
 
@@ -89,25 +93,49 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
         }
 
-        boolean suite = majTimer();
+        majTimer();
 
-        if(suite) {
-
-            //Récupération des vues
-            tvTimerTotal = findViewById(R.id.tempsTotal);
-            tvNomSequence = findViewById(R.id.nomSequence);
-            tvNomCycle = findViewById(R.id.nomCycle);
-            tvNomTravail = findViewById(R.id.nomTravail);
-            tvTimer = findViewById(R.id.timer);
-            btnPause = findViewById(R.id.pause);
-            btnSuivant = findViewById(R.id.suivant);
-
-            tvNomEntrainement.setText(entrainement.getNom());
+        tvNomEntrainement = findViewById(R.id.nomEntrainement);
+        tvTimerTotal = findViewById(R.id.tempsTotal);
+        tvNomSequence = findViewById(R.id.nomSequence);
+        tvNomCycle = findViewById(R.id.nomCycle);
+        tvNomTravail = findViewById(R.id.nomTravail);
+        tvTimer = findViewById(R.id.timer);
+        btnPause = findViewById(R.id.pause);
+        btnSuivant = findViewById(R.id.suivant);
+        tvNomEntrainement.setText(entrainement.getNom());
 
 
+        this.activity = this;
+        AlertDialog.Builder popup = new AlertDialog.Builder(activity);
+        popup.setTitle("Entrainement");
+        popup.setMessage("Lancer l'entrainement");
+        popup.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                go = true;
+                checkStart();
 
 
-        }
+            }
+        });
+
+        popup.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        popup.show();
+
+
+
+
+
+       // }
+
     }
 
     public void getCycles(Sequence sequence) {
@@ -172,7 +200,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         getTravailsAsync.execute();
     }
 
-    public boolean majTimer() {
+    public void majTimer() {
 
         int tempsPrepa = entrainement.getTempsPreparation();
         tempsTotal += tempsPrepa;
@@ -184,7 +212,8 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
             sequenceEnCours = sequences.get(i);
             getCycles(sequences.get(i));
         }
-        return true;
+
+
     }
 
     public void majCycle(List<Cycle> lcycles){
@@ -239,16 +268,18 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         for (int i = 0; i < compteurs.size(); i++){
             compteurTravailEnCours= compteurs.get(i);
 
-            tvNomSequence.setText(compteurTravailEnCours.getNomSequence());
-            tvNomCycle.setText(compteurTravailEnCours.getNomCycle());
-            tvNomTravail.setText(compteurTravailEnCours.getNomTravail());
-            compteurTravailEnCours.addOnUpdateListener(this);
 
-            majCompteur();
-            compteurTempsTotal.start();
-            compteurTravailEnCours.start();
-            start = true;
-            btnPause.setText(strPause);
+                tvNomSequence.setText(compteurTravailEnCours.getNomSequence());
+                tvNomCycle.setText(compteurTravailEnCours.getNomCycle());
+                tvNomTravail.setText(compteurTravailEnCours.getNomTravail());
+                compteurTravailEnCours.addOnUpdateListener(this);
+
+                majCompteur();
+                //compteurTempsTotal.start();
+                //compteurTravailEnCours.start();
+                //start = true;
+                btnPause.setText(strStart);
+
 
         }
     }
@@ -281,6 +312,12 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
             compteurTempsTotal.start();
             start = true;
             btnPause.setText(strPause);
+        }
+    }
+
+    public void checkStart(){
+        if (go){
+            lancerEntrainement();
         }
     }
 }

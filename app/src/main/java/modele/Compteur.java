@@ -18,7 +18,7 @@ public class Compteur extends UpdateSource{
 
 
     public Compteur(long time) {
-        updatedTime = time;
+        updatedTime = time*1000;
     }
 
     // Lancer le compteur
@@ -122,6 +122,10 @@ public class Compteur extends UpdateSource{
 
     public void setNomTravail(String nomTravail) {
         this.nomTravail = nomTravail;
+    }
+
+    public long getUpdatedTime() {
+        return updatedTime;
     }
 }
 
