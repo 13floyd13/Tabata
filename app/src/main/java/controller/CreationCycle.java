@@ -27,6 +27,7 @@ public class CreationCycle extends AppCompatActivity {
 
     private static final boolean CYCLE_KEY=true;
     private String nomCycle;
+    private int nbRepetitions;
     private DatabaseClient mDb;
     private ArrayList<Travail> travails = new ArrayList<Travail>();
     private ListView listTravailClicked;
@@ -99,6 +100,15 @@ public class CreationCycle extends AppCompatActivity {
         EditText eNomCycle = findViewById(R.id.nomCycle);
         nomCycle = eNomCycle.getText().toString();
 
+        //récupération du nombre de répétitions
+        EditText eNbRepetitions = findViewById(R.id.nbRepetitions);
+        String tmp = eNbRepetitions.getText().toString();
+        if (tmp.isEmpty()){
+            nbRepetitions = 4;
+        }else {
+            nbRepetitions = Integer.parseInt(tmp);
+        }
+
         //on vérifie que le nom du cycle ne soit pas vide
         if (nomCycle.isEmpty()){
             Toast toast = Toast.makeText(CreationCycle.this, "Nom de cycle obligatoire", Toast.LENGTH_LONG);
@@ -128,6 +138,7 @@ public class CreationCycle extends AppCompatActivity {
 
                 //Création de l'objet Cycle
                 Cycle cycle = new Cycle(nomCycle);
+                cycle.setRepetition(nbRepetitions);
 
                 //enregistrement du cycle en bdd
                 long cycleId = mDb.getAppDatabase()

@@ -23,4 +23,9 @@ public class UpdateSource {
         for (OnUpdateListener listener : listeners)
             listener.onUpdate();
     }
+
+    public void finish(){
+        for (OnUpdateListener listener : listeners)
+            listener.onFinish();
+    }
 }

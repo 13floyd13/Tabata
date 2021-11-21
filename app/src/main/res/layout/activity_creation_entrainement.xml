@@ -141,14 +141,16 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSave">
+        android:layout_height="200dp"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSave"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="0dp">
 
     <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:id="@+id/listSequence"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:scrollingCache="true"></ListView>
 
     </ScrollView>

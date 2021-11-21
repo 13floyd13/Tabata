@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tabata.R;
 
@@ -16,6 +18,8 @@ import java.util.List;
 
 import data.AppDatabase;
 import data.DatabaseClient;
+import modele.Cycle;
+import modele.CycleAvecTravails;
 import modele.Travail;
 import modele.TravailListAdapter;
 
@@ -24,8 +28,9 @@ public class ListeTravail extends AppCompatActivity {
     private AppDatabase mDb;
     private TravailListAdapter adapter;
     private ListView listTravail;
-    private boolean cycle=false;
     private ArrayList<Travail> travails = new ArrayList<Travail>();
+    private boolean suppression = false;
+    private ArrayList<Long> travailsAjoutes = new ArrayList<>();
 
 
 
@@ -37,8 +42,8 @@ public class ListeTravail extends AppCompatActivity {
         //récupération du boolen si on vient de cycle
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            cycle = extras.getBoolean("CYCLE_KEY");
             travails = extras.getParcelableArrayList("arrayListTravails");
+            suppression = extras.getBoolean("SUPPRESSION_KEY");
         }
 
         //On récupère des strings en ressources à concatener
@@ -61,8 +66,38 @@ public class ListeTravail extends AppCompatActivity {
         adapter = new TravailListAdapter(this, new ArrayList<Travail>());
         listTravail.setAdapter(adapter);
 
-        if(cycle) { //on ajoute un evenement click uniquement si on vient d'un cycle
 
+        if (suppression) {
+            listTravail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    Travail travailClicked = adapter.getItem(position);
+
+
+                    class SupprimerTravailAsync extends android.os.AsyncTask<Void, Void, Void> {
+
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            mDb.travailDao()
+                                    .delete(travailClicked);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                            adapter.notifyDataSetChanged();
+
+                        }
+                    }
+
+                    SupprimerTravailAsync supprimerTravailAsync = new SupprimerTravailAsync();
+                    supprimerTravailAsync.execute();
+                    finish();
+                }
+            });
+        }else {
             //ajout d'un évenement click à la listeView
             listTravail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -70,11 +105,25 @@ public class ListeTravail extends AppCompatActivity {
 
                     //Récupération du travail cliqué pour l'envoyer à la création du cycle dans un arayList de travail
                     Travail travailClicked = adapter.getItem(position);
-                    Intent goBacktoCycle = new Intent(getApplicationContext(), CreationCycle.class);
-                    travails.add(travailClicked);
-                    goBacktoCycle.putParcelableArrayListExtra("arrayListTravailsClicked", travails);
-                    goBacktoCycle.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(goBacktoCycle);
+
+                    //boucle pour récuperer les id des travails ajoutés à la creation de cycle
+                    for (int i = 0; i < travails.size(); i++) {
+                        travailsAjoutes.add(travails.get(i).getTravailId());
+                    }
+
+                    //on vérifie que le travail n'a pas déja été cliqué
+                    if (travailsAjoutes.contains(travailClicked.getTravailId())) {
+
+                        Toast toast = Toast.makeText(ListeTravail.this, "Sequence déja ajouté", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
+                        toast.show();
+                    } else {
+                        Intent goBacktoCycle = new Intent(getApplicationContext(), CreationCycle.class);
+                        travails.add(travailClicked);
+                        goBacktoCycle.putParcelableArrayListExtra("arrayListTravailsClicked", travails);
+                        goBacktoCycle.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(goBacktoCycle);
+                    }
                 }
             });
         }

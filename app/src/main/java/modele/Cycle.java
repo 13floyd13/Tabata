@@ -20,6 +20,9 @@ public class Cycle implements Parcelable {
     @ColumnInfo(name = "nom")
     private String nom;
 
+    @ColumnInfo(name = "repetition")
+    private int repetition;
+
     public Cycle(String nom){
         this.nom = nom;
     }
@@ -55,6 +58,14 @@ public class Cycle implements Parcelable {
 
     public void setCycleId(long id) {
         this.cycleId = id;
+    }
+
+    public int getRepetition() {
+        return repetition;
+    }
+
+    public void setRepetition(int repetition) {
+        this.repetition = repetition;
     }
 
     @Override

@@ -34,11 +34,33 @@
         android:id="@+id/nomCycle"
         />
 
+    <TextView
+        android:id="@+id/textNbRepetitions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/repetition"
+        app:layout_constraintTop_toBottomOf="@+id/nomCycle"
+        tools:ignore="MissingConstraints"/>
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toRightOf="@+id/textNbRepetitions"
+        app:layout_constraintTop_toBottomOf="@+id/nomCycle"
+        android:id="@+id/nbRepetitions"
+        />
+
+
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
-        app:layout_constraintTop_toBottomOf="@+id/textNomCycle"
+        app:layout_constraintTop_toBottomOf="@+id/textNbRepetitions"
         android:layout_marginTop="30dp"
         android:id="@+id/buttonAjouterTravail"
         android:onClick="onAjouterTravail"/>

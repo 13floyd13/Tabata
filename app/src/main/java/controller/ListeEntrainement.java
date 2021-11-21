@@ -62,7 +62,7 @@ public class ListeEntrainement extends AppCompatActivity {
         listEntrainement.setAdapter(adapter);
 
         //ajout d'un évenement click à la listView
-        if (suppression) {
+        if (suppression) { //on va supprimer l'entrainement cliqué
             listEntrainement.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -93,7 +93,7 @@ public class ListeEntrainement extends AppCompatActivity {
                     finish();
                 }
             });
-        } else {
+        } else {  //on va jouer l'entrainement cliqué
             listEntrainement.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

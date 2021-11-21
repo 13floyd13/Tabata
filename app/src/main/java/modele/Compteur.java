@@ -14,6 +14,7 @@ public class Compteur extends UpdateSource{
     private String nomSequence;
     private String nomCycle;
     private String nomTravail;
+    private Boolean fin = false;
 
 
 
@@ -43,6 +44,8 @@ public class Compteur extends UpdateSource{
 
                     // Mise à jour
                     update();
+                    finish();
+
                 }
 
             }.start();   // Start the countdown
@@ -82,7 +85,7 @@ public class Compteur extends UpdateSource{
     }
 
     // Arrete l'objet CountDownTimer et l'efface
-    private void stop() {
+    public void stop() {
         timer.cancel();
         timer = null;
     }
@@ -127,5 +130,10 @@ public class Compteur extends UpdateSource{
     public long getUpdatedTime() {
         return updatedTime;
     }
+
+    public Boolean getFin() {
+        return fin;
+    }
+
 }
 

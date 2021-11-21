@@ -33,5 +33,9 @@
     <string name="delete">Supprimer</string>
     <string name="start">Start</string>
     <string name="pause">Pause</string>
+    <string name="fin">Fin</string>
+    <string name="prochain">Prochain Timer : </string>
+    <string name="suivant">Suivant</string>
+    <string name="repetition">Répétitions de cette Activité</string>
 
 </resources>

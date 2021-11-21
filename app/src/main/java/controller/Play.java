@@ -2,8 +2,12 @@ package controller;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,26 +39,25 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
     private List<Long> cycleIds;
     private List<Long> travailIds;
     private int tempsTotal = 0;
-    private HashMap<String, Integer> mapTimer = new HashMap<>();
-    private String strEntrainement;
-    private String strSequence;
-    private String strCycle;
-    private String strTravail;
-    private String strRepos;
     private String space = " ";
     private String strTempsReposLong;
     private String strTempsPreparation;
+    private String strProchainTravail;
+    private String strFin;
+    private String strSuivant;
+    private String strRepos;
     private Sequence sequenceEnCours;
     private Cycle cycleEnCours;
     private ArrayList<Compteur> compteurs = new ArrayList<>();
-    TextView tvNomEntrainement;
-    TextView tvTimerTotal;
-    TextView tvNomSequence;
-    TextView tvNomCycle;
-    TextView tvNomTravail;
-    TextView tvTimer;
-    Button btnPause;
-    Button btnSuivant;
+    private TextView tvNomEntrainement;
+    private TextView tvTimerTotal;
+    private TextView tvNomSequence;
+    private TextView tvNomCycle;
+    private TextView tvNomTravail;
+    private TextView tvTimer;
+    private TextView tvProchainTravail;
+    private Button btnPause;
+    private Button btnSuivant;
     private Compteur compteurTravailEnCours;
     private Compteur compteurTempsTotal;
     private boolean start;
@@ -62,6 +65,9 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
     private String strPause;
     private Play activity;
     private boolean go = false;
+    private int iterateurCompteur = 0;
+    private ToneGenerator bip;
+
 
 
 
@@ -74,20 +80,18 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         mDb = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase();
         Bundle extras = getIntent().getExtras();
 
-        strEntrainement = getResources().getString(R.string.entrainement);
-        strSequence = getResources().getString(R.string.sequence);
-        strCycle = getResources().getString(R.string.cycle);
-        strTravail = getResources().getString(R.string.travail);
         strRepos = getResources().getString(R.string.repos);
         strTempsReposLong = getResources().getString(R.string.reposLong);
         strTempsPreparation = getResources().getString(R.string.preparation);
         strStart = getResources().getString(R.string.start);
         strPause = getResources().getString(R.string.pause);
+        strProchainTravail = getResources().getString(R.string.prochain);
+        strFin = getResources().getString(R.string.fin);
+        strSuivant = getResources().getString(R.string.suivant);
 
         if (extras != null){
 
             EntrainementAvecSequences entrainementAvecSequences = extras.getParcelable("entrainementAvecSequences");
-            //entrainement = entrainementAvecSequences.getEntrainement();
             sequences = entrainementAvecSequences.getSequences();
             entrainement = extras.getParcelable("entrainement");
 
@@ -101,9 +105,12 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         tvNomCycle = findViewById(R.id.nomCycle);
         tvNomTravail = findViewById(R.id.nomTravail);
         tvTimer = findViewById(R.id.timer);
+        tvProchainTravail = findViewById(R.id.prochainTravail);
         btnPause = findViewById(R.id.pause);
         btnSuivant = findViewById(R.id.suivant);
         tvNomEntrainement.setText(entrainement.getNom());
+
+        bip = new ToneGenerator(AudioManager.STREAM_ALARM,100);
 
 
         this.activity = this;
@@ -129,12 +136,6 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         });
 
         popup.show();
-
-
-
-
-
-       // }
 
     }
 
@@ -174,6 +175,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
     public void getTravails(Cycle cycle){
 
+        int nbRepetitionsCycles= cycle.getRepetition();
         class GetTravailsAsync extends android.os.AsyncTask<Void, Void, List<Travail>>{
 
             @Override
@@ -193,7 +195,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
                 //Mise à jour de l'adapter avec la liste d'entrainements
                 travails = listTravails;
-                majTravail(listTravails);
+                majTravail(listTravails, nbRepetitionsCycles);
             }
         }
         GetTravailsAsync getTravailsAsync = new GetTravailsAsync();
@@ -204,7 +206,6 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
         int tempsPrepa = entrainement.getTempsPreparation();
         tempsTotal += tempsPrepa;
-        mapTimer.put(strEntrainement+space+entrainement.getNom(), tempsPrepa);
         Compteur tempsPrepaCompteur = new Compteur(tempsPrepa);
         tempsPrepaCompteur.setNomTravail(strTempsPreparation);
         compteurs.add(tempsPrepaCompteur);
@@ -224,32 +225,34 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         }
     }
 
-    public void majTravail(List<Travail> ltravails){
-        for (int i = 0; i < ltravails.size(); i++){
-            String nomTravail = travails.get(i).getNom();
-            int tempsTravail = travails.get(i).getTemps();
-            int tempsRepos = travails.get(i).getRepos();
-            mapTimer.put(nomTravail+space+strTravail, tempsTravail);
-            mapTimer.put(nomTravail+space+strRepos, tempsRepos);
-            tempsTotal += tempsTravail;
-            tempsTotal += tempsRepos;
-            Compteur travailCompteur = new Compteur(tempsTravail);
-            travailCompteur.setNomSequence(sequenceEnCours.getNom());
-            travailCompteur.setNomCycle(cycleEnCours.getNom());
-            travailCompteur.setNomTravail(nomTravail);
-            compteurs.add(travailCompteur);
+    public void majTravail(List<Travail> ltravails, int nbRepetitionsCycle){
+        for (int j = 0; j < nbRepetitionsCycle; j++) {
+            for (int i = 0; i < ltravails.size(); i++) {
+                String nomTravail = travails.get(i).getNom();
+                int tempsTravail = travails.get(i).getTemps();
+                int tempsRepos = travails.get(i).getRepos();
 
-            Compteur reposCompteur = new Compteur(tempsRepos);
-            reposCompteur.setNomSequence(sequenceEnCours.getNom());
-            reposCompteur.setNomCycle(cycleEnCours.getNom());
-            reposCompteur.setNomTravail(strRepos);
-            compteurs.add(reposCompteur);
+                tempsTotal += tempsTravail;
+                tempsTotal += tempsRepos;
+                Compteur travailCompteur = new Compteur(tempsTravail);
+                travailCompteur.setNomSequence(sequenceEnCours.getNom());
+                travailCompteur.setNomCycle(cycleEnCours.getNom());
+                travailCompteur.setNomTravail(nomTravail);
+                compteurs.add(travailCompteur);
 
+                Compteur reposCompteur = new Compteur(tempsRepos);
+                reposCompteur.setNomSequence(sequenceEnCours.getNom());
+                reposCompteur.setNomCycle(cycleEnCours.getNom());
+                reposCompteur.setNomTravail(strRepos);
+
+                compteurs.add(reposCompteur);
+
+            }
         }
 
-        String nomSequence = sequenceEnCours.getNom();
+
         int tempsReposLong = sequenceEnCours.getTempsReposLong();
-        mapTimer.put(strSequence+space+nomSequence, tempsReposLong);
+
         tempsTotal += tempsReposLong;
 
         Compteur reposLongCompteur = new Compteur(tempsReposLong);
@@ -262,43 +265,63 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
     }
 
     public void lancerEntrainement(){
-
-        compteurTempsTotal = new Compteur(tempsTotal);
-
-        for (int i = 0; i < compteurs.size(); i++){
+        int i = iterateurCompteur;
+        if( i < compteurs.size()){
             compteurTravailEnCours= compteurs.get(i);
+            if((i+1) < compteurs.size()){
+                Compteur compteurSuivant = compteurs.get(i+1);
+                tvProchainTravail.setText(strProchainTravail+compteurSuivant.getNomTravail());
+                btnSuivant.setText(strSuivant);
+            }else{
+                tvProchainTravail.setText(strProchainTravail+strFin);
+                btnSuivant.setText(strFin);
+            }
+            majDesign();
+            tvNomSequence.setText(compteurTravailEnCours.getNomSequence());
+            tvNomSequence.setTextColor(Color.WHITE);
+            tvNomCycle.setText(compteurTravailEnCours.getNomCycle());
+            tvNomTravail.setText(compteurTravailEnCours.getNomTravail());
+
+            compteurTravailEnCours.addOnUpdateListener(this);
+
+            compteurTravailEnCours.start();
+            start = true;
+            btnPause.setText(strPause);
+            majCompteur();
 
 
-                tvNomSequence.setText(compteurTravailEnCours.getNomSequence());
-                tvNomCycle.setText(compteurTravailEnCours.getNomCycle());
-                tvNomTravail.setText(compteurTravailEnCours.getNomTravail());
-                compteurTravailEnCours.addOnUpdateListener(this);
-
-                majCompteur();
-                //compteurTempsTotal.start();
-                //compteurTravailEnCours.start();
-                //start = true;
-                btnPause.setText(strStart);
-
-
+        }else{
+            //fin de l'entrainement
         }
+
     }
 
     private void majCompteur() {
         // Affichage des informations du compteur
         tvTimer.setText("" + compteurTravailEnCours.getMinutes() + ":"
-                + String.format("%02d", compteurTravailEnCours.getSecondes()) + ":"
-                + String.format("%03d", compteurTravailEnCours.getMillisecondes()));
+                + String.format("%02d", compteurTravailEnCours.getSecondes())); /*+ ":"
+                + String.format("%03d", compteurTravailEnCours.getMillisecondes()));*/
 
         tvTimerTotal.setText("" + compteurTempsTotal.getMinutes() + ":"
-                + String.format("%02d", compteurTempsTotal.getSecondes()) + ":"
-                + String.format("%03d", compteurTempsTotal.getMillisecondes()));
+                + String.format("%02d", compteurTempsTotal.getSecondes()));/* + ":"
+                + String.format("%03d", compteurTempsTotal.getMillisecondes()));*/
     }
 
 
     @Override
     public void onUpdate() {
         majCompteur();
+        if(compteurTravailEnCours.getSecondes() == 3 || compteurTravailEnCours.getSecondes() == 2 || compteurTravailEnCours.getSecondes() == 1){
+            bip.startTone(ToneGenerator.TONE_PROP_BEEP, 150);
+        }
+    }
+
+    @Override
+    public void onFinish() {
+
+        compteurTravailEnCours.stop();
+        iterateurCompteur++;
+        lancerEntrainement();
     }
 
     public void onPause(View view) {
@@ -317,7 +340,39 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
     public void checkStart(){
         if (go){
+            compteurTempsTotal = new Compteur(tempsTotal);
+            compteurTempsTotal.start();
             lancerEntrainement();
         }
+    }
+
+    public void majDesign(){
+
+        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.screen);
+
+        if(compteurTravailEnCours.getNomTravail() == strTempsPreparation){
+            constraintLayout.setBackgroundColor(Color.GREEN);
+        }else if(compteurTravailEnCours.getNomTravail() == strTempsReposLong){
+            constraintLayout.setBackgroundColor(Color.BLUE);
+        }else if(compteurTravailEnCours.getNomTravail() == strRepos){
+            constraintLayout.setBackgroundColor(Color.CYAN);
+        }else{
+            constraintLayout.setBackgroundColor(Color.RED);
+        }
+
+    }
+
+    public void onNext(View view) {
+        if((iterateurCompteur +1) < compteurs.size()){
+            long resteTimeTravail = compteurTravailEnCours.getUpdatedTime();
+            long resteTotal = compteurTempsTotal.getUpdatedTime();
+            compteurTempsTotal.stop();
+            compteurTempsTotal = new Compteur((resteTotal - resteTimeTravail)/1000);
+            compteurTempsTotal.start();
+            onFinish();
+        }else{
+            //finish
+        }
+
     }
 }

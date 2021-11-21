@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tabata.R;
 
@@ -19,6 +21,8 @@ import data.DatabaseClient;
 import modele.Cycle;
 import modele.CycleAvecTravails;
 import modele.CycleListAdapter;
+import modele.Sequence;
+import modele.SequenceAvecCycles;
 import modele.Travail;
 import modele.TravailListAdapter;
 
@@ -27,8 +31,9 @@ public class ListeCycle extends AppCompatActivity {
     private AppDatabase mDb;
     private CycleListAdapter adapter;
     private ListView listCycle;
-    private boolean sequence = false;
     private ArrayList<CycleAvecTravails> cycles = new ArrayList<CycleAvecTravails>();
+    private boolean suppression = false;
+    private ArrayList<Long> cyclesAjoutes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +43,8 @@ public class ListeCycle extends AppCompatActivity {
         //récupération du boolean si on vient de sequence
         Bundle extras = getIntent().getExtras();
         if (extras != null){
-            sequence = extras.getBoolean("SEQUENCE_KEY");
             cycles = extras.getParcelableArrayList("arrayListCycles");
+            suppression = extras.getBoolean("SUPPRESSION_KEY");
         }
 
         //on récupère les strings à concaténer
@@ -62,8 +67,38 @@ public class ListeCycle extends AppCompatActivity {
         adapter = new CycleListAdapter(this, new ArrayList<CycleAvecTravails>());
         listCycle.setAdapter(adapter);
 
-        if(sequence) { //on ajoute un evenement click uniquement si on vient d'une sequence
+        if (suppression) { //si on vient du menu Supression
+            listCycle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                    CycleAvecTravails cycleAvecTravailsClicked = adapter.getItem(position);
+                    Cycle cycle= cycleAvecTravailsClicked.getCycle();
+
+
+                    class SupprimerCycleAsync extends android.os.AsyncTask<Void, Void, Void> {
+
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            mDb.cycleDao()
+                                    .delete(cycle);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                            adapter.notifyDataSetChanged();
+
+                        }
+                    }
+
+                    SupprimerCycleAsync supprimerCycleAsync = new SupprimerCycleAsync();
+                    supprimerCycleAsync.execute();
+                    finish();
+                }
+            });
+        }else{ //si on vient du menu Creation
             //ajout d'un évenement click à la listeView
             listCycle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -71,11 +106,24 @@ public class ListeCycle extends AppCompatActivity {
 
                     //Récupération du travail cliqué pour l'envoyer à la création du cycle dans un arayList de travail
                     CycleAvecTravails cycleClicked = adapter.getItem(position);
-                    Intent goBacktoSequence = new Intent(getApplicationContext(), CreationSequence.class);
-                    cycles.add(cycleClicked);
-                    goBacktoSequence.putParcelableArrayListExtra("arrayListCycleClicked", cycles);
-                    goBacktoSequence.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(goBacktoSequence);
+
+                    //boucle pour récuperer les id des cycles ajoutés à la creation de sequence
+                    for(int i = 0; i < cycles.size(); i++){
+                        cyclesAjoutes.add(cycles.get(i).getCycle().getCycleId());
+                    }
+
+                    //on vérifie que le cycle n'a pas déja été ajouté
+                    if(cyclesAjoutes.contains(cycleClicked.getCycle().getCycleId())){
+                        Toast toast = Toast.makeText(ListeCycle.this, "Cycle déja ajouté", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
+                        toast.show();
+                    }else { //si pas ajouté on l'ajoute à la creation de sequence
+                        Intent goBacktoSequence = new Intent(getApplicationContext(), CreationSequence.class);
+                        cycles.add(cycleClicked);
+                        goBacktoSequence.putParcelableArrayListExtra("arrayListCycleClicked", cycles);
+                        goBacktoSequence.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(goBacktoSequence);
+                    }
                 }
             });
         }

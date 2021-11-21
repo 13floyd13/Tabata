@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tabata.R;
 
@@ -18,6 +20,9 @@ import data.AppDatabase;
 import data.DatabaseClient;
 import modele.CycleAvecTravails;
 import modele.CycleListAdapter;
+import modele.Entrainement;
+import modele.EntrainementAvecSequences;
+import modele.Sequence;
 import modele.SequenceAvecCycles;
 import modele.SequenceListAdapter;
 
@@ -27,9 +32,9 @@ public class ListeSequence extends AppCompatActivity {
     private AppDatabase mDb;
     private SequenceListAdapter adapter;
     private ListView listSequence;
-    private boolean entrainement = false;
     private ArrayList<SequenceAvecCycles> sequences = new ArrayList<SequenceAvecCycles>();
-    //private ArrayList<SequenceAvecCycles> seq = new ArrayList<>();
+    private boolean suppression = false;
+    private ArrayList<Long> sequencesAjoutes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +43,16 @@ public class ListeSequence extends AppCompatActivity {
 
         //récupération du boolean si on vient d'entrainement
         Bundle extras = getIntent().getExtras();
-        if (extras != null){
-            entrainement = extras.getBoolean("ENTRAINEMENT_KEY");
+        if (extras != null) {
             sequences = extras.getParcelableArrayList("arrayListSequences");
+            suppression = extras.getBoolean("SUPPRESSION_KEY");
         }
 
         //on récupère les strings à concaténer
         String liste = getResources().getString(R.string.liste);
         String space = " ";
         String sequence = getResources().getString(R.string.sequence);
-        String strListeSequence = liste+space+sequence;
+        String strListeSequence = liste + space + sequence;
 
         //récupération du TextView pour ajouter la string
         TextView titrePage = findViewById(R.id.titrePage);
@@ -63,9 +68,37 @@ public class ListeSequence extends AppCompatActivity {
         adapter = new SequenceListAdapter(this, new ArrayList<SequenceAvecCycles>());
         listSequence.setAdapter(adapter);
 
+        if (suppression) {
+            listSequence.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        if(entrainement) { //on ajoute un evenement click uniquement si on vient d'un entrainement
+                    SequenceAvecCycles sequenceAvecCyclesClicked = adapter.getItem(position);
+                    Sequence sequence = sequenceAvecCyclesClicked.getSequence();
 
+                    class SupprimerSequenceAsync extends android.os.AsyncTask<Void, Void, Void> {
+
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            mDb.sequenceDao()
+                                    .delete(sequence);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                            adapter.notifyDataSetChanged();
+
+                        }
+                    }
+
+                    SupprimerSequenceAsync supprimerSequenceAsync = new SupprimerSequenceAsync();
+                    supprimerSequenceAsync.execute();
+                    finish();
+                }
+            });
+        }else {
             //ajout d'un évenement click à la listeView
             listSequence.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -73,11 +106,26 @@ public class ListeSequence extends AppCompatActivity {
 
                     //Récupération de la séquence cliqué
                     SequenceAvecCycles sequenceClicked = adapter.getItem(position);
-                    Intent goBacktoEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
-                    sequences.add(sequenceClicked);
-                    goBacktoEntrainement.putParcelableArrayListExtra("arrayListSequenceClicked", sequences);
-                    goBacktoEntrainement.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(goBacktoEntrainement);
+
+                    //boucle pour récuperer les id des sequences déja ajoutés à la creation d'entrainement
+                    for (int i = 0; i < sequences.size(); i++){
+                        sequencesAjoutes.add(sequences.get(i).getSequence().getSequenceId());
+                    }
+
+                    //on vérifie que la sequence n'a pas déja été cliqué
+                    if (sequencesAjoutes.contains(sequenceClicked.getSequence().getSequenceId())) {
+
+                        Toast toast = Toast.makeText(ListeSequence.this, "Sequence déja ajouté", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
+                        toast.show();
+
+                    }else {
+                        Intent goBacktoEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
+                        sequences.add(sequenceClicked);
+                        goBacktoEntrainement.putParcelableArrayListExtra("arrayListSequenceClicked", sequences);
+                        goBacktoEntrainement.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(goBacktoEntrainement);
+                    }
                 }
             });
         }
