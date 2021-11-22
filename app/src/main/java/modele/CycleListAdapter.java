@@ -14,6 +14,8 @@ import com.example.tabata.R;
 import java.util.List;
 
 public class CycleListAdapter extends ArrayAdapter<CycleAvecTravails> {
+
+
     public CycleListAdapter(Context mCtx, List<CycleAvecTravails> objects) {
         super(mCtx, R.layout.adapter_view_layout_cycle, objects);
     }
@@ -31,10 +33,14 @@ public class CycleListAdapter extends ArrayAdapter<CycleAvecTravails> {
 
         //récupération des objets graphiques
         TextView textViewNom = (TextView) rowView.findViewById(R.id.adapter_nomCycle);
+        TextView textViewNbRepet = (TextView) rowView.findViewById(R.id.adapter_nbRepet);
 
+        String strRepetition= getContext().getString(R.string.repetition);
+        String space = " ";
         //on remplit le text
         Cycle cycle = cycleavecTravails.getCycle();
         textViewNom.setText(cycle.getNom());
+        textViewNbRepet.setText(strRepetition + space +cycle.getRepetition());
 
         return rowView;
     }

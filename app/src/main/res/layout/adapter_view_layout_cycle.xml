@@ -13,4 +13,13 @@
         android:layout_marginTop="20dp"
         android:id="@+id/adapter_nomCycle" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/adapter_nomCycle"
+        android:id="@+id/adapter_nbRepet"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

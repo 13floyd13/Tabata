@@ -52,11 +52,12 @@ public class CreationSequence extends AppCompatActivity {
     private EditText eDescription;
 
     //Ressources
-
     private String ajouter;
     private String space;
     private String create;
     private String cycle;
+    private String sequenceObligatoire;
+    private String miniCycle;
 
 
     @Override
@@ -77,22 +78,22 @@ public class CreationSequence extends AppCompatActivity {
         //On test si on a reçu quelque chose via le getIntent et si oui on l'introduit dans les editText liés
         if (nbRepet != null){
             eNbRepetitions = findViewById(R.id.nbRepetitions);
-            nbRepet = eNbRepetitions.getText().toString();
+            eNbRepetitions.setText(nbRepet);
         }
 
         if (nomSequence != null){
             eNomSequence = findViewById(R.id.nomSequence);
-            nomSequence = eNomSequence.getText().toString();
+            eNomSequence.setText(nomSequence);
         }
 
         if (description != null){
             eDescription = findViewById(R.id.descriptionSequence);
-            description = eDescription.getText().toString();
+            eDescription.setText(description);
         }
 
         if (strTempsReposLong != null){
             eTempsReposLong = findViewById(R.id.tempsRepos);
-            strTempsReposLong = eTempsReposLong.getText().toString();
+            eTempsReposLong.setText(strTempsReposLong);
         }
 
         //Récupération du DatabaseClient
@@ -103,6 +104,8 @@ public class CreationSequence extends AppCompatActivity {
         space = " ";
         create = getResources().getString(R.string.creer);
         cycle = getResources().getString(R.string.cycle);
+        sequenceObligatoire = getResources().getString(R.string.sequenceObligatoire);
+        miniCycle = getResources().getString(R.string.miniCycle);
 
         String strCreateCycle = create+space+cycle;
         String strAjouterCycle = ajouter+space+cycle;
@@ -166,7 +169,7 @@ public class CreationSequence extends AppCompatActivity {
 
         //on vérifie que le nom de la séquence ne soit pas vide
         if(nomSequence.isEmpty()){
-            Toast toast = Toast.makeText(CreationSequence.this, "Nom de séquence obligatoire", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(CreationSequence.this, sequenceObligatoire, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
             toast.show();
             return;
@@ -185,7 +188,7 @@ public class CreationSequence extends AppCompatActivity {
 
         //on vérifie qu'au moins un cycle soit ajoutée
         if (listViewCycle.getCount() == 0){
-            Toast toast = Toast.makeText(CreationSequence.this, "Vous devez ajouter au moins un cycle", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(CreationSequence.this, miniCycle, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
             toast.show();
             return;

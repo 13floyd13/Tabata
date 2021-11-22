@@ -49,6 +49,8 @@ public class CreationCycle extends AppCompatActivity {
     private String space;
     private String create;
     private String travail;
+    private String cycleObligatoire;
+    private String miniTravail;
 
 
     @Override
@@ -83,6 +85,8 @@ public class CreationCycle extends AppCompatActivity {
         space = " ";
         create = getResources().getString(R.string.creer);
         travail = getResources().getString(R.string.travail);
+        cycleObligatoire = getResources().getString(R.string.cycleObligatoire);
+        miniTravail = getResources().getString(R.string.miniTravail);
 
         String strCreateTravail = create+space+travail;
         String strAjouterTravail = ajouter+space+travail;
@@ -150,7 +154,7 @@ public class CreationCycle extends AppCompatActivity {
 
         //on vérifie que le nom du cycle ne soit pas vide
         if (nomCycle.isEmpty()){
-            Toast toast = Toast.makeText(CreationCycle.this, "Nom de cycle obligatoire", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(CreationCycle.this, cycleObligatoire, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
             toast.show();
             return;
@@ -161,7 +165,7 @@ public class CreationCycle extends AppCompatActivity {
 
         //on vérifie qu'au moins un travail soit ajouté
         if (listViewTravail.getCount() == 0){
-            Toast toast = Toast.makeText(CreationCycle.this, "Vous devez ajouter au moins un travail", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(CreationCycle.this, miniTravail, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
             toast.show();
             return;

@@ -54,6 +54,8 @@ public class CreationEntrainement extends AppCompatActivity {
     private String space;
     private String sequence;
     private String create;
+    private String entrainementObligatoire;
+    private String miniSequence;
 
 
     @Override
@@ -71,7 +73,7 @@ public class CreationEntrainement extends AppCompatActivity {
         //On test si on a reçu quelque chose via le getIntent et si oui on l'introduit dans l'editText
         if (nomEntrainement != null){
             eNomEntrainement = findViewById(R.id.nomEntrainement);
-            this.nomEntrainement = eNomEntrainement.getText().toString();
+            eNomEntrainement.setText(nomEntrainement);
         }
         //Récupération du DatabaseClient
         mDb = DatabaseClient.getInstance(getApplicationContext());
@@ -81,6 +83,8 @@ public class CreationEntrainement extends AppCompatActivity {
         space = " ";
         sequence = getResources().getString(R.string.sequence);
         create = getResources().getString(R.string.creer);
+        entrainementObligatoire = getResources().getString(R.string.entrainementObligatoire);
+        miniSequence = getResources().getString(R.string.miniSequence);
 
         String ajouterSequence = ajouter+space+sequence;
         String createSequence = create+space+sequence;
@@ -129,7 +133,7 @@ public class CreationEntrainement extends AppCompatActivity {
 
         //On vérifie que le nom de l'entrainement de soit pas vide
         if (this.nomEntrainement.isEmpty()) {
-            Toast toast = Toast.makeText(CreationEntrainement.this, "Nom d'entrainement' obligatoire", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(CreationEntrainement.this, entrainementObligatoire, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
             toast.show();
             return;
@@ -140,7 +144,7 @@ public class CreationEntrainement extends AppCompatActivity {
 
         //on vérifie qu'au moins une séquence soit ajoutée
         if (listViewSequence.getCount() == 0) {
-            Toast toast = Toast.makeText(CreationEntrainement.this, "Vous devez ajouter au moins une séquence", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(CreationEntrainement.this, miniSequence, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
             toast.show();
             return;

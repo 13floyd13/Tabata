@@ -35,18 +35,21 @@ public class SequenceListAdapter extends ArrayAdapter<SequenceAvecCycles> {
         TextView textViewNom = (TextView) rowView.findViewById(R.id.adapter_nomSequence);
         TextView textViewDescription = (TextView) rowView.findViewById(R.id.adapter_descriptionSequence);
         TextView textViewTempsReposLong = (TextView) rowView.findViewById(R.id.adapter_tempsReposLong);
+        TextView textViewNbRepet = (TextView) rowView.findViewById(R.id.adapter_nbRepet);
 
         //récupération des strings en ressources
         String strTemps = getContext().getString(R.string.temps);
         String strRepos = getContext().getString(R.string.reposLong);
         String strSecondes = getContext().getString(R.string.secondes);
         String space = " ";
+        String strRepetition= getContext().getString(R.string.repetition);
         //on récupère les infos et on remplit de les textView
         Sequence sequence = sequenceAvecCycles.getSequence();
 
         textViewNom.setText(sequence.getNom());
         textViewDescription.setText(sequence.getDescription());
         textViewTempsReposLong.setText(strTemps + space + strRepos + space + sequence.getTempsReposLong() + space + strSecondes);
+        textViewNbRepet.setText(strRepetition + sequence.getRepetition());
 
 
 

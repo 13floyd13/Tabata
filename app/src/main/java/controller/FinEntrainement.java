@@ -26,8 +26,12 @@ public class FinEntrainement extends AppCompatActivity {
     private String currentDate;
     private FinEntrainement activity;
 
-
     //Ressources
+    private String strOui;
+    private String strNon;
+    private String straddHistorique;
+    private String strFin;
+    private String strEntrainement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +44,26 @@ public class FinEntrainement extends AppCompatActivity {
             currentDate = extras.getString("currentDate");
         }
 
+        //récupération des ressources
+        strOui = getResources().getString(R.string.oui);
+        strNon = getResources().getString(R.string.non);
+        straddHistorique = getResources().getString(R.string.lancer);
+        strFin = getResources().getString(R.string.fin);
+        strEntrainement = getResources().getString(R.string.entrainement);
+        String space = " ";
+        String deuxP = " : ";
+
         // Récupération du DatabaseClient
         mDb = DatabaseClient.getInstance(getApplicationContext());
 
         this.activity = this;
-        AlertDialog.Builder popup = new AlertDialog.Builder(activity);
-        popup.setTitle("Fin Entrainement : " + nomEntrainement);
-        popup.setMessage("Souhaitez vous ajouter cet entrainement à votre historique?");
 
-        popup.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+        //Création d'une popum pour intéraction utilisateur
+        AlertDialog.Builder popup = new AlertDialog.Builder(activity);
+        popup.setTitle(strFin + space + strEntrainement + deuxP + nomEntrainement);
+        popup.setMessage(straddHistorique);
+
+        popup.setPositiveButton(strOui, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //méthode intermédiaire car sinon le clique sur le oui lance deux fois l'insert
@@ -56,7 +71,7 @@ public class FinEntrainement extends AppCompatActivity {
             }
         });
 
-        popup.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+        popup.setNegativeButton(strNon, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 retourMenu();
@@ -67,6 +82,7 @@ public class FinEntrainement extends AppCompatActivity {
 
     }
 
+    //enregistre l'entrainement sous forme d'historique
     public void enregistrerEntrainement(){
 
         class InsertHistoriqueAsync extends android.os.AsyncTask<Void, Void, Historique>{
@@ -98,6 +114,7 @@ public class FinEntrainement extends AppCompatActivity {
 
     //retour au menu en supprimant toutes les activités precedentes
     public void retourMenu(){
+
         Intent goBackToMain = new Intent(getApplicationContext(), MainActivity.class);
         goBackToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(goBackToMain);

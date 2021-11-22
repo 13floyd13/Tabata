@@ -37,6 +37,7 @@ public class CreationTravail extends AppCompatActivity {
     private String space;
     private String travail;
     private String repos;
+    private String travailObligatoire;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class CreationTravail extends AppCompatActivity {
         space = " ";
         travail = getResources().getString(R.string.travail);
         repos = getResources().getString(R.string.repos);
+        travailObligatoire = getResources().getString(R.string.travailObligatoire);
 
         String strTempsTravail = temps+space+travail;
         String strTempsRepos = temps+space+repos;
@@ -72,7 +74,7 @@ public class CreationTravail extends AppCompatActivity {
 
         //on vérifie qu'il n'est pas vide
         if(nomTravail.isEmpty()){
-            Toast toast = Toast.makeText(CreationTravail.this, "Nom de travail obligatoire", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(CreationTravail.this, travailObligatoire, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
             toast.show();
             return;

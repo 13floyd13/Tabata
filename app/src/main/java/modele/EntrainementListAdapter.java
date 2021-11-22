@@ -14,6 +14,8 @@ import com.example.tabata.R;
 import java.util.List;
 
 public class EntrainementListAdapter extends ArrayAdapter<EntrainementAvecSequences>{
+
+
     public EntrainementListAdapter(Context mCtx, List<EntrainementAvecSequences> objects) {
         super(mCtx, R.layout.adapter_view_layout_entrainement, objects);
     }

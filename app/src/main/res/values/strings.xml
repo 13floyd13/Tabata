@@ -20,7 +20,7 @@
     <string name="description">Description</string>
     <string name="tempsReposLong">Temps de repos long</string>
     <string name="save">sauvegarder</string>
-    <string name="temps"></string>
+    <string name="temps">Temps</string>
     <string name="secondes">secondes</string>
     <string name="creationTravail">Création Travail</string>
     <string name="creationSequence">Création Sequence</string>
@@ -37,5 +37,16 @@
     <string name="prochain">Prochain Timer : </string>
     <string name="suivant">Suivant</string>
     <string name="repetition">Répétitions de cette Activité</string>
+    <string name="oui">Oui</string>
+    <string name="non">Non</string>
+    <string name="lancer">Lancer l\'entrainement ?</string>
+    <string name="addHistorique">Souhaitez vous ajouter cet entrainement à votre historique?</string>
+    <string name="cycleObligatoire">Nom de cycle obligatoire</string>
+    <string name="miniTravail">Vous devez ajouter au moins un travail</string>
+    <string name="entrainementObligatoire">Nom d\'entrainement obligatoire</string>
+    <string name="miniSequence">Vous devez ajouter au moins une séquence</string>
+    <string name="sequenceObligatoire">Nom de séquence obligatoire</string>
+    <string name="miniCycle">Vous devez ajouter au moins un cycle</string>
+    <string name="travailObligatoire">Nom de travail obligatoire</string>
 
 </resources>

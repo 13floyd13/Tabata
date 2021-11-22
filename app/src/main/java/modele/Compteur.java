@@ -137,5 +137,8 @@ public class Compteur extends UpdateSource{
         return fin;
     }
 
+    public CountDownTimer getTimer() {
+        return timer;
+    }
 }
 

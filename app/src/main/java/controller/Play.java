@@ -79,6 +79,9 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
     private String strRepos;
     private String strStart;
     private String strPause;
+    private String strOui;
+    private String strNon;
+    private String strLancer;
 
 
 
@@ -100,6 +103,9 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         strProchainTravail = getResources().getString(R.string.prochain);
         strFin = getResources().getString(R.string.fin);
         strSuivant = getResources().getString(R.string.suivant);
+        strOui = getResources().getString(R.string.oui);
+        strNon = getResources().getString(R.string.non);
+        strLancer = getResources().getString(R.string.lancer);
 
         //récupération de l'entrainement et des sequences
         Bundle extras = getIntent().getExtras();
@@ -132,11 +138,11 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         //mise en place d'une popup pour demander si on lance l'entrainement
         this.activity = this;
         AlertDialog.Builder popup = new AlertDialog.Builder(activity);
-        popup.setTitle("Entrainement");
-        popup.setMessage("Lancer l'entrainement");
+        popup.setTitle(entrainement.getNom());
+        popup.setMessage(strLancer);
 
         //Bouton oui cliquable
-        popup.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+        popup.setPositiveButton(strOui, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss(); //fermeture de la boite de dialogue
@@ -146,7 +152,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         });
 
         //bouton non cliquable
-        popup.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+        popup.setNegativeButton(strNon, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
@@ -505,7 +511,12 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
         //Arret des compteurs
         compteurTempsTotal.stop();
-        compteurTravailEnCours.stop();
+
+        //on vérifie si le compteur a déja été stop
+        if(compteurTravailEnCours.getTimer() != null){
+            compteurTravailEnCours.stop();
+        }
+
 
         //récupération de la date du jour
         String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
