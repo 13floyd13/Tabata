@@ -17,6 +17,9 @@ public class Sequence implements Parcelable {
     @ColumnInfo(name = "nom")
     private String nom;
 
+    @ColumnInfo(name = "repetition")
+    private int repetition;
+
     @ColumnInfo(name = "tempsReposLong")
     private int tempsReposLong;
 
@@ -78,6 +81,14 @@ public class Sequence implements Parcelable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getRepetition() {
+        return repetition;
+    }
+
+    public void setRepetition(int repetition) {
+        this.repetition = repetition;
     }
 
     @Override

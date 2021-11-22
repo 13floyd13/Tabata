@@ -17,10 +17,17 @@ import modele.Travail;
 
 public class CreationTravail extends AppCompatActivity {
 
+    private final int tempsTravailDefault = 20;
+    private final int tempsReposDefault = 10;
     private String nomTravail;
     private int tempsTravail;
     private int tempsRepos;
     private DatabaseClient mDb;
+    private EditText eTempsTravail;
+    private EditText eTempsRepos;
+    private TextView tvTempsTravail;
+    private TextView tvTempsRepos;
+    private EditText eNomTravail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,17 +47,25 @@ public class CreationTravail extends AppCompatActivity {
         String strTempsRepos = temps+space+repos;
 
         //récupération du TextView de temps de travail pour ajouter la string
-        TextView tvTempsTravail = findViewById(R.id.textTempsTravail);
+        tvTempsTravail = findViewById(R.id.textTempsTravail);
         tvTempsTravail.setText(strTempsTravail);
 
         //récupération du TextView de temps de repos pour ajouter la string
-        TextView tvTempsRepos = findViewById(R.id.textTempsRepos);
+        tvTempsRepos = findViewById(R.id.textTempsRepos);
         tvTempsRepos.setText(strTempsRepos);
+
+        //récupération des EditText
+        eTempsTravail = findViewById(R.id.tempsTravail);
+        eTempsRepos = findViewById(R.id.tempsRepos);
+
+        //remplissage par défaut
+        eNomTravail.setText(tempsTravail);
+        eTempsRepos.setText(tempsRepos);
     }
 
     public void onSave(View view) {
         // on récupère le nom
-        EditText eNomTravail = findViewById(R.id.nomTravail);
+        eNomTravail = findViewById(R.id.nomTravail);
         nomTravail = eNomTravail.getText().toString();
 
         //on vérifie qu'il n'est pas vide
@@ -62,26 +77,24 @@ public class CreationTravail extends AppCompatActivity {
         }
 
         //on récupère le temps de travail
-        EditText eTempsTravail = findViewById(R.id.tempsTravail);
         String strTempsTravail = eTempsTravail.getText().toString();
 
         //on vérifie s'il est vide sinon on l'initialise à 20 secondes par défaut
-        if(strTempsTravail.isEmpty()){
+        /*if(strTempsTravail.isEmpty()){
             tempsTravail = 20;
         }else{
             tempsTravail = Integer.parseInt(strTempsTravail);
-        }
+        }*/
 
         //on récupère le temps de repos
-        EditText eTempsRepos = findViewById(R.id.tempsRepos);
         String strTempsRepos = eTempsRepos.getText().toString();
 
         //on vérifie s'il est vide sinon on l'initialise à 10 secondes par défaut
-        if(strTempsRepos.isEmpty()){
+        /*if(strTempsRepos.isEmpty()){
             tempsRepos = 10;
         }else{
             tempsRepos = Integer.parseInt(strTempsRepos);
-        }
+        }*/
 
         //Création d'une classe asynchrone pour sauvegarder le Travail
         class SaveTravail extends AsyncTask<Void, Void, Travail>{

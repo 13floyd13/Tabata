@@ -143,6 +143,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
         class GetCyclesAsync extends android.os.AsyncTask<Void, Void, List<Cycle>>{
 
+            int nbRepetitions = sequence.getRepetition();
 
             @Override
             protected List<Cycle> doInBackground(Void... voids) {
@@ -166,7 +167,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
                 //Mise à jour de l'adapter avec la liste d'entrainements
                 cycles = listCycles;
-                majCycle(listCycles);
+                majCycle(listCycles, nbRepetitions);
             }
         }
         GetCyclesAsync getCyclesAsync = new GetCyclesAsync();
@@ -217,11 +218,13 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
     }
 
-    public void majCycle(List<Cycle> lcycles){
+    public void majCycle(List<Cycle> lcycles, int nbRepetitions){
 
-        for (int j = 0; j < lcycles.size(); j++){
-            cycleEnCours = lcycles.get(j);
-            getTravails(lcycles.get(j));
+        for (int i = 0; i < nbRepetitions; i++) {
+            for (int j = 0; j < lcycles.size(); j++) {
+                cycleEnCours = lcycles.get(j);
+                getTravails(lcycles.get(j));
+            }
         }
     }
 

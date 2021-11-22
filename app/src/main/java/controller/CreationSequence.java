@@ -35,6 +35,7 @@ public class CreationSequence extends AppCompatActivity {
     private String description;
     private ListView listCycleClicked;
     private CycleListAdapter adapter;
+    private int nbRepetitions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +109,14 @@ public class CreationSequence extends AppCompatActivity {
             return;
         }
 
+        EditText eNbRepetitions = findViewById(R.id.nbRepetitions);
+        String tmp = eNbRepetitions.getText().toString();
+        if (tmp.isEmpty()){
+            nbRepetitions = 4;
+        }else {
+            nbRepetitions = Integer.parseInt(tmp);
+        }
+
         //récupération de la liste des cycles ajoutées
         ListView listViewCycle = findViewById(R.id.listCycles);
 
@@ -144,6 +153,8 @@ public class CreationSequence extends AppCompatActivity {
 
                 //Création de l'objet Sequence
                 Sequence sequence = new Sequence(nomSequence);
+                sequence.setRepetition(nbRepetitions);
+
 
                 //Ajout de la description et du temps de Repos Long
                 if(strTempsReposLong.isEmpty()){
