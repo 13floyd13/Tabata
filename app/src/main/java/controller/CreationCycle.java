@@ -20,19 +20,34 @@ import java.util.List;
 import data.DatabaseClient;
 import modele.Cycle;
 import modele.CycleTravailCrossRef;
+import modele.Sequence;
 import modele.Travail;
 import modele.TravailListAdapter;
 
 public class CreationCycle extends AppCompatActivity {
 
-    private static final boolean CYCLE_KEY=true;
+    //Data
+    private DatabaseClient mDb;
+    private TravailListAdapter adapter;
+
+    //Attributs
     private String nomCycle;
     private int nbRepetitions;
-    private DatabaseClient mDb;
     private ArrayList<Travail> travails = new ArrayList<Travail>();
+
+    //Views
     private ListView listTravailClicked;
-    private TravailListAdapter adapter;
-    private boolean sequence;
+    private Button buttonAddTravail;
+    private Button buttonCreateTravail;
+    private EditText eNomCycle;
+    private EditText eNbRepetitions;
+    private ListView listViewTravail;
+
+    //Ressources
+    private String ajouter;
+    private String space;
+    private String create;
+    private String travail;
 
 
     @Override
@@ -51,20 +66,20 @@ public class CreationCycle extends AppCompatActivity {
         mDb = DatabaseClient.getInstance(getApplicationContext());
 
         //On récupère des strings en ressources à concatener
-        String ajouter = getResources().getString(R.string.ajouter);
-        String space = " ";
-        String create = getResources().getString(R.string.creer);
-        String travail = getResources().getString(R.string.travail);
+        ajouter = getResources().getString(R.string.ajouter);
+        space = " ";
+        create = getResources().getString(R.string.creer);
+        travail = getResources().getString(R.string.travail);
 
         String strCreateTravail = create+space+travail;
         String strAjouterTravail = ajouter+space+travail;
 
         //récupértion du bouton d'ajout de cycle pour ajouter la string
-        Button buttonAddTravail = findViewById(R.id.buttonAjouterTravail);
+        buttonAddTravail = findViewById(R.id.buttonAjouterTravail);
         buttonAddTravail.setText(strAjouterTravail);
 
         //récupération du bouton de création de cycle pour ajouter la string
-        Button buttonCreateTravail = findViewById(R.id.buttonCreerTravail);
+        buttonCreateTravail = findViewById(R.id.buttonCreerTravail);
         buttonCreateTravail.setText(strCreateTravail);
 
         //récupération de la listView de travail ajoutés
@@ -82,7 +97,6 @@ public class CreationCycle extends AppCompatActivity {
 
     public void onAjouterTravail(View view) {
         Intent goToListeTravail = new Intent(getApplicationContext(), ListeTravail.class);
-        goToListeTravail.putExtra("CYCLE_KEY",true);
 
         //envoie de la liste de travails déja ajouté
         goToListeTravail.putParcelableArrayListExtra("arrayListTravails", travails);
@@ -97,12 +111,14 @@ public class CreationCycle extends AppCompatActivity {
     public void onSave(View view) {
 
         //récupération du nom du cycle
-        EditText eNomCycle = findViewById(R.id.nomCycle);
+        eNomCycle = findViewById(R.id.nomCycle);
         nomCycle = eNomCycle.getText().toString();
 
         //récupération du nombre de répétitions
-        EditText eNbRepetitions = findViewById(R.id.nbRepetitions);
+        eNbRepetitions = findViewById(R.id.nbRepetitions);
         String tmp = eNbRepetitions.getText().toString();
+
+        // on s'assure que l'editText ne soit pas vide
         if (tmp.isEmpty()){
             nbRepetitions = 4;
         }else {
@@ -118,7 +134,7 @@ public class CreationCycle extends AppCompatActivity {
         }
 
         //récupération de la liste de travails ajoutées
-        ListView listViewTravail = findViewById(R.id.listTravails);
+        listViewTravail = findViewById(R.id.listTravails);
 
         //on vérifie qu'au moins un travail soit ajouté
         if (listViewTravail.getCount() == 0){
@@ -158,11 +174,17 @@ public class CreationCycle extends AppCompatActivity {
 
                 return cycle;
             }
+
+            @Override
+            protected void onPostExecute(Cycle cycle) {
+
+                super.onPostExecute(cycle);
+                finish();// on stop l'activité après l'ajout en bd
+            }
         }
 
         SaveCycle saveCycle = new SaveCycle();
         saveCycle.execute();
-        finish();
 
     }
 

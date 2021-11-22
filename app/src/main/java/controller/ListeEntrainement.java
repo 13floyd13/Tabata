@@ -22,13 +22,22 @@ import modele.EntrainementListAdapter;
 
 public class ListeEntrainement extends AppCompatActivity {
 
-    //Attributs
+    //Data
     private AppDatabase mDb;
     private EntrainementListAdapter adapter;
-    private ListView listEntrainement;
+
+    //Attributs
     private ArrayList<EntrainementAvecSequences> entrainements = new ArrayList<EntrainementAvecSequences>();
     private boolean suppression = false;
 
+    //Views
+    private ListView listEntrainement;
+    private TextView titrePage;
+
+    //Ressources
+    private String liste;
+    private String space;
+    private String entrainement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +51,13 @@ public class ListeEntrainement extends AppCompatActivity {
         }
 
         //on récupère les strings à concaténer
-        String liste = getResources().getString(R.string.liste);
-        String space = " ";
-        String entrainement = getResources().getString(R.string.entrainement);
+        liste = getResources().getString(R.string.liste);
+        space = " ";
+        entrainement = getResources().getString(R.string.entrainement);
         String strListeEntrainement = liste + space + entrainement;
 
         //récupération du TextView pour ajouter la string
-        TextView titrePage = findViewById(R.id.titrePage);
+        titrePage = findViewById(R.id.titrePage);
         titrePage.setText(strListeEntrainement);
 
         //récupération du ListView
@@ -84,23 +93,27 @@ public class ListeEntrainement extends AppCompatActivity {
                         protected void onPostExecute(Void aVoid) {
                             super.onPostExecute(aVoid);
                             adapter.notifyDataSetChanged();
-
+                            finish();
                         }
                     }
 
                     SupprimerEntrainementAsync supprimerEntrainementAsync = new SupprimerEntrainementAsync();
                     supprimerEntrainementAsync.execute();
-                    finish();
+
                 }
             });
+
         } else {  //on va jouer l'entrainement cliqué
+
             listEntrainement.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     EntrainementAvecSequences entrainementAvecSequences = adapter.getItem(position);
                     Intent goToPlay = new Intent(getApplicationContext(), Play.class);
-                    goToPlay.putExtra("entrainementAvecSequences", entrainementAvecSequences);
+                    goToPlay.putParcelableArrayListExtra("sequences_key", entrainementAvecSequences.getSequences());
+                    //goToPlay.putExtra("entrainementAvecSequences", entrainementAvecSequences);
                     goToPlay.putExtra("entrainement", entrainementAvecSequences.getEntrainement());
                     startActivity(goToPlay);
 
@@ -109,6 +122,7 @@ public class ListeEntrainement extends AppCompatActivity {
         }
     }
 
+        //récupération des entrainements en bd
         private void getEntrainements(){
             class RecupererEntrainementAsync extends android.os.AsyncTask<Void, Void, List<EntrainementAvecSequences>>{
 

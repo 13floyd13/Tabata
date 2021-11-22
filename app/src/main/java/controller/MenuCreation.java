@@ -12,24 +12,39 @@ import com.example.tabata.R;
 
 public class MenuCreation extends AppCompatActivity {
 
+    //Views
+    private Button bCreationEntrainement;
+    private Button bCreationSequence;
+    private Button bCreationCycle;
+    private Button bCreationTravail;
+
+    //Ressources
+    private String create;
+    private String entrainement;
+    private String sequence;
+    private String cycle;
+    private String travail;
+    private String space;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_creation);
 
         //récupération des Views
-        Button bCreationEntrainement = findViewById(R.id.btnCreationEntrainement);
-        Button bCreationSequence = findViewById(R.id.btnCreationSequence);
-        Button bCreationCycle = findViewById(R.id.btnCreationCycle);
-        Button bCreationTravail = findViewById(R.id.btnCreationTravail);
+        bCreationEntrainement = findViewById(R.id.btnCreationEntrainement);
+        bCreationSequence = findViewById(R.id.btnCreationSequence);
+        bCreationCycle = findViewById(R.id.btnCreationCycle);
+        bCreationTravail = findViewById(R.id.btnCreationTravail);
 
         //Liste des strings à concatener pour set le text des boutons
-        String create = getResources().getString(R.string.creer);
-        String entrainement = getResources().getString(R.string.entrainement);
-        String sequence = getResources().getString(R.string.sequence);
-        String cycle = getResources().getString(R.string.cycle);
-        String travail = getResources().getString(R.string.travail);
-        String space = " ";
+        create = getResources().getString(R.string.creer);
+        entrainement = getResources().getString(R.string.entrainement);
+        sequence = getResources().getString(R.string.sequence);
+        cycle = getResources().getString(R.string.cycle);
+        travail = getResources().getString(R.string.travail);
+        space = " ";
+
         String createEntrainement = create + space + entrainement;
         String createSequence = create + space + sequence;
         String createCycle = create + space + cycle;

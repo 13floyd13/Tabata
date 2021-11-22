@@ -23,6 +23,10 @@ public interface SequenceDao {
         List<SequenceAvecCycles> getAll();
 
         @Transaction
+        @Query("SELECT repetition FROM sequence WHERE sequenceId =:sequenceId")
+        int getRepetitions(long sequenceId);
+
+        @Transaction
         @Insert
         long insert(Sequence sequence);
 

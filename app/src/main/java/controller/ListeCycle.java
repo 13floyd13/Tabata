@@ -28,12 +28,25 @@ import modele.TravailListAdapter;
 
 public class ListeCycle extends AppCompatActivity {
 
+    //Data
     private AppDatabase mDb;
     private CycleListAdapter adapter;
-    private ListView listCycle;
+
+    //Attributs
     private ArrayList<CycleAvecTravails> cycles = new ArrayList<CycleAvecTravails>();
-    private boolean suppression = false;
     private ArrayList<Long> cyclesAjoutes = new ArrayList<>();
+    private boolean suppression = false;
+
+    //Views
+    private ListView listCycle;
+    private TextView titrePage;
+
+    //Ressources
+    private String liste;
+    private String space;
+    private String cycle;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +61,13 @@ public class ListeCycle extends AppCompatActivity {
         }
 
         //on récupère les strings à concaténer
-        String liste = getResources().getString(R.string.liste);
-        String space = " ";
-        String cycle = getResources().getString(R.string.cycle);
+        liste = getResources().getString(R.string.liste);
+        space = " ";
+        cycle = getResources().getString(R.string.cycle);
         String strListeCycle = liste+space+cycle;
 
         //récupération du TextView pour ajouter la string
-        TextView titrePage = findViewById(R.id.titrePage);
+        titrePage = findViewById(R.id.titrePage);
         titrePage.setText(strListeCycle);
 
         //récupération du ListView
@@ -68,18 +81,21 @@ public class ListeCycle extends AppCompatActivity {
         listCycle.setAdapter(adapter);
 
         if (suppression) { //si on vient du menu Supression
+
             listCycle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                    //récupération de l'objet cliqué
                     CycleAvecTravails cycleAvecTravailsClicked = adapter.getItem(position);
                     Cycle cycle= cycleAvecTravailsClicked.getCycle();
-
 
                     class SupprimerCycleAsync extends android.os.AsyncTask<Void, Void, Void> {
 
                         @Override
                         protected Void doInBackground(Void... voids) {
+
+                            //Suppression de la bd
                             mDb.cycleDao()
                                     .delete(cycle);
                             return null;
@@ -89,18 +105,22 @@ public class ListeCycle extends AppCompatActivity {
                         protected void onPostExecute(Void aVoid) {
                             super.onPostExecute(aVoid);
                             adapter.notifyDataSetChanged();
+                            finish();
 
                         }
                     }
 
                     SupprimerCycleAsync supprimerCycleAsync = new SupprimerCycleAsync();
                     supprimerCycleAsync.execute();
-                    finish();
+
                 }
             });
+
         }else{ //si on vient du menu Creation
+
             //ajout d'un évenement click à la listeView
             listCycle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -129,6 +149,7 @@ public class ListeCycle extends AppCompatActivity {
         }
     }
 
+    //récupération des cycles en bd
     private void getCycles(){
 
         class RecupererCycleAsync extends android.os.AsyncTask<Void, Void, List<CycleAvecTravails>>{

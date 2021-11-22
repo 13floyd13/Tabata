@@ -24,18 +24,37 @@ import modele.CycleAvecTravails;
 import modele.CycleListAdapter;
 import modele.Sequence;
 import modele.SequenceCycleCrossRef;
+import modele.Travail;
 
 public class CreationSequence extends AppCompatActivity {
 
-    private static final boolean SEQUENCE_KEY = true;
-    private String nomSequence;
+    //Data
     private DatabaseClient mDb;
-    private ArrayList<CycleAvecTravails> cyclesAvecTravails = new ArrayList<CycleAvecTravails>();
-    int tempsReposLong;
-    private String description;
-    private ListView listCycleClicked;
     private CycleListAdapter adapter;
+
+    //Attributs
+    private int tempsReposLong;
+    private ArrayList<CycleAvecTravails> cyclesAvecTravails = new ArrayList<CycleAvecTravails>();
     private int nbRepetitions;
+
+    //Views
+    private ListView listCycleClicked;
+    private Button buttonAddCycle;
+    private Button buttonCreateCycle;
+    private EditText eNomSequence;
+    private EditText eNbRepetitions;
+    private ListView listViewCycle;
+    private EditText eTempsReposLong;
+    private EditText eDescription;
+
+    //Ressources
+    private String nomSequence;
+    private String description;
+    private String ajouter;
+    private String space;
+    private String create;
+    private String cycle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,20 +71,20 @@ public class CreationSequence extends AppCompatActivity {
         mDb = DatabaseClient.getInstance(getApplicationContext());
 
         //On récupère des strings en ressources à concatener
-        String ajouter = getResources().getString(R.string.ajouter);
-        String space = " ";
-        String create = getResources().getString(R.string.creer);
-        String cycle = getResources().getString(R.string.cycle);
+        ajouter = getResources().getString(R.string.ajouter);
+        space = " ";
+        create = getResources().getString(R.string.creer);
+        cycle = getResources().getString(R.string.cycle);
 
         String strCreateCycle = create+space+cycle;
         String strAjouterCycle = ajouter+space+cycle;
 
         //récupértion du bouton d'ajout de cycle pour ajouter la string
-        Button buttonAddCycle = findViewById(R.id.buttonAjouterCycle);
+        buttonAddCycle = findViewById(R.id.buttonAjouterCycle);
         buttonAddCycle.setText(strAjouterCycle);
 
         //récupération du bouton de création de cycle pour ajouter la string
-        Button buttonCreateCycle = findViewById(R.id.buttonCreerCycle);
+        buttonCreateCycle = findViewById(R.id.buttonCreerCycle);
         buttonCreateCycle.setText(strCreateCycle);
 
         //récupération de la listView de cycles ajoutés
@@ -83,7 +102,6 @@ public class CreationSequence extends AppCompatActivity {
 
     public void onAjouterCycle(View view) {
         Intent goToListCycle = new Intent(getApplicationContext(), ListeCycle.class);
-        goToListCycle.putExtra("SEQUENCE_KEY", SEQUENCE_KEY);
 
         //envoie des cycles déja ajoutés au préalable dans la séquence
         goToListCycle.putParcelableArrayListExtra("arrayListCycles", cyclesAvecTravails);
@@ -98,7 +116,7 @@ public class CreationSequence extends AppCompatActivity {
     public void onSave(View view) {
 
         //récupértion du nom de la séquence
-        EditText eNomSequence = findViewById(R.id.nomSequence);
+        eNomSequence = findViewById(R.id.nomSequence);
         nomSequence = eNomSequence.getText().toString();
 
         //on vérifie que le nom de la séquence ne soit pas vide
@@ -109,7 +127,7 @@ public class CreationSequence extends AppCompatActivity {
             return;
         }
 
-        EditText eNbRepetitions = findViewById(R.id.nbRepetitions);
+        eNbRepetitions = findViewById(R.id.nbRepetitions);
         String tmp = eNbRepetitions.getText().toString();
         if (tmp.isEmpty()){
             nbRepetitions = 4;
@@ -118,7 +136,7 @@ public class CreationSequence extends AppCompatActivity {
         }
 
         //récupération de la liste des cycles ajoutées
-        ListView listViewCycle = findViewById(R.id.listCycles);
+        listViewCycle = findViewById(R.id.listCycles);
 
         //on vérifie qu'au moins un cycle soit ajoutée
         if (listViewCycle.getCount() == 0){
@@ -130,18 +148,12 @@ public class CreationSequence extends AppCompatActivity {
 
 
         //récupération du temps de repos long
-        EditText eTempsReposLong = findViewById(R.id.tempsRepos);
+        eTempsReposLong = findViewById(R.id.tempsRepos);
         String strTempsReposLong = eTempsReposLong.getText().toString();
 
-        //on vérifie si le temps de repos est rempli sinon on le met à 60 secondes par défaut
-        if(strTempsReposLong.isEmpty()){
-            tempsReposLong = 60;
-        }else{
-            tempsReposLong = Integer.parseInt(strTempsReposLong);
-        }
 
         //récupération de la description de la séquence
-        EditText eDescription = findViewById(R.id.descriptionSequence);
+        eDescription = findViewById(R.id.descriptionSequence);
         String description = eDescription.getText().toString();
 
 
@@ -154,7 +166,6 @@ public class CreationSequence extends AppCompatActivity {
                 //Création de l'objet Sequence
                 Sequence sequence = new Sequence(nomSequence);
                 sequence.setRepetition(nbRepetitions);
-
 
                 //Ajout de la description et du temps de Repos Long
                 if(strTempsReposLong.isEmpty()){
@@ -182,11 +193,18 @@ public class CreationSequence extends AppCompatActivity {
 
                 return sequence;
             }
+
+            @Override
+            protected void onPostExecute(Sequence sequence) {
+
+                super.onPostExecute(sequence);
+                finish();// on stop l'activité après l'ajout en bd
+            }
         }
 
         SaveSequence saveSequence = new SaveSequence();
-        saveSequence.execute();
-        finish();
+        saveSequence.execute(); //execution de l'async
+
 
     }
 }

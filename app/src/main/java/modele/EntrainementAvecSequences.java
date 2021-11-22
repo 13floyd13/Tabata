@@ -4,10 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.room.Embedded;
-import androidx.room.Entity;
 import androidx.room.Junction;
 import androidx.room.Relation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -63,8 +63,8 @@ public class EntrainementAvecSequences implements Parcelable {
         return entrainement;
     }
 
-    public List<Sequence> getSequences() {
-        return sequences;
+    public ArrayList<? extends Parcelable> getSequences() {
+        return (ArrayList<? extends Parcelable>) sequences;
     }
 
     @Override

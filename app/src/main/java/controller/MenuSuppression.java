@@ -11,7 +11,22 @@ import com.example.tabata.R;
 
 public class MenuSuppression extends AppCompatActivity {
 
+    //Constante
     private static final boolean SUPPRESSION_KEY = true;
+
+    //Views
+    private Button bSuppressionEntrainement;
+    private Button bSuppressionSequence;
+    private Button bSuppressionCycle;
+    private Button bSuppressionTravail;
+
+    //Ressources
+    private String delete;
+    private String entrainement;
+    private String sequence;
+    private String cycle;
+    private String travail;
+    private String space;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,18 +34,19 @@ public class MenuSuppression extends AppCompatActivity {
         setContentView(R.layout.activity_menu_supression);
 
         //récupération des Views
-        Button bSuppressionEntrainement = findViewById(R.id.btnSuppressionEntrainement);
-        Button bSuppressionSequence = findViewById(R.id.btnSuppressionSequence);
-        Button bSuppressionCycle = findViewById(R.id.btnSuppressionCycle);
-        Button bSuppressionTravail = findViewById(R.id.btnSuppressionTravail);
+        bSuppressionEntrainement = findViewById(R.id.btnSuppressionEntrainement);
+        bSuppressionSequence = findViewById(R.id.btnSuppressionSequence);
+        bSuppressionCycle = findViewById(R.id.btnSuppressionCycle);
+        bSuppressionTravail = findViewById(R.id.btnSuppressionTravail);
 
         //Liste des strings à concatener pour set le text des boutons
-        String delete = getResources().getString(R.string.delete);
-        String entrainement = getResources().getString(R.string.entrainement);
-        String sequence = getResources().getString(R.string.sequence);
-        String cycle = getResources().getString(R.string.cycle);
-        String travail = getResources().getString(R.string.travail);
-        String space = " ";
+        delete = getResources().getString(R.string.delete);
+        entrainement = getResources().getString(R.string.entrainement);
+        sequence = getResources().getString(R.string.sequence);
+        cycle = getResources().getString(R.string.cycle);
+        travail = getResources().getString(R.string.travail);
+        space = " ";
+
         String deleteEntrainement = delete + space + entrainement;
         String deleteSequence = delete + space + sequence;
         String deleteCycle = delete + space + cycle;

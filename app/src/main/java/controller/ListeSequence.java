@@ -28,13 +28,25 @@ import modele.SequenceListAdapter;
 
 public class ListeSequence extends AppCompatActivity {
 
-    //Attributs
+    //Data
     private AppDatabase mDb;
     private SequenceListAdapter adapter;
-    private ListView listSequence;
+
+    //Attributs
     private ArrayList<SequenceAvecCycles> sequences = new ArrayList<SequenceAvecCycles>();
     private boolean suppression = false;
     private ArrayList<Long> sequencesAjoutes = new ArrayList<>();
+
+    //Views
+    private ListView listSequence;
+    private TextView titrePage;
+
+    //ressources
+    private String liste;
+    private String space;
+    private String sequence;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +61,13 @@ public class ListeSequence extends AppCompatActivity {
         }
 
         //on récupère les strings à concaténer
-        String liste = getResources().getString(R.string.liste);
-        String space = " ";
-        String sequence = getResources().getString(R.string.sequence);
+        liste = getResources().getString(R.string.liste);
+        space = " ";
+        sequence = getResources().getString(R.string.sequence);
         String strListeSequence = liste + space + sequence;
 
         //récupération du TextView pour ajouter la string
-        TextView titrePage = findViewById(R.id.titrePage);
+        titrePage = findViewById(R.id.titrePage);
         titrePage.setText(strListeSequence);
 
         //récupération du ListView
@@ -73,11 +85,13 @@ public class ListeSequence extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                    //récupération de l'objet cliqué
                     SequenceAvecCycles sequenceAvecCyclesClicked = adapter.getItem(position);
                     Sequence sequence = sequenceAvecCyclesClicked.getSequence();
 
                     class SupprimerSequenceAsync extends android.os.AsyncTask<Void, Void, Void> {
 
+                        //suppression de la sequence de la bd
                         @Override
                         protected Void doInBackground(Void... voids) {
                             mDb.sequenceDao()
@@ -89,18 +103,21 @@ public class ListeSequence extends AppCompatActivity {
                         protected void onPostExecute(Void aVoid) {
                             super.onPostExecute(aVoid);
                             adapter.notifyDataSetChanged();
-
+                            finish();
                         }
                     }
 
                     SupprimerSequenceAsync supprimerSequenceAsync = new SupprimerSequenceAsync();
                     supprimerSequenceAsync.execute();
-                    finish();
+
                 }
             });
+
         }else {
+
             //ajout d'un évenement click à la listeView
             listSequence.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -130,6 +147,8 @@ public class ListeSequence extends AppCompatActivity {
             });
         }
     }
+
+    //récupération des sequences en bd
     private void getSequences(){
 
         class RecupererSequenceAsync extends android.os.AsyncTask<Void, Void, List<SequenceAvecCycles>>{

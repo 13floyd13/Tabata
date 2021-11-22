@@ -25,12 +25,24 @@ import modele.TravailListAdapter;
 
 public class ListeTravail extends AppCompatActivity {
 
+
+    //Data
     private AppDatabase mDb;
     private TravailListAdapter adapter;
-    private ListView listTravail;
+
+    //Attributs
     private ArrayList<Travail> travails = new ArrayList<Travail>();
     private boolean suppression = false;
     private ArrayList<Long> travailsAjoutes = new ArrayList<>();
+
+    //Views
+    private ListView listTravail;
+    private TextView titrePage;
+
+    //Ressources
+    private String liste;
+    private String space;
+    private String travail;
 
 
 
@@ -47,13 +59,13 @@ public class ListeTravail extends AppCompatActivity {
         }
 
         //On récupère des strings en ressources à concatener
-        String liste = getResources().getString(R.string.liste);
-        String space = " ";
-        String travail = getResources().getString(R.string.travail);
+        liste = getResources().getString(R.string.liste);
+        space = " ";
+        travail = getResources().getString(R.string.travail);
         String strListeTravail = liste+space+travail;
 
         //récupération du TextView de temps de travail pour ajouter la string
-        TextView titrePage = findViewById(R.id.titrePage);
+        titrePage = findViewById(R.id.titrePage);
         titrePage.setText(strListeTravail);
 
         //récupération du ListView
@@ -72,11 +84,12 @@ public class ListeTravail extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                    //récupération du travail cliqué
                     Travail travailClicked = adapter.getItem(position);
-
 
                     class SupprimerTravailAsync extends android.os.AsyncTask<Void, Void, Void> {
 
+                        //suppression de l'objet de la bd
                         @Override
                         protected Void doInBackground(Void... voids) {
                             mDb.travailDao()
@@ -88,18 +101,20 @@ public class ListeTravail extends AppCompatActivity {
                         protected void onPostExecute(Void aVoid) {
                             super.onPostExecute(aVoid);
                             adapter.notifyDataSetChanged();
-
+                            finish();
                         }
                     }
 
                     SupprimerTravailAsync supprimerTravailAsync = new SupprimerTravailAsync();
                     supprimerTravailAsync.execute();
-                    finish();
                 }
             });
+
         }else {
+
             //ajout d'un évenement click à la listeView
             listTravail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -117,7 +132,9 @@ public class ListeTravail extends AppCompatActivity {
                         Toast toast = Toast.makeText(ListeTravail.this, "Sequence déja ajouté", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
                         toast.show();
+
                     } else {
+
                         Intent goBacktoCycle = new Intent(getApplicationContext(), CreationCycle.class);
                         travails.add(travailClicked);
                         goBacktoCycle.putParcelableArrayListExtra("arrayListTravailsClicked", travails);
@@ -129,6 +146,7 @@ public class ListeTravail extends AppCompatActivity {
         }
     }
 
+    //récupération des travails en bd
     private void getTravails() {
 
         class RecupererTravailAsync extends android.os.AsyncTask<Void, Void, List<Travail>> {

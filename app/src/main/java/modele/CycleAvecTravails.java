@@ -13,7 +13,7 @@ public class CycleAvecTravails implements Parcelable {
     @Embedded
     public Cycle cycle;
 
-    //Relation de type one-to-many entre cycle et travail
+    //Relation de type many-to-many entre cycle et travail
     @Relation(
             parentColumn = "cycleId",
             entityColumn = "travailId",

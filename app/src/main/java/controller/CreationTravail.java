@@ -17,17 +17,26 @@ import modele.Travail;
 
 public class CreationTravail extends AppCompatActivity {
 
-    private final int tempsTravailDefault = 20;
-    private final int tempsReposDefault = 10;
+    //Attributs
     private String nomTravail;
     private int tempsTravail;
     private int tempsRepos;
+
+    //database
     private DatabaseClient mDb;
+
+    //Views
     private EditText eTempsTravail;
     private EditText eTempsRepos;
     private TextView tvTempsTravail;
     private TextView tvTempsRepos;
     private EditText eNomTravail;
+
+    //Ressources
+    private String temps;
+    private String space;
+    private String travail;
+    private String repos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +47,10 @@ public class CreationTravail extends AppCompatActivity {
         mDb = DatabaseClient.getInstance(getApplicationContext());
 
         //On récupère des strings en ressources à concatener
-        String temps = getResources().getString(R.string.temps);
-        String space = " ";
-        String travail = getResources().getString(R.string.travail);
-        String repos = getResources().getString(R.string.repos);
+        temps = getResources().getString(R.string.temps);
+        space = " ";
+        travail = getResources().getString(R.string.travail);
+        repos = getResources().getString(R.string.repos);
 
         String strTempsTravail = temps+space+travail;
         String strTempsRepos = temps+space+repos;
@@ -54,13 +63,6 @@ public class CreationTravail extends AppCompatActivity {
         tvTempsRepos = findViewById(R.id.textTempsRepos);
         tvTempsRepos.setText(strTempsRepos);
 
-        //récupération des EditText
-        eTempsTravail = findViewById(R.id.tempsTravail);
-        eTempsRepos = findViewById(R.id.tempsRepos);
-
-        //remplissage par défaut
-        eNomTravail.setText(tempsTravail);
-        eTempsRepos.setText(tempsRepos);
     }
 
     public void onSave(View view) {
@@ -76,25 +78,29 @@ public class CreationTravail extends AppCompatActivity {
             return;
         }
 
+        //récupération des EditText
+        eTempsTravail = findViewById(R.id.tempsTravail);
+        eTempsRepos = findViewById(R.id.tempsRepos);
+
         //on récupère le temps de travail
         String strTempsTravail = eTempsTravail.getText().toString();
 
         //on vérifie s'il est vide sinon on l'initialise à 20 secondes par défaut
-        /*if(strTempsTravail.isEmpty()){
+        if(strTempsTravail.isEmpty()){
             tempsTravail = 20;
         }else{
             tempsTravail = Integer.parseInt(strTempsTravail);
-        }*/
+        }
 
         //on récupère le temps de repos
         String strTempsRepos = eTempsRepos.getText().toString();
 
         //on vérifie s'il est vide sinon on l'initialise à 10 secondes par défaut
-        /*if(strTempsRepos.isEmpty()){
+        if(strTempsRepos.isEmpty()){
             tempsRepos = 10;
         }else{
             tempsRepos = Integer.parseInt(strTempsRepos);
-        }*/
+        }
 
         //Création d'une classe asynchrone pour sauvegarder le Travail
         class SaveTravail extends AsyncTask<Void, Void, Travail>{
@@ -118,12 +124,12 @@ public class CreationTravail extends AppCompatActivity {
             protected void onPostExecute(Travail travail) {
 
                 super.onPostExecute(travail);
-                finish();
+                finish(); // on stop l'activité après l'ajout en bd
             }
         }
 
         SaveTravail saveTravail = new SaveTravail();
-        saveTravail.execute();
-        finish();
+        saveTravail.execute(); //execution de l'async
+
     }
 }

@@ -11,6 +11,8 @@ public class Compteur extends UpdateSource{
     // DATA
     private long updatedTime = INITIAL_TIME;
     private CountDownTimer timer;   // https://developer.android.com/reference/android/os/CountDownTimer.html
+
+    //Attributs
     private String nomSequence;
     private String nomCycle;
     private String nomTravail;

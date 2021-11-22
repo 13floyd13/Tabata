@@ -65,6 +65,7 @@
     <EditText
         android:layout_width="50dp"
         android:layout_height="wrap_content"
+        android:text="10"
         android:inputType="numberSigned"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
@@ -113,6 +114,7 @@
     <EditText
         android:layout_width="50dp"
         android:layout_height="wrap_content"
+        android:text="60"
         android:inputType="numberSigned"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
