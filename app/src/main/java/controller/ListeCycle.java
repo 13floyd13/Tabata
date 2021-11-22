@@ -36,6 +36,10 @@ public class ListeCycle extends AppCompatActivity {
     private ArrayList<CycleAvecTravails> cycles = new ArrayList<CycleAvecTravails>();
     private ArrayList<Long> cyclesAjoutes = new ArrayList<>();
     private boolean suppression = false;
+    private String nbRepet;
+    private String nomSequence;
+    private String description;
+    private String strTempsReposLong;
 
     //Views
     private ListView listCycle;
@@ -58,6 +62,10 @@ public class ListeCycle extends AppCompatActivity {
         if (extras != null){
             cycles = extras.getParcelableArrayList("arrayListCycles");
             suppression = extras.getBoolean("SUPPRESSION_KEY");
+            nbRepet = extras.getString("nbRepet");
+            nomSequence = extras.getString("nomSequence");
+            description = extras.getString("description");
+            strTempsReposLong = extras.getString("strTempsReposLong");
         }
 
         //on récupère les strings à concaténer
@@ -141,6 +149,10 @@ public class ListeCycle extends AppCompatActivity {
                         Intent goBacktoSequence = new Intent(getApplicationContext(), CreationSequence.class);
                         cycles.add(cycleClicked);
                         goBacktoSequence.putParcelableArrayListExtra("arrayListCycleClicked", cycles);
+                        goBacktoSequence.putExtra("nomSequence", nomSequence);
+                        goBacktoSequence.putExtra("nbRepet", nbRepet);
+                        goBacktoSequence.putExtra("strTempsReposLong", strTempsReposLong);
+                        goBacktoSequence.putExtra("description", description);
                         goBacktoSequence.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(goBacktoSequence);
                     }

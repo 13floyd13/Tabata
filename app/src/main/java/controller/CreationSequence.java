@@ -36,6 +36,10 @@ public class CreationSequence extends AppCompatActivity {
     private int tempsReposLong;
     private ArrayList<CycleAvecTravails> cyclesAvecTravails = new ArrayList<CycleAvecTravails>();
     private int nbRepetitions;
+    private String nbRepet;
+    private String nomSequence;
+    private String description;
+    private String strTempsReposLong;
 
     //Views
     private ListView listCycleClicked;
@@ -48,8 +52,7 @@ public class CreationSequence extends AppCompatActivity {
     private EditText eDescription;
 
     //Ressources
-    private String nomSequence;
-    private String description;
+
     private String ajouter;
     private String space;
     private String create;
@@ -65,6 +68,31 @@ public class CreationSequence extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             cyclesAvecTravails = extras.getParcelableArrayList("arrayListCycleClicked");
+            nbRepet = extras.getString("nbRepet");
+            nomSequence = extras.getString("nomSequence");
+            description = extras.getString("description");
+            strTempsReposLong = extras.getString("strTempsReposLong");
+        }
+
+        //On test si on a reçu quelque chose via le getIntent et si oui on l'introduit dans les editText liés
+        if (nbRepet != null){
+            eNbRepetitions = findViewById(R.id.nbRepetitions);
+            nbRepet = eNbRepetitions.getText().toString();
+        }
+
+        if (nomSequence != null){
+            eNomSequence = findViewById(R.id.nomSequence);
+            nomSequence = eNomSequence.getText().toString();
+        }
+
+        if (description != null){
+            eDescription = findViewById(R.id.descriptionSequence);
+            description = eDescription.getText().toString();
+        }
+
+        if (strTempsReposLong != null){
+            eTempsReposLong = findViewById(R.id.tempsRepos);
+            strTempsReposLong = eTempsReposLong.getText().toString();
         }
 
         //Récupération du DatabaseClient
@@ -101,10 +129,27 @@ public class CreationSequence extends AppCompatActivity {
     }
 
     public void onAjouterCycle(View view) {
+        //récupération des editText pour ne pas perdre les infos entre les activités
+        eNomSequence = findViewById(R.id.nomSequence);
+        nomSequence = eNomSequence.getText().toString();
+
+        eNbRepetitions = findViewById(R.id.nbRepetitions);
+        nbRepet = eNbRepetitions.getText().toString();
+
+        eTempsReposLong = findViewById(R.id.tempsRepos);
+        strTempsReposLong = eTempsReposLong.getText().toString();
+
+        eDescription = findViewById(R.id.descriptionSequence);
+        description = eDescription.getText().toString();
+
         Intent goToListCycle = new Intent(getApplicationContext(), ListeCycle.class);
 
         //envoie des cycles déja ajoutés au préalable dans la séquence
         goToListCycle.putParcelableArrayListExtra("arrayListCycles", cyclesAvecTravails);
+        goToListCycle.putExtra("nomSequence", nomSequence);
+        goToListCycle.putExtra("nbRepet", nbRepet);
+        goToListCycle.putExtra("strTempsReposLong", tempsReposLong);
+        goToListCycle.putExtra("description", description);
         startActivity(goToListCycle);
     }
 
@@ -128,11 +173,11 @@ public class CreationSequence extends AppCompatActivity {
         }
 
         eNbRepetitions = findViewById(R.id.nbRepetitions);
-        String tmp = eNbRepetitions.getText().toString();
-        if (tmp.isEmpty()){
+        nbRepet = eNbRepetitions.getText().toString();
+        if (nbRepet.isEmpty()){
             nbRepetitions = 4;
         }else {
-            nbRepetitions = Integer.parseInt(tmp);
+            nbRepetitions = Integer.parseInt(nbRepet);
         }
 
         //récupération de la liste des cycles ajoutées
@@ -149,7 +194,7 @@ public class CreationSequence extends AppCompatActivity {
 
         //récupération du temps de repos long
         eTempsReposLong = findViewById(R.id.tempsRepos);
-        String strTempsReposLong = eTempsReposLong.getText().toString();
+        strTempsReposLong = eTempsReposLong.getText().toString();
 
 
         //récupération de la description de la séquence

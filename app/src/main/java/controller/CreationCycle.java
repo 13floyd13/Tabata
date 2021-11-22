@@ -34,6 +34,7 @@ public class CreationCycle extends AppCompatActivity {
     private String nomCycle;
     private int nbRepetitions;
     private ArrayList<Travail> travails = new ArrayList<Travail>();
+    private String nbRepet;
 
     //Views
     private ListView listTravailClicked;
@@ -60,6 +61,18 @@ public class CreationCycle extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             travails = extras.getParcelableArrayList("arrayListTravailsClicked");
+            nomCycle = extras.getString("nomCycle");
+            nbRepet = extras.getString("nbRepet");
+        }
+
+        if(nomCycle != null){
+            eNomCycle = findViewById(R.id.nomCycle);
+            eNomCycle.setText(nomCycle);
+        }
+
+        if(nbRepet != null){
+            eNbRepetitions = findViewById(R.id.nbRepetitions);
+            eNbRepetitions.setText(nbRepet);
         }
 
         //Récupération du DatabaseClient
@@ -96,10 +109,20 @@ public class CreationCycle extends AppCompatActivity {
     }
 
     public void onAjouterTravail(View view) {
+
+        //on récupère les editText s'ils ont déja été remplis pour les conserver entre le changement d'activité
+        eNomCycle = findViewById(R.id.nomCycle);
+        nomCycle = eNomCycle.getText().toString();
+
+        eNbRepetitions = findViewById(R.id.nbRepetitions);
+        nbRepet = eNbRepetitions.getText().toString();
+
         Intent goToListeTravail = new Intent(getApplicationContext(), ListeTravail.class);
 
         //envoie de la liste de travails déja ajouté
         goToListeTravail.putParcelableArrayListExtra("arrayListTravails", travails);
+        goToListeTravail.putExtra("nomCycle", nomCycle);
+        goToListeTravail.putExtra("nbRepet", nbRepet);
         startActivity(goToListeTravail);
     }
 
@@ -116,13 +139,13 @@ public class CreationCycle extends AppCompatActivity {
 
         //récupération du nombre de répétitions
         eNbRepetitions = findViewById(R.id.nbRepetitions);
-        String tmp = eNbRepetitions.getText().toString();
+        nbRepet = eNbRepetitions.getText().toString();
 
         // on s'assure que l'editText ne soit pas vide
-        if (tmp.isEmpty()){
+        if (nbRepet.isEmpty()){
             nbRepetitions = 4;
         }else {
-            nbRepetitions = Integer.parseInt(tmp);
+            nbRepetitions = Integer.parseInt(nbRepet);
         }
 
         //on vérifie que le nom du cycle ne soit pas vide

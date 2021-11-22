@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
@@ -15,9 +16,13 @@ import android.widget.TextView;
 
 import com.example.tabata.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import data.AppDatabase;
 import data.DatabaseClient;
@@ -51,6 +56,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
     private boolean go = false;
     private int iterateurCompteur = 0;
     private ToneGenerator bip;
+    private Date date;
 
     //Views
     private TextView tvNomEntrainement;
@@ -65,7 +71,6 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
     private Play activity;
 
     //Ressources
-    private String space = " ";
     private String strTempsReposLong;
     private String strTempsPreparation;
     private String strProchainTravail;
@@ -84,7 +89,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
         // Récupération du DatabaseClient
         mDb = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase();
-        Bundle extras = getIntent().getExtras();
+
 
         //récupération des strings en ressources
         strRepos = getResources().getString(R.string.repos);
@@ -97,6 +102,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         strSuivant = getResources().getString(R.string.suivant);
 
         //récupération de l'entrainement et des sequences
+        Bundle extras = getIntent().getExtras();
         if (extras != null){
             EntrainementAvecSequences entrainementAvecSequences = extras.getParcelable("entrainementAvecSequences");
             //sequences = entrainementAvecSequences.getSequences();
@@ -123,7 +129,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         bip = new ToneGenerator(AudioManager.STREAM_ALARM,100);
 
 
-        //mise en place d'une popup pour demander si onlance l'entrainement
+        //mise en place d'une popup pour demander si on lance l'entrainement
         this.activity = this;
         AlertDialog.Builder popup = new AlertDialog.Builder(activity);
         popup.setTitle("Entrainement");
@@ -333,6 +339,14 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
                 //c'est la fin de l'entrainement
                 tvProchainTravail.setText(strProchainTravail+strFin);
                 btnSuivant.setText(strFin);
+
+                //on change la propriété onClick du bouton pour envoyer vers la fin de l'entrainement
+                btnSuivant.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finEntrainement();
+                    }
+                });
             }
 
             //on met à jour le design en fonction du compteur en cours
@@ -360,6 +374,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
         }else{
             //fin de l'entrainement
+            finEntrainement();
         }
 
     }
@@ -479,9 +494,25 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
             //on appel la méthode de fin du timer de travail
             onFinish();
+
         }else{
-            //finish
+            finEntrainement();
         }
 
+    }
+
+    public void finEntrainement(){
+
+        //Arret des compteurs
+        compteurTempsTotal.stop();
+        compteurTravailEnCours.stop();
+
+        //récupération de la date du jour
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+
+        Intent goToFinEntrainement = new Intent(getApplicationContext(), FinEntrainement.class);
+        goToFinEntrainement.putExtra("currentDate", currentDate);
+        goToFinEntrainement.putExtra("nomEntrainement", entrainement.getNom());
+        startActivity(goToFinEntrainement);
     }
 }

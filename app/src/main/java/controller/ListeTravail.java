@@ -34,6 +34,8 @@ public class ListeTravail extends AppCompatActivity {
     private ArrayList<Travail> travails = new ArrayList<Travail>();
     private boolean suppression = false;
     private ArrayList<Long> travailsAjoutes = new ArrayList<>();
+    private String nomCycle;
+    private String nbRepet;
 
     //Views
     private ListView listTravail;
@@ -43,6 +45,7 @@ public class ListeTravail extends AppCompatActivity {
     private String liste;
     private String space;
     private String travail;
+
 
 
 
@@ -56,13 +59,15 @@ public class ListeTravail extends AppCompatActivity {
         if(extras != null){
             travails = extras.getParcelableArrayList("arrayListTravails");
             suppression = extras.getBoolean("SUPPRESSION_KEY");
+            nomCycle = extras.getString("nomCycle");
+            nbRepet = extras.getString("nbRepet");
         }
 
         //On récupère des strings en ressources à concatener
         liste = getResources().getString(R.string.liste);
         space = " ";
         travail = getResources().getString(R.string.travail);
-        String strListeTravail = liste+space+travail;
+        String strListeTravail = liste + space + travail;
 
         //récupération du TextView de temps de travail pour ajouter la string
         titrePage = findViewById(R.id.titrePage);
@@ -138,6 +143,8 @@ public class ListeTravail extends AppCompatActivity {
                         Intent goBacktoCycle = new Intent(getApplicationContext(), CreationCycle.class);
                         travails.add(travailClicked);
                         goBacktoCycle.putParcelableArrayListExtra("arrayListTravailsClicked", travails);
+                        goBacktoCycle.putExtra("nomCycle", nomCycle);
+                        goBacktoCycle.putExtra("nbRepet", nbRepet);
                         goBacktoCycle.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(goBacktoCycle);
                     }

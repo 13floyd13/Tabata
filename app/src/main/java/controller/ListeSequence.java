@@ -36,6 +36,7 @@ public class ListeSequence extends AppCompatActivity {
     private ArrayList<SequenceAvecCycles> sequences = new ArrayList<SequenceAvecCycles>();
     private boolean suppression = false;
     private ArrayList<Long> sequencesAjoutes = new ArrayList<>();
+    private String nomEntrainement;
 
     //Views
     private ListView listSequence;
@@ -58,6 +59,7 @@ public class ListeSequence extends AppCompatActivity {
         if (extras != null) {
             sequences = extras.getParcelableArrayList("arrayListSequences");
             suppression = extras.getBoolean("SUPPRESSION_KEY");
+            nomEntrainement = extras.getString("nomEntrainement");
         }
 
         //on récupère les strings à concaténer
@@ -140,6 +142,7 @@ public class ListeSequence extends AppCompatActivity {
                         Intent goBacktoEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
                         sequences.add(sequenceClicked);
                         goBacktoEntrainement.putParcelableArrayListExtra("arrayListSequenceClicked", sequences);
+                        goBacktoEntrainement.putExtra("nomEntrainement", nomEntrainement);
                         goBacktoEntrainement.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(goBacktoEntrainement);
                     }

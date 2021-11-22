@@ -28,5 +28,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onHistorique(View view) {
+        Intent goToHistorique = new Intent(getApplicationContext(), ListeHistorique.class);
+        startActivity(goToHistorique);
     }
 }

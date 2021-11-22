@@ -37,6 +37,7 @@ public class CreationEntrainement extends AppCompatActivity {
     private int tempsPreparation;
     private int tempsReposLong;
     private ArrayList<SequenceAvecCycles> sequenceAvecCycles = new ArrayList<SequenceAvecCycles>();
+    private String nomEntrainement;
 
     //Views
     private ListView listSequenceClicked;
@@ -49,7 +50,6 @@ public class CreationEntrainement extends AppCompatActivity {
     private EditText eDescription;
 
     //Ressources
-    private String nomEntrainement;
     private String ajouter;
     private String space;
     private String sequence;
@@ -65,8 +65,14 @@ public class CreationEntrainement extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             sequenceAvecCycles = extras.getParcelableArrayList("arrayListSequenceClicked");
+            nomEntrainement = extras.getString("nomEntrainement");
         }
 
+        //On test si on a reçu quelque chose via le getIntent et si oui on l'introduit dans l'editText
+        if (nomEntrainement != null){
+            eNomEntrainement = findViewById(R.id.nomEntrainement);
+            this.nomEntrainement = eNomEntrainement.getText().toString();
+        }
         //Récupération du DatabaseClient
         mDb = DatabaseClient.getInstance(getApplicationContext());
 
@@ -105,6 +111,7 @@ public class CreationEntrainement extends AppCompatActivity {
 
         //envoie des sequences déja ajoutés au préalable
         goToListSequence.putParcelableArrayListExtra("arrayListSequences", sequenceAvecCycles);
+        goToListSequence.putExtra("nomEntrainement", nomEntrainement);
         startActivity(goToListSequence);
 
     }
