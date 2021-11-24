@@ -132,7 +132,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         tvNomEntrainement.setText(entrainement.getNom());
 
         //initialisation du bip
-        bip = new ToneGenerator(AudioManager.STREAM_ALARM,100);
+        bip = new ToneGenerator(AudioManager.STREAM_NOTIFICATION,100);
 
 
         //mise en place d'une popup pour demander si on lance l'entrainement
@@ -403,9 +403,15 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         majCompteur();
 
         //si on est dans les trois dernières secondes on joue un bip
-        if(compteurTravailEnCours.getSecondes() == 3 || compteurTravailEnCours.getSecondes() == 2 || compteurTravailEnCours.getSecondes() == 1){
-            bip.startTone(ToneGenerator.TONE_PROP_BEEP, 150);
+        if(compteurTravailEnCours.getUpdatedTime() < 3050 && compteurTravailEnCours.getUpdatedTime() > 2950 /*|| compteurTravailEnCours.getSecondes() == 2 || compteurTravailEnCours.getSecondes() == 1 */){
+            bip.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+        }else if(compteurTravailEnCours.getUpdatedTime() < 2050 && compteurTravailEnCours.getUpdatedTime() > 1950){
+            bip.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+        }else if(compteurTravailEnCours.getUpdatedTime() < 1050 && compteurTravailEnCours.getUpdatedTime() > 950){
+            bip.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
         }
+
+
     }
 
     //methode appelé lorsque que le timer est terminé ou lorsque l'on presse le bouton suivant pour passer au prochain timer
