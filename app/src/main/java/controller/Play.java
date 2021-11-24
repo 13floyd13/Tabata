@@ -419,7 +419,9 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
     public void onFinish() {
 
         //Arret du compteur
-        compteurTravailEnCours.stop();
+        if(compteurTempsTotal.getTimer() != null){
+            compteurTempsTotal.stop();
+        }
 
         //iréation pour passer au prochain compteur
         iterateurCompteur++;
@@ -496,7 +498,10 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
             long resteTotal = compteurTempsTotal.getUpdatedTime();
 
             //on stop le timer temps total
-            compteurTempsTotal.stop();
+            if(compteurTempsTotal.getTimer() != null){
+                compteurTempsTotal.stop();
+            }
+
 
             //on créer un nouveau compteur avec la soustraction du temps passé par l'utilisateur
             compteurTempsTotal = new Compteur((resteTotal - resteTimeTravail)/1000);
@@ -516,11 +521,13 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
     public void finEntrainement(){
 
         //Arret des compteurs
-        compteurTempsTotal.stop();
-
         //on vérifie si le compteur a déja été stop
-        if(compteurTravailEnCours.getTimer() != null){
+        if (compteurTravailEnCours.getTimer() != null && start == true){
             compteurTravailEnCours.stop();
+        }
+
+        if(compteurTempsTotal.getTimer() != null && start == true){
+            compteurTempsTotal.stop();
         }
 
 
