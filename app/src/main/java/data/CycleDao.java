@@ -27,6 +27,10 @@ public interface CycleDao {
     List<Cycle> getCycles(List<Long> cycleIds);
 
     @Transaction
+    @Query("SELECT * FROM Cycle WHERE cycleId In (:cycleIds)")
+    ArrayList<CycleAvecTravails> getCyclesAvecTravails(List<Long> cycleIds);
+
+    @Transaction
     @Insert
     long insert(Cycle cycle);
 

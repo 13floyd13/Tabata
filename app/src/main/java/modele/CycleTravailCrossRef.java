@@ -8,4 +8,5 @@ import java.util.ArrayList;
 public class CycleTravailCrossRef {
     public long cycleId;
     public long travailId;
+
 }

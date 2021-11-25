@@ -58,7 +58,7 @@ public class FinEntrainement extends AppCompatActivity {
 
         this.activity = this;
 
-        //Création d'une popum pour intéraction utilisateur
+        //Création d'une popup pour intéraction utilisateur
         AlertDialog.Builder popup = new AlertDialog.Builder(activity);
         popup.setTitle(strFin + space + strEntrainement + deuxP + nomEntrainement);
         popup.setMessage(straddHistorique);

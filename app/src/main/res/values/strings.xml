@@ -48,5 +48,7 @@
     <string name="sequenceObligatoire">Nom de séquence obligatoire</string>
     <string name="miniCycle">Vous devez ajouter au moins un cycle</string>
     <string name="travailObligatoire">Nom de travail obligatoire</string>
+    <string name="suppressionTravail">Suppression du Travail suivant ? :</string>
+    <string name="suppressionSupplementaireCycle">Cela entrainera la suppression des cycles suivants : </string>
 
 </resources>
