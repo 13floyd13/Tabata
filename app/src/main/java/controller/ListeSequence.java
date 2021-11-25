@@ -1,7 +1,9 @@
 package controller;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import data.AppDatabase;
 import data.DatabaseClient;
+import modele.Cycle;
 import modele.CycleAvecTravails;
 import modele.CycleListAdapter;
 import modele.Entrainement;
@@ -37,6 +40,11 @@ public class ListeSequence extends AppCompatActivity {
     private boolean suppression = false;
     private ArrayList<Long> sequencesAjoutes = new ArrayList<>();
     private String nomEntrainement;
+    private ArrayList<Entrainement> entrainementAsupprimer = new ArrayList<>();
+    private ListeSequence activity;
+    private AlertDialog.Builder popup1;
+    private AlertDialog.Builder popup2;
+    private Sequence sequenceASupprimer;
 
     //Views
     private ListView listSequence;
@@ -46,6 +54,14 @@ public class ListeSequence extends AppCompatActivity {
     private String liste;
     private String space;
     private String sequence;
+    private String strSuppression;
+    private String strsuppressionSequence;
+    private String strSuppressionSupplementaire;
+    private String oui;
+    private String non;
+    private String strCycle;
+    private String strSequence;
+    private String strEntrainement;
 
 
 
@@ -53,6 +69,14 @@ public class ListeSequence extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_sequence);
+
+
+        this.activity = this;
+
+        //préparation de la popup
+        popup1 = new AlertDialog.Builder(activity);
+        popup2 = new AlertDialog.Builder(activity);
+
 
         //récupération du boolean si on vient d'entrainement
         Bundle extras = getIntent().getExtras();
@@ -63,6 +87,14 @@ public class ListeSequence extends AppCompatActivity {
         }
 
         //on récupère les strings à concaténer
+        strSuppression = getResources().getString(R.string.suppression);
+        strsuppressionSequence = getResources().getString(R.string.suppressionSequence);
+        strSuppressionSupplementaire = getResources().getString(R.string.suppressionSupplementaire);
+        strCycle = getResources().getString(R.string.cycle);
+        strSequence = getResources().getString(R.string.sequence);
+        strEntrainement = getResources().getString(R.string.entrainement);
+        oui = getResources().getString(R.string.oui);
+        non = getResources().getString(R.string.non);
         liste = getResources().getString(R.string.liste);
         space = " ";
         sequence = getResources().getString(R.string.sequence);
@@ -89,29 +121,36 @@ public class ListeSequence extends AppCompatActivity {
 
                     //récupération de l'objet cliqué
                     SequenceAvecCycles sequenceAvecCyclesClicked = adapter.getItem(position);
-                    Sequence sequence = sequenceAvecCyclesClicked.getSequence();
+                    sequenceASupprimer = sequenceAvecCyclesClicked.getSequence();
 
-                    class SupprimerSequenceAsync extends android.os.AsyncTask<Void, Void, Void> {
+                    //récupération des sequences qui contiennent ce cycle
+                    getEntrainementsAssocies(sequenceASupprimer);
 
-                        //suppression de la sequence de la bd
+                    popup1.setTitle(strSuppression);
+                    popup1.setMessage(strsuppressionSequence + space + sequenceASupprimer.getNom());
+
+                    popup1.setPositiveButton(oui, new DialogInterface.OnClickListener() {
                         @Override
-                        protected Void doInBackground(Void... voids) {
-                            mDb.sequenceDao()
-                                    .delete(sequence);
-                            return null;
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(!entrainementAsupprimer.isEmpty()){
+                                askSuppression();
+                            }else{
+                                suppression();
+                            }
+
+                            dialog.dismiss();
                         }
+                    });
 
+                    popup1.setNegativeButton(non, new DialogInterface.OnClickListener() {
                         @Override
-                        protected void onPostExecute(Void aVoid) {
-                            super.onPostExecute(aVoid);
-                            adapter.notifyDataSetChanged();
+                        public void onClick(DialogInterface dialog, int which) {
+
                             finish();
                         }
-                    }
+                    });
 
-                    SupprimerSequenceAsync supprimerSequenceAsync = new SupprimerSequenceAsync();
-                    supprimerSequenceAsync.execute();
-
+                    popup1.show();
                 }
             });
 
@@ -141,6 +180,7 @@ public class ListeSequence extends AppCompatActivity {
                     }else {
                         Intent goBacktoEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
                         sequences.add(sequenceClicked);
+                        goBacktoEntrainement.putExtra("nbRepet", sequenceClicked.getNbRepet());
                         goBacktoEntrainement.putParcelableArrayListExtra("arrayListSequenceClicked", sequences);
                         goBacktoEntrainement.putExtra("nomEntrainement", nomEntrainement);
                         goBacktoEntrainement.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -180,6 +220,130 @@ public class ListeSequence extends AppCompatActivity {
         recup.execute();
     }
 
+    public void getEntrainementsAssocies(Sequence sequenceQuiSeraSupprime){
+
+        class RecupererEntrainementsAssocies extends android.os.AsyncTask<Void, Void, List<Entrainement>>{
+
+            @Override
+            protected List<Entrainement> doInBackground(Void... voids) {
+
+                List<Long> entrainementsIds = mDb
+                        .entrainementSequenceCrossRefDao()
+                        .getEntrainementsId(sequenceQuiSeraSupprime.getSequenceId());
+
+                List<Entrainement> entrainements = mDb
+                        .entrainementDao()
+                        .getEntrainements(entrainementsIds);
+
+                return entrainements;
+            }
+
+            @Override
+            protected void onPostExecute(List<Entrainement> entrainements) {
+                super.onPostExecute(entrainements);
+
+                for (int i = 0; i < entrainements.size(); i++){
+                    checkEntrainement(entrainements.get(i));
+                }
+            }
+        }
+
+        RecupererEntrainementsAssocies recupererEntrainementsAssocies = new RecupererEntrainementsAssocies();
+        recupererEntrainementsAssocies.execute();
+    }
+
+    public void checkEntrainement(Entrainement entrainement){
+
+        class RecupererEntrainementADelete extends android.os.AsyncTask<Void, Void, Integer>{
+
+            @Override
+            protected Integer doInBackground(Void... voids) {
+
+                int nbSequences = mDb
+                        .entrainementSequenceCrossRefDao()
+                        .getNbSequences(entrainement.getEntrainementId());
+
+                return nbSequences;
+            }
+
+            @Override
+            protected void onPostExecute(Integer nbSequences){
+                super.onPostExecute(nbSequences);
+
+                if (nbSequences == 1){
+                    entrainementAsupprimer.add(entrainement);
+                }
+            }
+        }
+
+        RecupererEntrainementADelete recupererEntrainementADelete = new RecupererEntrainementADelete();
+        recupererEntrainementADelete.execute();
+
+    }
+
+    public void askSuppression(){
+
+        String space = " ";
+        String message = strSuppressionSupplementaire + "\n";
+
+        message += strEntrainement + space;
+
+        for (int i = 0; i < entrainementAsupprimer.size(); i++){
+
+            message += entrainementAsupprimer.get(i).getNom() + space;
+
+        }
+
+
+        popup2.setTitle(strSuppression);
+        popup2.setMessage(message);
+
+        popup2.setPositiveButton(oui, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                suppression();
+            }
+        });
+
+        popup2.setNegativeButton(non, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        popup2.show();
+    }
+
+    public void suppression(){
+
+        class SupprimerToutAsync extends android.os.AsyncTask<Void, Void, Void> {
+
+            //suppression de l'objet de la bd
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                mDb.sequenceDao()
+                        .delete(sequenceASupprimer);
+
+                mDb.entrainementDao()
+                        .deleteAll(entrainementAsupprimer);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                adapter.notifyDataSetChanged();
+                finish();
+            }
+        }
+
+        SupprimerToutAsync supprimerTravailAsync = new SupprimerToutAsync();
+        supprimerTravailAsync.execute();
+    }
+
     @Override
     protected void onStart(){
         super.onStart();
@@ -188,3 +352,6 @@ public class ListeSequence extends AppCompatActivity {
         getSequences();
     }
 }
+
+
+

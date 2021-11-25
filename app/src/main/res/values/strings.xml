@@ -49,7 +49,9 @@
     <string name="miniCycle">Vous devez ajouter au moins un cycle</string>
     <string name="travailObligatoire">Nom de travail obligatoire</string>
     <string name="suppressionTravail">Suppression du Travail suivant ? :</string>
-    <string name="suppressionSupplementaire">Cela entraine la suppression des elements vides suivants</string>
+    <string name="suppressionSupplementaire">Cela entraine la suppression des éléments vides suivants</string>
+    <string name="suppressionCycle">Suppression du Cycle suivant ? :</string>
+    <string name="suppressionSequence">Suppression de la Séquence suivante suivante ? :</string>
 
 
 </resources>

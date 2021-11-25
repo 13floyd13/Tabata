@@ -49,7 +49,13 @@ public class SequenceListAdapter extends ArrayAdapter<SequenceAvecCycles> {
         textViewNom.setText(sequence.getNom());
         textViewDescription.setText(sequence.getDescription());
         textViewTempsReposLong.setText(strTemps + space + strRepos + space + sequence.getTempsReposLong() + space + strSecondes);
-        textViewNbRepet.setText(strRepetition + sequence.getRepetition());
+
+        if(sequence.getRepetition() != 0){
+            textViewNbRepet.setText(strRepetition + space + sequence.getRepetition());
+        }else{
+            textViewNbRepet.setText(strRepetition + space + sequenceAvecCycles.getNbRepet());
+        }
+
 
 
 

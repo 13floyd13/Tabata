@@ -37,7 +37,9 @@ public class CreationEntrainement extends AppCompatActivity {
     private int tempsPreparation;
     private int tempsReposLong;
     private ArrayList<SequenceAvecCycles> sequenceAvecCycles = new ArrayList<SequenceAvecCycles>();
+    private ArrayList<Sequence> sequences = new ArrayList<>();
     private String nomEntrainement;
+    private Sequence sequenceRecup;
 
     //Views
     private ListView listSequenceClicked;
@@ -68,6 +70,8 @@ public class CreationEntrainement extends AppCompatActivity {
         if (extras != null) {
             sequenceAvecCycles = extras.getParcelableArrayList("arrayListSequenceClicked");
             nomEntrainement = extras.getString("nomEntrainement");
+            int nbRepet = extras.getInt("nbRepet");
+            sequenceAvecCycles.get(sequenceAvecCycles.size()-1).setNbRepet(nbRepet);
         }
 
         //On test si on a reçu quelque chose via le getIntent et si oui on l'introduit dans l'editText

@@ -12,6 +12,7 @@ import java.util.List;
 public class SequenceAvecCycles implements Parcelable {
     @Embedded
     public Sequence sequence;
+    private int nbRepet;
 
     //Relation de type many-to-many entre Sequence et Cycle
     @Relation(
@@ -25,6 +26,7 @@ public class SequenceAvecCycles implements Parcelable {
     public SequenceAvecCycles(Sequence sequence, List<Cycle> cycles){
         this.sequence = sequence;
         this.cycles = cycles;
+        this.nbRepet = sequence.getRepetition();
     }
 
     //Méthodes
@@ -34,16 +36,29 @@ public class SequenceAvecCycles implements Parcelable {
         cycles = in.createTypedArrayList(Cycle.CREATOR);
     }
 
-    @Override
+   /* @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(sequence, flags);
         dest.writeTypedList(cycles);
-    }
 
-    @Override
+    }*/
+
+    /*@Override
     public int describeContents() {
         return 0;
     }
+
+    public static final Creator<SequenceAvecCycles> CREATOR = new Creator<SequenceAvecCycles>() {
+        @Override
+        public SequenceAvecCycles createFromParcel(Parcel in) {
+            return new SequenceAvecCycles(in);
+        }
+
+        @Override
+        public SequenceAvecCycles[] newArray(int size) {
+            return new SequenceAvecCycles[size];
+        }
+    };*/
 
     public static final Creator<SequenceAvecCycles> CREATOR = new Creator<SequenceAvecCycles>() {
         @Override
@@ -76,5 +91,23 @@ public class SequenceAvecCycles implements Parcelable {
         return cycles;
     }
 
+    public int getNbRepet() {
+        return nbRepet;
+    }
 
+    public void setNbRepet(int nbRepet) {
+        this.nbRepet = nbRepet;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(sequence, flags);
+        dest.writeInt(nbRepet);
+        dest.writeTypedList(cycles);
+    }
 }
