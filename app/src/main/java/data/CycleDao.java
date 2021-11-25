@@ -26,9 +26,6 @@ public interface CycleDao {
     @Query("SELECT * FROM Cycle WHERE cycleId In (:cycleIds)")
     List<Cycle> getCycles(List<Long> cycleIds);
 
-    @Transaction
-    @Query("SELECT * FROM Cycle WHERE cycleId In (:cycleIds)")
-    ArrayList<CycleAvecTravails> getCyclesAvecTravails(List<Long> cycleIds);
 
     @Transaction
     @Insert
@@ -42,6 +39,9 @@ public interface CycleDao {
 
     @Delete
     void delete(Cycle cycle);
+
+    @Delete
+    void deleteAll(ArrayList<Cycle> cycles);
 
     @Update
     void update(Cycle cycle);

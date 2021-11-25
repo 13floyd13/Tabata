@@ -26,6 +26,11 @@ public interface CycleTravailCrossRefDao {
     @Transaction
     @Query("Select cycleId FROM CycleTravailCrossRef WHERE travailId IN (:travailId)")
     List<Long> getCycleIds(long travailId);
+
+    @Transaction
+    @Query("SELECT count(travailId) from CycleTravailCrossRef WHERE cycleId = :cycleId")
+    int getNbTravails(long cycleId);
+
     @Insert
     long insert(CycleTravailCrossRef cycleTravailCrossRef);
 

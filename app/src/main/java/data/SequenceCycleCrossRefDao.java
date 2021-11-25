@@ -24,6 +24,14 @@ public interface SequenceCycleCrossRefDao {
     @Query("SELECT cycleId FROM SEQUENCECYCLECROSSREF WHERE sequenceId = :sequenceId ")
     List<Long> getCyclesId(long sequenceId);
 
+    @Transaction
+    @Query("SELECT sequenceId FROM SEQUENCECYCLECROSSREF WHERE cycleId = :cycleId ")
+    List<Long> getSequencesId(Long cycleId);
+
+    @Transaction
+    @Query("SELECT count(cycleId) from SequenceCycleCrossRef WHERE sequenceId = :sequenceId")
+    int getNbCycles(long sequenceId);
+
     @Insert
     long insert(SequenceCycleCrossRef sequenceCycleCrossRef);
 

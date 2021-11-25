@@ -47,7 +47,7 @@ public class FinEntrainement extends AppCompatActivity {
         //récupération des ressources
         strOui = getResources().getString(R.string.oui);
         strNon = getResources().getString(R.string.non);
-        straddHistorique = getResources().getString(R.string.lancer);
+        straddHistorique = getResources().getString(R.string.addHistorique);
         strFin = getResources().getString(R.string.fin);
         strEntrainement = getResources().getString(R.string.entrainement);
         String space = " ";

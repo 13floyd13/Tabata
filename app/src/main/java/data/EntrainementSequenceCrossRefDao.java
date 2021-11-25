@@ -20,6 +20,14 @@ public interface EntrainementSequenceCrossRefDao {
     @Query("Select * From Entrainement")
     List<EntrainementAvecSequences> getEntrainementSequence();
 
+    @Transaction
+    @Query("SELECT entrainementId FROM EntrainementSequenceCrossRef WHERE sequenceId = :sequenceId ")
+    List<Long> getEntrainementsId(Long sequenceId);
+
+    @Transaction
+    @Query("SELECT count(sequenceId) from EntrainementSequenceCrossRef WHERE entrainementId = :entrainementId")
+    int getNbSequences(long entrainementId);
+
     @Insert
     long insert(EntrainementSequenceCrossRef entrainementSequenceCrossRef);
 

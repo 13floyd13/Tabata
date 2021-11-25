@@ -21,8 +21,8 @@ import java.util.List;
 import data.AppDatabase;
 import data.DatabaseClient;
 import modele.Cycle;
-import modele.CycleAvecTravails;
-import modele.CycleTravailCrossRef;
+import modele.Entrainement;
+import modele.Sequence;
 import modele.Travail;
 import modele.TravailListAdapter;
 
@@ -39,11 +39,14 @@ public class ListeTravail extends AppCompatActivity {
     private ArrayList<Long> travailsAjoutes = new ArrayList<>();
     private String nomCycle;
     private String nbRepet;
-    private ArrayList<Cycle> cycles = new ArrayList<>();
-    private ArrayList<Long> cyclesIds = new ArrayList<>();
+    private ArrayList<Cycle> cyclesAsupprimer = new ArrayList<>();
+    private ArrayList<Sequence> sequencesAsupprimer = new ArrayList<>();
+    private ArrayList<Entrainement> entrainementAsupprimer = new ArrayList<>();
     private ListeTravail activity;
-    private AlertDialog.Builder popup;
+    private AlertDialog.Builder popup1;
+    private AlertDialog.Builder popup2;
     private Travail travailClicked;
+
 
     //Views
     private ListView listTravail;
@@ -55,9 +58,12 @@ public class ListeTravail extends AppCompatActivity {
     private String travail;
     private String strSuppression;
     private String strsuppressionTravail;
-    private String strSuppressionSupplementaireCycle;
+    private String strSuppressionSupplementaire;
     private String oui;
     private String non;
+    private String strCycle;
+    private String strSequence;
+    private String strEntrainement;
 
 
     @Override
@@ -68,7 +74,8 @@ public class ListeTravail extends AppCompatActivity {
         this.activity = this;
 
         //préparation de la popup
-        popup = new AlertDialog.Builder(activity);
+        popup1 = new AlertDialog.Builder(activity);
+        popup2 = new AlertDialog.Builder(activity);
 
         //récupération du boolen si on vient de cycle
         Bundle extras = getIntent().getExtras();
@@ -82,7 +89,10 @@ public class ListeTravail extends AppCompatActivity {
         //On récupère des strings en ressources à concatener
         strSuppression = getResources().getString(R.string.suppression);
         strsuppressionTravail = getResources().getString(R.string.suppressionTravail);
-        strSuppressionSupplementaireCycle = getResources().getString(R.string.suppressionSupplementaireCycle);
+        strSuppressionSupplementaire = getResources().getString(R.string.suppressionSupplementaire);
+        strCycle = getResources().getString(R.string.cycle);
+        strSequence = getResources().getString(R.string.sequence);
+        strEntrainement = getResources().getString(R.string.entrainement);
         oui = getResources().getString(R.string.oui);
         non = getResources().getString(R.string.non);
         liste = getResources().getString(R.string.liste);
@@ -117,7 +127,31 @@ public class ListeTravail extends AppCompatActivity {
                     //récupération des cycles qui contiennent ce travail
                     getCyclesAssociated();
 
+                    popup1.setTitle(strSuppression);
+                    popup1.setMessage(strsuppressionTravail + space + travailClicked.getNom());
 
+                    popup1.setPositiveButton(oui, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(!cyclesAsupprimer.isEmpty()){
+                                askSuppression();
+                            }else{
+                                suppression();
+                            }
+
+                            dialog.dismiss();
+                        }
+                    });
+
+                    popup1.setNegativeButton(non, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            finish();
+                        }
+                    });
+
+                    popup1.show();
                 }
             });
 
@@ -181,7 +215,6 @@ public class ListeTravail extends AppCompatActivity {
                 adapter.addAll(travails);
                 adapter.notifyDataSetChanged();
             }
-
         }
 
         //execution de la demande asynchrone
@@ -192,35 +225,33 @@ public class ListeTravail extends AppCompatActivity {
     //récupération des  id des cycles qui contiennent le travail cliqué
     public void getCyclesAssociated(){
 
-        class RecupererCyclesAssociesAsync extends android.os.AsyncTask<Void, Void, List<Long>>{
+        class RecupererCyclesAssociesAsync extends android.os.AsyncTask<Void, Void, List<Cycle>>{
 
             @Override
-            protected List<Long> doInBackground(Void... voids) {
+            protected List<Cycle> doInBackground(Void... voids) {
 
                 List<Long> idsCycle = mDb
                         .cycleTravailCrossRefDao()
                         .getCycleIds(travailClicked.getTravailId());
 
 
-                return idsCycle;
+                List<Cycle> cycles1 = mDb
+                        .cycleDao()
+                        .getCycles(idsCycle);
+                return cycles1;
+
             }
 
             @Override
-            protected void onPostExecute(List<Long> idsCycle){
-                super.onPostExecute(idsCycle);
+            protected void onPostExecute(List<Cycle> cyclesACheck){
+                super.onPostExecute(cyclesACheck);
 
-                for (int i = 0; i < idsCycle.size(); i++){
+                for (int i = 0; i < cyclesACheck.size(); i++){
 
 
-                    cyclesIds.addAll(idsCycle);
-
-                    //récupération des cycles qui devront être supprimés
-                    getCyclesToDelete();
-
+                    getNumberTravails(cyclesACheck.get(i));
                 }
-
             }
-
         }
 
         RecupererCyclesAssociesAsync recupererCyclesAssociesAsync = new RecupererCyclesAssociesAsync();
@@ -230,32 +261,29 @@ public class ListeTravail extends AppCompatActivity {
 
     //récupération des cycles ne contenant que le travail cliqué
     //s'ils contiennent que le travail cliqué on doit les supprimer pour ne pas avoir de cycle vide dans l'application
-    public void getCyclesToDelete(){
+    public void getNumberTravails(Cycle cycleACheck){
 
-        class RecupererCyclesADelete extends android.os.AsyncTask<Void, Void, ArrayList<CycleAvecTravails>>{
+        class RecupererCyclesADelete extends android.os.AsyncTask<Void, Void, Integer>{
 
             @Override
-            protected ArrayList<CycleAvecTravails> doInBackground(Void... voids) {
+            protected Integer doInBackground(Void... voids) {
 
-                ArrayList<CycleAvecTravails> cycles1 = mDb
-                        .cycleDao()
-                        .getCyclesAvecTravails(cyclesIds);
-                return cycles1;
+                int nbTravails = mDb
+                        .cycleTravailCrossRefDao()
+                        .getNbTravails(cycleACheck.getCycleId());
+
+                return nbTravails;
+
             }
 
             @Override
-            protected void onPostExecute(ArrayList<CycleAvecTravails> cycleAvecTravails){
-                super.onPostExecute(cycleAvecTravails);
+            protected void onPostExecute(Integer nbTravails){
+                super.onPostExecute(nbTravails);
 
-
-                for (int i = 0; i < cycleAvecTravails.size(); i++){
-                    List<Travail> travails = cycleAvecTravails.get(i).getTravails();
-
-                    if (travails.size() == 1){
-                        cycles.add(cycleAvecTravails.get(i).getCycle());
-                    }
+                if (nbTravails == 1){
+                    cyclesAsupprimer.add(cycleACheck);
+                    getSequenceAssocies(cycleACheck);
                 }
-                askSuppression();
             }
         }
 
@@ -264,19 +292,165 @@ public class ListeTravail extends AppCompatActivity {
 
     }
 
+    public void getSequenceAssocies(Cycle cycleQuiSeraDelete){
+
+        class RecupererSequenceAssocies extends android.os.AsyncTask<Void, Void, List<Sequence>>{
+
+            @Override
+            protected List<Sequence> doInBackground(Void... voids) {
+                List<Long> sequencesIds = mDb
+                        .sequenceCycleCrossRefDao()
+                        .getSequencesId(cycleQuiSeraDelete.getCycleId());
+
+                List<Sequence> sequences = mDb
+                        .sequenceDao()
+                        .getSequences(sequencesIds);
+                return sequences;
+            }
+
+            @Override
+            protected void onPostExecute(List<Sequence> sequences) {
+                super.onPostExecute(sequences);
+
+                for (int i = 0; i < sequences.size(); i++){
+                    checkSequence(sequences.get(i));
+                }
+            }
+
+        }
+
+        RecupererSequenceAssocies recupererSequenceAssocies = new RecupererSequenceAssocies();
+        recupererSequenceAssocies.execute();
+
+    }
+
+    public void checkSequence(Sequence sequence){
+
+        class RecupererSequenceADelete extends android.os.AsyncTask<Void, Void, Integer>{
+
+            @Override
+            protected Integer doInBackground(Void... voids) {
+
+                int nbCycles = mDb
+                        .sequenceCycleCrossRefDao()
+                        .getNbCycles(sequence.getSequenceId());
+
+                return nbCycles;
+            }
+
+            @Override
+            protected void onPostExecute(Integer nbCycles){
+                super.onPostExecute(nbCycles);
+
+                if (nbCycles == 1){
+                    sequencesAsupprimer.add(sequence);
+                    getEntrainementsAssocies(sequence);
+                }
+            }
+        }
+
+        RecupererSequenceADelete recupererSequenceADelete = new RecupererSequenceADelete();
+        recupererSequenceADelete.execute();
+
+    }
+
+    public void getEntrainementsAssocies(Sequence sequenceQuiSeraSupprime){
+
+        class RecupererEntrainementsAssocies extends android.os.AsyncTask<Void, Void, List<Entrainement>>{
+
+            @Override
+            protected List<Entrainement> doInBackground(Void... voids) {
+
+                List<Long> entrainementsIds = mDb
+                        .entrainementSequenceCrossRefDao()
+                        .getEntrainementsId(sequenceQuiSeraSupprime.getSequenceId());
+
+                List<Entrainement> entrainements = mDb
+                        .entrainementDao()
+                        .getEntrainements(entrainementsIds);
+
+                return entrainements;
+            }
+
+            @Override
+            protected void onPostExecute(List<Entrainement> entrainements) {
+                super.onPostExecute(entrainements);
+
+                for (int i = 0; i < entrainements.size(); i++){
+                    checkEntrainement(entrainements.get(i));
+                }
+            }
+        }
+
+        RecupererEntrainementsAssocies recupererEntrainementsAssocies = new RecupererEntrainementsAssocies();
+        recupererEntrainementsAssocies.execute();
+    }
+
+    public void checkEntrainement(Entrainement entrainement){
+
+        class RecupererEntrainementADelete extends android.os.AsyncTask<Void, Void, Integer>{
+
+            @Override
+            protected Integer doInBackground(Void... voids) {
+
+                int nbSequences = mDb
+                        .entrainementSequenceCrossRefDao()
+                        .getNbSequences(entrainement.getEntrainementId());
+
+                return nbSequences;
+            }
+
+            @Override
+            protected void onPostExecute(Integer nbSequences){
+                super.onPostExecute(nbSequences);
+
+                if (nbSequences == 1){
+                    entrainementAsupprimer.add(entrainement);
+                }
+            }
+        }
+
+        RecupererEntrainementADelete recupererEntrainementADelete = new RecupererEntrainementADelete();
+        recupererEntrainementADelete.execute();
+
+    }
+
     public void askSuppression(){
 
         String space = " ";
-        String message = strsuppressionTravail + space + travailClicked.getNom() + "\n";
-        if(!cycles.isEmpty()){
-            for (int i = 0; i < cycles.size(); i++){
-                message += cycles.get(i).getNom() + space;
+        String message = strSuppressionSupplementaire + "\n";
+        message += strCycle + space;
+
+        for (int i = 0; i < cyclesAsupprimer.size(); i++){
+            message += cyclesAsupprimer.get(i).getNom() + space;
+        }
+
+        if (!sequencesAsupprimer.isEmpty()){
+
+            message += "\n";
+            message += strSequence + space;
+            for (int i = 0 ; i < sequencesAsupprimer.size(); i++){
+
+                message += sequencesAsupprimer.get(i).getNom() + space;
             }
         }
-        popup.setTitle(strSuppression);
-        popup.setMessage(message);
 
-        popup.setPositiveButton(oui, new DialogInterface.OnClickListener() {
+        if (!entrainementAsupprimer.isEmpty()){
+
+            message += "\n";
+            message += strEntrainement + space;
+
+            for (int i = 0; i < entrainementAsupprimer.size(); i++){
+
+                message += entrainementAsupprimer.get(i).getNom() + space;
+            }
+        }
+
+
+        popup2.setTitle(strSuppression);
+        popup2.setMessage(message);
+
+        popup2.setPositiveButton(oui, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -284,19 +458,19 @@ public class ListeTravail extends AppCompatActivity {
             }
         });
 
-        popup.setNegativeButton(non, new DialogInterface.OnClickListener() {
+        popup2.setNegativeButton(non, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
             }
         });
 
-        popup.show();
+        popup2.show();
     }
 
     public void suppression(){
 
-        class SupprimerTravailAsync extends android.os.AsyncTask<Void, Void, Void> {
+        class SupprimerToutAsync extends android.os.AsyncTask<Void, Void, Void> {
 
             //suppression de l'objet de la bd
             @Override
@@ -304,10 +478,14 @@ public class ListeTravail extends AppCompatActivity {
                 mDb.travailDao()
                         .delete(travailClicked);
 
-                for (int i = 0; i < cycles.size(); i++){
-                    mDb.cycleDao()
-                            .delete(cycles.get(i));
-                }
+                mDb.cycleDao()
+                        .deleteAll(cyclesAsupprimer);
+
+                mDb.sequenceDao()
+                        .deleteAll(sequencesAsupprimer);
+
+                mDb.entrainementDao()
+                        .deleteAll(entrainementAsupprimer);
                 return null;
             }
 
@@ -319,7 +497,7 @@ public class ListeTravail extends AppCompatActivity {
             }
         }
 
-        SupprimerTravailAsync supprimerTravailAsync = new SupprimerTravailAsync();
+        SupprimerToutAsync supprimerTravailAsync = new SupprimerToutAsync();
         supprimerTravailAsync.execute();
     }
 

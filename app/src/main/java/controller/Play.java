@@ -403,11 +403,11 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         majCompteur();
 
         //si on est dans les trois dernières secondes on joue un bip
-        if(compteurTravailEnCours.getUpdatedTime() < 3050 && compteurTravailEnCours.getUpdatedTime() > 2950 /*|| compteurTravailEnCours.getSecondes() == 2 || compteurTravailEnCours.getSecondes() == 1 */){
+        if (compteurTravailEnCours.getUpdatedTime() < 3050 && compteurTravailEnCours.getUpdatedTime() > 2950 /*|| compteurTravailEnCours.getSecondes() == 2 || compteurTravailEnCours.getSecondes() == 1 */){
             bip.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
-        }else if(compteurTravailEnCours.getUpdatedTime() < 2050 && compteurTravailEnCours.getUpdatedTime() > 1950){
+        }else if (compteurTravailEnCours.getUpdatedTime() < 2050 && compteurTravailEnCours.getUpdatedTime() > 1950){
             bip.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
-        }else if(compteurTravailEnCours.getUpdatedTime() < 1050 && compteurTravailEnCours.getUpdatedTime() > 950){
+        }else if (compteurTravailEnCours.getUpdatedTime() < 1050 && compteurTravailEnCours.getUpdatedTime() > 950){
             bip.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
         }
 
@@ -419,7 +419,7 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
     public void onFinish() {
 
         //Arret du compteur
-        if(compteurTempsTotal.getTimer() != null){
+        if (compteurTempsTotal.getTimer() != null){
             compteurTempsTotal.stop();
         }
 
@@ -473,11 +473,11 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
 
         ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.screen);
 
-        if(compteurTravailEnCours.getNomTravail() == strTempsPreparation){
+        if (compteurTravailEnCours.getNomTravail() == strTempsPreparation){
             constraintLayout.setBackgroundColor(Color.GREEN);
-        }else if(compteurTravailEnCours.getNomTravail() == strTempsReposLong){
+        }else if (compteurTravailEnCours.getNomTravail() == strTempsReposLong){
             constraintLayout.setBackgroundColor(Color.BLUE);
-        }else if(compteurTravailEnCours.getNomTravail() == strRepos){
+        }else if (compteurTravailEnCours.getNomTravail() == strRepos){
             constraintLayout.setBackgroundColor(Color.CYAN);
         }else{
             constraintLayout.setBackgroundColor(Color.RED);
@@ -498,8 +498,12 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
             long resteTotal = compteurTempsTotal.getUpdatedTime();
 
             //on stop le timer temps total
-            if(compteurTempsTotal.getTimer() != null){
+            if (compteurTempsTotal.getTimer() != null){
                 compteurTempsTotal.stop();
+            }
+
+            if (compteurTravailEnCours.getTimer() != null){
+                compteurTravailEnCours.stop();
             }
 
 

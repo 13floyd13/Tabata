@@ -23,6 +23,10 @@ public interface EntrainementDao {
     List<EntrainementAvecSequences> getAll();
 
     @Transaction
+    @Query("SELECT * FROM Entrainement WHERE entrainementId IN (:entrainementId)")
+    List<Entrainement> getEntrainements(List<Long> entrainementId);
+
+    @Transaction
     @Insert
     long insert(Entrainement entrainement);
 
@@ -31,6 +35,9 @@ public interface EntrainementDao {
 
     @Delete
     void delete(Entrainement entrainement);
+
+    @Delete
+    void deleteAll(List<Entrainement> entrainements);
 
     @Update
     void update(Entrainement entrainement);

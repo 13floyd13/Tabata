@@ -7,6 +7,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,6 +28,10 @@ public interface SequenceDao {
         int getRepetitions(long sequenceId);
 
         @Transaction
+        @Query("SELECT * FROM sequence WHERE sequenceId IN (:sequenceId)")
+        List<Sequence> getSequences(List<Long> sequenceId);
+
+        @Transaction
         @Insert
         long insert(Sequence sequence);
 
@@ -35,6 +40,9 @@ public interface SequenceDao {
 
         @Delete
         void delete(Sequence sequence);
+
+        @Delete
+        void deleteAll(ArrayList<Sequence> sequences);
 
         @Update
         void update(Sequence sequence);
