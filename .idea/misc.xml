@@ -5,8 +5,8 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.20989583333333334" />
         <entry key="app/src/main/res/layout/activity_creation_cycle.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_creation_entrainement.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_creation_sequence.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_creation_entrainement.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_creation_sequence.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_creation_travail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_edition.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_fin_entrainement.xml" value="0.203125" />

@@ -65,6 +65,14 @@ public class CycleAvecTravails implements Parcelable {
         return cycle;
     }
 
+    public int getNbRepet(){
+        return cycle.getRepetition();
+    }
+
+    public void setNbRepet(int nbRepet){
+        cycle.setRepetition(nbRepet);
+    }
+
 
     @Override
     public int describeContents() {

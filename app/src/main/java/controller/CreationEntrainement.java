@@ -120,6 +120,10 @@ public class CreationEntrainement extends AppCompatActivity {
     }
 
     public void onAjouterSequence(View view) {
+
+        eNomEntrainement = findViewById(R.id.nomEntrainement);
+        nomEntrainement = eNomEntrainement.getText().toString();
+
         Intent goToListSequence = new Intent(getApplicationContext(), ListeSequence.class);
 
         //envoie des sequences déja ajoutés au préalable

@@ -36,6 +36,7 @@ public class EntrainementListAdapter extends ArrayAdapter<EntrainementAvecSequen
         TextView textViewDescription = (TextView) rowView.findViewById(R.id.adapter_descriptionEntrainement);
         TextView textViewTempsPreparation = (TextView) rowView.findViewById(R.id.adapter_tempsPreparation);
         TextView textViewTempsRepos = (TextView) rowView.findViewById(R.id.adapter_tempsRepos);
+        TextView textViewNomsSequences = (TextView) rowView.findViewById(R.id.adapter_nomsSequences);
 
         //récupération des strings en ressources
         String strTemps = getContext().getString(R.string.temps);
@@ -43,6 +44,7 @@ public class EntrainementListAdapter extends ArrayAdapter<EntrainementAvecSequen
         String strSecondes = getContext().getString(R.string.secondes);
         String strPreparation = getContext().getString(R.string.preparation);
         String space = " ";
+        String strSequence= getContext().getString(R.string.sequence);
 
         //récupération des infos pour remplir les textView
         Entrainement entrainement = entrainementAvecSequences.getEntrainement();
@@ -52,6 +54,16 @@ public class EntrainementListAdapter extends ArrayAdapter<EntrainementAvecSequen
         textViewTempsPreparation.setText(strTemps + space + strPreparation + space + entrainement.getTempsPreparation() + space + strSecondes);
         textViewTempsRepos.setText(strTemps + space + strRepos + space + entrainement.getTempsRepos() + space + strSecondes);
 
+        //récupération des noms des sequences pour les afficher
+        String strListeSequences = strSequence + "\n";
+
+        for (int i = 0; i < entrainementAvecSequences.getSequences().size(); i++){
+
+            strListeSequences += entrainementAvecSequences.getSeq().get(i).getNom();
+            strListeSequences += space;
+        }
+
+        textViewNomsSequences.setText(strListeSequences);
 
         return rowView;
     }

@@ -45,6 +45,7 @@ public class SequenceListAdapter extends ArrayAdapter<SequenceAvecCycles> {
         String space = " ";
         String strRepetition= getContext().getString(R.string.repetition);
         String strCycles = getContext().getString(R.string.cycle);
+
         //on récupère les infos et on remplit de les textView
         Sequence sequence = sequenceAvecCycles.getSequence();
 
@@ -64,7 +65,7 @@ public class SequenceListAdapter extends ArrayAdapter<SequenceAvecCycles> {
         textViewCycles.setText(strListesCycles);
 
 
-        //récupération du nombre de répétitions en fonction de certains Intent ou rl'info ne passe pas
+        //récupération du nombre de répétitions en fonction de certains Intent ou l'info ne passe pas
         if(sequence.getRepetition() != 0){
             textViewNbRepet.setText(strRepetition + space + sequence.getRepetition());
         }else{

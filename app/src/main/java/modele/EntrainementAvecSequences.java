@@ -67,6 +67,10 @@ public class EntrainementAvecSequences implements Parcelable {
         return (ArrayList<? extends Parcelable>) sequences;
     }
 
+    public List<Sequence> getSeq(){
+        return sequences;
+    }
+
     @Override
     public int describeContents() {
         return 0;

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -201,6 +202,7 @@ public class ListeCycle extends AppCompatActivity {
                         goBacktoSequence.putParcelableArrayListExtra("arrayListCycleClicked", cycles);
                         goBacktoSequence.putExtra("nomSequence", nomSequence);
                         goBacktoSequence.putExtra("nbRepet", nbRepet);
+                        goBacktoSequence.putExtra("repet", cycleClicked.getNbRepet());
                         goBacktoSequence.putExtra("strTempsReposLong", strTempsReposLong);
                         goBacktoSequence.putExtra("description", description);
                         goBacktoSequence.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

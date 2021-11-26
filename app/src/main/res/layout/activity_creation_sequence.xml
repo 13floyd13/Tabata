@@ -12,14 +12,14 @@
         android:text="@string/creationSequence"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/titrePage"/>
 
     <TextView
         android:id="@+id/textNomSequence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="@string/nom"
         app:layout_constraintTop_toBottomOf="@+id/titrePage"
         tools:ignore="MissingConstraints"/>
@@ -28,7 +28,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintLeft_toRightOf="@+id/textNomSequence"
         app:layout_constraintTop_toBottomOf="@+id/titrePage"
         android:id="@+id/nomSequence"
@@ -38,7 +38,7 @@
         android:id="@+id/textDescriptionSequence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="@string/description"
         app:layout_constraintTop_toBottomOf="@+id/textNomSequence"
         tools:ignore="MissingConstraints"/>
@@ -47,7 +47,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintLeft_toRightOf="@+id/textDescriptionSequence"
         app:layout_constraintTop_toBottomOf="@+id/textNomSequence"
         android:id="@+id/descriptionSequence"
@@ -57,7 +57,7 @@
         android:id="@+id/textNbRepetitions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="@string/repetition"
         app:layout_constraintTop_toBottomOf="@+id/textDescriptionSequence"
         tools:ignore="MissingConstraints"/>
@@ -68,7 +68,7 @@
         android:text="4"
         android:inputType="numberSigned"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintLeft_toRightOf="@+id/textNbRepetitions"
         app:layout_constraintTop_toBottomOf="@+id/textDescriptionSequence"
         android:id="@+id/nbRepetitions"
@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:text=""
         app:layout_constraintTop_toBottomOf="@+id/textNbRepetitions"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:id="@+id/buttonAjouterCycle"
         android:onClick="onAjouterCycle"/>
 
@@ -88,7 +88,7 @@
         android:layout_height="wrap_content"
         android:text=""
         app:layout_constraintTop_toBottomOf="@+id/buttonAjouterCycle"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:id="@+id/buttonCreerCycle"
         android:onClick="onCreerCycle"
         />
@@ -97,7 +97,7 @@
         android:id="@+id/textTempsRepos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="@string/tempsReposLong"
         app:layout_constraintTop_toBottomOf="@+id/buttonCreerCycle"
         tools:ignore="MissingConstraints"/>
@@ -108,7 +108,7 @@
         android:text="60"
         android:inputType="numberSigned"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintLeft_toRightOf="@+id/textTempsRepos"
         app:layout_constraintTop_toBottomOf="@+id/buttonCreerCycle"
         android:id="@+id/tempsRepos"
@@ -119,7 +119,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/buttonCreerCycle"
         app:layout_constraintLeft_toRightOf="@+id/tempsRepos"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="5dp"
         android:text="@string/secondes"></TextView>
 
@@ -127,20 +127,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/tempsRepos"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="@string/save"
         android:id="@+id/buttonSave"
         android:onClick="onSave"></Button>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
+        android:layout_marginTop="0dp"
         app:layout_constraintTop_toBottomOf="@+id/buttonSave">
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="0dp"
         android:id="@+id/listCycles"></ListView>
 
     </ScrollView>

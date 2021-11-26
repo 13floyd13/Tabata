@@ -40,6 +40,8 @@ public class CreationSequence extends AppCompatActivity {
     private String nomSequence;
     private String description;
     private String strTempsReposLong;
+    private int repet;
+
 
     //Views
     private ListView listCycleClicked;
@@ -73,6 +75,13 @@ public class CreationSequence extends AppCompatActivity {
             nomSequence = extras.getString("nomSequence");
             description = extras.getString("description");
             strTempsReposLong = extras.getString("strTempsReposLong");
+            repet = extras.getInt("repet");
+        }
+
+        //on set le nb de repetitions pour que ça apparaisse dans la liste
+        if(!cyclesAvecTravails.isEmpty()){
+
+            cyclesAvecTravails.get(cyclesAvecTravails.size()-1).setNbRepet(repet);
         }
 
         //On test si on a reçu quelque chose via le getIntent et si oui on l'introduit dans les editText liés

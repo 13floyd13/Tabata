@@ -13,8 +13,6 @@ public class SequenceAvecCycles implements Parcelable {
     @Embedded
     public Sequence sequence;
 
-    //@Embedded
-    //private Integer nbRepet;
 
     //Relation de type many-to-many entre Sequence et Cycle
     @Relation(
@@ -38,41 +36,6 @@ public class SequenceAvecCycles implements Parcelable {
         cycles = in.createTypedArrayList(Cycle.CREATOR);
     }
 
-   /* @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(sequence, flags);
-        dest.writeTypedList(cycles);
-
-    }*/
-
-    /*@Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<SequenceAvecCycles> CREATOR = new Creator<SequenceAvecCycles>() {
-        @Override
-        public SequenceAvecCycles createFromParcel(Parcel in) {
-            return new SequenceAvecCycles(in);
-        }
-
-        @Override
-        public SequenceAvecCycles[] newArray(int size) {
-            return new SequenceAvecCycles[size];
-        }
-    };*/
-
-    /*public static final Creator<SequenceAvecCycles> CREATOR = new Creator<SequenceAvecCycles>() {
-        @Override
-        public SequenceAvecCycles createFromParcel(Parcel in) {
-            return new SequenceAvecCycles(in);
-        }
-
-        @Override
-        public SequenceAvecCycles[] newArray(int size) {
-            return new SequenceAvecCycles[size];
-        }
-    };*/
 
     public static final Creator<SequenceAvecCycles> CREATOR = new Creator<SequenceAvecCycles>() {
         @Override
@@ -124,10 +87,4 @@ public class SequenceAvecCycles implements Parcelable {
         dest.writeTypedList(cycles);
     }
 
-    /*@Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(sequence, flags);
-        //dest.writeInt(nbRepet);
-        dest.writeTypedList(cycles);
-    }*/
 }

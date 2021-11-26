@@ -12,14 +12,14 @@
         android:text="@string/creationEntrainement"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/titrePage"/>
 
     <TextView
         android:id="@+id/textNomEntrainement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="@string/nom"
         app:layout_constraintTop_toBottomOf="@+id/titrePage"
         tools:ignore="MissingConstraints"/>
@@ -28,7 +28,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintLeft_toRightOf="@+id/textNomEntrainement"
         app:layout_constraintTop_toBottomOf="@+id/titrePage"
         android:id="@+id/nomEntrainement"
@@ -38,7 +38,7 @@
         android:id="@+id/textDescriptionEntrainement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="@string/description"
         app:layout_constraintTop_toBottomOf="@+id/textNomEntrainement"
         tools:ignore="MissingConstraints"/>
@@ -47,7 +47,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintLeft_toRightOf="@+id/textDescriptionEntrainement"
         app:layout_constraintTop_toBottomOf="@+id/textNomEntrainement"
         android:id="@+id/descriptionEntrainement"
@@ -57,7 +57,7 @@
         android:id="@+id/textTempsPreparation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="@string/preparation"
         app:layout_constraintTop_toBottomOf="@+id/textDescriptionEntrainement"
         tools:ignore="MissingConstraints"/>
@@ -68,7 +68,7 @@
         android:text="10"
         android:inputType="numberSigned"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintLeft_toRightOf="@+id/textTempsPreparation"
         app:layout_constraintTop_toBottomOf="@+id/textDescriptionEntrainement"
         android:id="@+id/tempsPreparation"
@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/textDescriptionEntrainement"
         app:layout_constraintLeft_toRightOf="@+id/tempsPreparation"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="5dp"
         android:text="secondes"></TextView>
 
@@ -88,7 +88,7 @@
         android:layout_height="wrap_content"
         android:text=""
         app:layout_constraintTop_toBottomOf="@+id/textTempsPreparation"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:id="@+id/buttonAjouterSequence"
         android:onClick="onAjouterSequence"/>
 
@@ -97,7 +97,7 @@
         android:layout_height="wrap_content"
         android:text=""
         app:layout_constraintTop_toBottomOf="@+id/buttonAjouterSequence"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:id="@+id/buttonCreerSequence"
         android:onClick="onCreerSequence"
         />
@@ -106,7 +106,7 @@
         android:id="@+id/textTempsRepos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="@string/tempsReposLong"
         app:layout_constraintTop_toBottomOf="@+id/buttonCreerSequence"
         tools:ignore="MissingConstraints"/>
@@ -117,7 +117,7 @@
         android:text="60"
         android:inputType="numberSigned"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintLeft_toRightOf="@+id/textTempsRepos"
         app:layout_constraintTop_toBottomOf="@+id/buttonCreerSequence"
         android:id="@+id/tempsRepos"
@@ -128,7 +128,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/buttonCreerSequence"
         app:layout_constraintLeft_toRightOf="@+id/tempsRepos"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="5dp"
         android:text="@string/secondes"></TextView>
 
@@ -136,17 +136,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/tempsRepos"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="@string/save"
         android:id="@+id/buttonSave"
         android:onClick="onSave"></Button>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="300dp"
         app:layout_constraintTop_toBottomOf="@+id/buttonSave"
-        android:layout_marginTop="0dp">
+        android:layout_marginTop="0dp"
+        android:id="@+id/scroll">
 
         <ListView
             android:id="@+id/listSequence"
