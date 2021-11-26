@@ -78,7 +78,7 @@ public class ListeSequence extends AppCompatActivity {
         popup2 = new AlertDialog.Builder(activity);
 
 
-        //récupération du boolean si on vient d'entrainement
+        //récupération des Intents
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             sequences = extras.getParcelableArrayList("arrayListSequences");
@@ -114,7 +114,9 @@ public class ListeSequence extends AppCompatActivity {
         adapter = new SequenceListAdapter(this, new ArrayList<SequenceAvecCycles>());
         listSequence.setAdapter(adapter);
 
+        //si on vient du menu Supression
         if (suppression) {
+
             listSequence.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -126,18 +128,27 @@ public class ListeSequence extends AppCompatActivity {
                     //récupération des sequences qui contiennent ce cycle
                     getEntrainementsAssocies(sequenceASupprimer);
 
+                    //mise en place de la popup de validation de la suppression de la sequence
                     popup1.setTitle(strSuppression);
                     popup1.setMessage(strsuppressionSequence + space + sequenceASupprimer.getNom());
 
                     popup1.setPositiveButton(oui, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
+                            //on regarde si on aura des entrainements qui deviendront vides et devront donc être supprimées
+                            //cela demandera une deuxième validation à l'utilisateur
                             if(!entrainementAsupprimer.isEmpty()){
+
                                 askSuppression();
+
+                                //sinon on supprime juste la séquence
                             }else{
+
                                 suppression();
                             }
 
+                            //fermeture de la popup
                             dialog.dismiss();
                         }
                     });
@@ -154,6 +165,7 @@ public class ListeSequence extends AppCompatActivity {
                 }
             });
 
+            //si on vient du menu Creation
         }else {
 
             //ajout d'un évenement click à la listeView
@@ -177,7 +189,9 @@ public class ListeSequence extends AppCompatActivity {
                         toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
                         toast.show();
 
+                        //si pas ajouté on l'ajoute à la creation d'entrainement
                     }else {
+
                         Intent goBacktoEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
                         sequences.add(sequenceClicked);
                         goBacktoEntrainement.putExtra("nbRepet", sequenceClicked.getNbRepet());
@@ -220,6 +234,7 @@ public class ListeSequence extends AppCompatActivity {
         recup.execute();
     }
 
+    //récupérations de tous les entrainements contenant la sequence qui sera supprimé
     public void getEntrainementsAssocies(Sequence sequenceQuiSeraSupprime){
 
         class RecupererEntrainementsAssocies extends android.os.AsyncTask<Void, Void, List<Entrainement>>{
@@ -242,6 +257,8 @@ public class ListeSequence extends AppCompatActivity {
             protected void onPostExecute(List<Entrainement> entrainements) {
                 super.onPostExecute(entrainements);
 
+                //Pour chaque entrainement trouvé
+                //on va regarder s'il ne contient qu'une sequence ou non
                 for (int i = 0; i < entrainements.size(); i++){
                     checkEntrainement(entrainements.get(i));
                 }
@@ -252,6 +269,9 @@ public class ListeSequence extends AppCompatActivity {
         recupererEntrainementsAssocies.execute();
     }
 
+    //On va regarder sur les entrainements contenant la sequences à supprimer
+    //s'ils contiennent d'autres sequences ou non
+    //s'ils n'ont pas d'autre sequence, il faudra alors les ajouter à une liste d'entrainement à supprimer
     public void checkEntrainement(Entrainement entrainement){
 
         class RecupererEntrainementADelete extends android.os.AsyncTask<Void, Void, Integer>{
@@ -270,6 +290,8 @@ public class ListeSequence extends AppCompatActivity {
             protected void onPostExecute(Integer nbSequences){
                 super.onPostExecute(nbSequences);
 
+                //Si l'entrainement ne contient qu'une sequence (la sequence qui sera supprimé)
+                //on ajoute cet entrainement à une liste
                 if (nbSequences == 1){
                     entrainementAsupprimer.add(entrainement);
                 }
@@ -281,20 +303,24 @@ public class ListeSequence extends AppCompatActivity {
 
     }
 
+    //methode appelée uniquement si on a au moins un entrainement à supprimer en plus de la sequence
     public void askSuppression(){
 
+        //préparation du message qui va contenir les noms des entrainements à supprimer
         String space = " ";
         String message = strSuppressionSupplementaire + "\n";
 
         message += strEntrainement + space;
 
+        //récupération des noms des entrainements à supprimer
         for (int i = 0; i < entrainementAsupprimer.size(); i++){
 
             message += entrainementAsupprimer.get(i).getNom() + space;
 
         }
 
-
+        //on prépare une popup de confirmation de suppression
+        // des elements en plus de la séquence cliqué
         popup2.setTitle(strSuppression);
         popup2.setMessage(message);
 
@@ -302,6 +328,7 @@ public class ListeSequence extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                //si oui on lance la suppression
                 suppression();
             }
         });
@@ -309,6 +336,8 @@ public class ListeSequence extends AppCompatActivity {
         popup2.setNegativeButton(non, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                //sinon on stop l'activité et on ne supprimera pas le travail non plus
                 finish();
             }
         });
@@ -316,11 +345,12 @@ public class ListeSequence extends AppCompatActivity {
         popup2.show();
     }
 
+    //méthode qui va supprimer tout ce qu'on a besoin
     public void suppression(){
 
         class SupprimerToutAsync extends android.os.AsyncTask<Void, Void, Void> {
 
-            //suppression de l'objet de la bd
+            //suppression des objets de la bd
             @Override
             protected Void doInBackground(Void... voids) {
 

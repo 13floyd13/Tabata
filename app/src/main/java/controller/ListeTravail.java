@@ -77,7 +77,7 @@ public class ListeTravail extends AppCompatActivity {
         popup1 = new AlertDialog.Builder(activity);
         popup2 = new AlertDialog.Builder(activity);
 
-        //récupération du boolen si on vient de cycle
+        //récupération des intents
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             travails = extras.getParcelableArrayList("arrayListTravails");
@@ -114,7 +114,7 @@ public class ListeTravail extends AppCompatActivity {
         adapter = new TravailListAdapter(this, new ArrayList<Travail>());
         listTravail.setAdapter(adapter);
 
-
+        //si on vient du menu Supression
         if (suppression) {
 
             listTravail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -127,18 +127,25 @@ public class ListeTravail extends AppCompatActivity {
                     //récupération des cycles qui contiennent ce travail
                     getCyclesAssociated();
 
+                    //mise en place de la popup de validation de la suppression de ce travail
                     popup1.setTitle(strSuppression);
                     popup1.setMessage(strsuppressionTravail + space + travailClicked.getNom());
 
                     popup1.setPositiveButton(oui, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
+                            //on regarde si on aura des cycles qui deviendront vides et devront donc être supprimés
+                            //cela demandera une deuxième validation à l'utilisateur
                             if(!cyclesAsupprimer.isEmpty()){
                                 askSuppression();
+
+                                //sinon on supprime juste le travail
                             }else{
                                 suppression();
                             }
 
+                            //fermeture de la popup
                             dialog.dismiss();
                         }
                     });
@@ -147,14 +154,17 @@ public class ListeTravail extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
+                            //si non on ferme juste l'activité
                             finish();
                         }
                     });
 
+                    //affichage de la popup
                     popup1.show();
                 }
             });
 
+            //si on vient du menu Creation
         }else {
 
             //ajout d'un évenement click à la listeView
@@ -178,6 +188,7 @@ public class ListeTravail extends AppCompatActivity {
                         toast.setGravity(Gravity.TOP | Gravity.CENTER, 20, 30);
                         toast.show();
 
+                        //sinon on ajoute le travail à la liste de travails déja cliqué avant et on envoie à l'activity de creation de cycle
                     } else {
 
                         Intent goBacktoCycle = new Intent(getApplicationContext(), CreationCycle.class);
@@ -222,7 +233,7 @@ public class ListeTravail extends AppCompatActivity {
         recup.execute();
     }
 
-    //récupération des  id des cycles qui contiennent le travail cliqué
+    //récupération des  id des cycles puis des cycles qui contiennent le travail cliqué
     public void getCyclesAssociated(){
 
         class RecupererCyclesAssociesAsync extends android.os.AsyncTask<Void, Void, List<Cycle>>{
@@ -246,9 +257,10 @@ public class ListeTravail extends AppCompatActivity {
             protected void onPostExecute(List<Cycle> cyclesACheck){
                 super.onPostExecute(cyclesACheck);
 
+                //Pour chaque cycle qui contient le travail à supprimer
+                //on va vérifier si ce cycle ne contient que ce travail
+                //dans ce cas il faudra le supprimer
                 for (int i = 0; i < cyclesACheck.size(); i++){
-
-
                     getNumberTravails(cyclesACheck.get(i));
                 }
             }
@@ -261,6 +273,7 @@ public class ListeTravail extends AppCompatActivity {
 
     //récupération des cycles ne contenant que le travail cliqué
     //s'ils contiennent que le travail cliqué on doit les supprimer pour ne pas avoir de cycle vide dans l'application
+    //on les ajoutes donc dans une liste de cycles à supprimer
     public void getNumberTravails(Cycle cycleACheck){
 
         class RecupererCyclesADelete extends android.os.AsyncTask<Void, Void, Integer>{
@@ -273,15 +286,18 @@ public class ListeTravail extends AppCompatActivity {
                         .getNbTravails(cycleACheck.getCycleId());
 
                 return nbTravails;
-
             }
 
             @Override
             protected void onPostExecute(Integer nbTravails){
                 super.onPostExecute(nbTravails);
 
+                //Si le nombre de travail ==1 c'est que le cycle ne contient que le travail à supprimer
+                //on ajoute donc le cycle en question à la liste de cycles à supprimer
                 if (nbTravails == 1){
                     cyclesAsupprimer.add(cycleACheck);
+
+                    //On va vérifier de la même façon toutes les sequences qui contiennent ce cycle qui sera supprimé
                     getSequenceAssocies(cycleACheck);
                 }
             }
@@ -292,6 +308,7 @@ public class ListeTravail extends AppCompatActivity {
 
     }
 
+    //on récupère toutes les sequences contenant le cycle qui sera supprimé
     public void getSequenceAssocies(Cycle cycleQuiSeraDelete){
 
         class RecupererSequenceAssocies extends android.os.AsyncTask<Void, Void, List<Sequence>>{
@@ -313,6 +330,7 @@ public class ListeTravail extends AppCompatActivity {
                 super.onPostExecute(sequences);
 
                 for (int i = 0; i < sequences.size(); i++){
+                    //on va vérifier chaque séquence s'il elle contient suelement le cycle à supprimer ou non
                     checkSequence(sequences.get(i));
                 }
             }
@@ -324,6 +342,9 @@ public class ListeTravail extends AppCompatActivity {
 
     }
 
+    //on va regarder le nombre de cycle dans cette sequence
+    //si un seul cycle, ce cycle sera celui qui sera supprimé
+    //il faudra donc ajouter la sequence dans une list de sequence à supprimer
     public void checkSequence(Sequence sequence){
 
         class RecupererSequenceADelete extends android.os.AsyncTask<Void, Void, Integer>{
@@ -342,8 +363,11 @@ public class ListeTravail extends AppCompatActivity {
             protected void onPostExecute(Integer nbCycles){
                 super.onPostExecute(nbCycles);
 
+                //si nombre de cycle dans la sequence = 1 on ajoute la sequence à la liste de sequence à supprimer
                 if (nbCycles == 1){
                     sequencesAsupprimer.add(sequence);
+
+                    //on va maintenant récupérer tous les entrainements qui contiennent cette sequence sui sera supprimé
                     getEntrainementsAssocies(sequence);
                 }
             }
@@ -354,6 +378,7 @@ public class ListeTravail extends AppCompatActivity {
 
     }
 
+    //récupérations de tous les entrainements contenant la sequence qui sera supprimé
     public void getEntrainementsAssocies(Sequence sequenceQuiSeraSupprime){
 
         class RecupererEntrainementsAssocies extends android.os.AsyncTask<Void, Void, List<Entrainement>>{
@@ -376,6 +401,8 @@ public class ListeTravail extends AppCompatActivity {
             protected void onPostExecute(List<Entrainement> entrainements) {
                 super.onPostExecute(entrainements);
 
+                //Pour chaque entrainement trouvé
+                //on va regarder s'il ne contient qu'une sequence ou non
                 for (int i = 0; i < entrainements.size(); i++){
                     checkEntrainement(entrainements.get(i));
                 }
@@ -386,6 +413,9 @@ public class ListeTravail extends AppCompatActivity {
         recupererEntrainementsAssocies.execute();
     }
 
+    //On va regarder sur les entrainements contenant la sequences à supprimer
+    //s'ils contiennent d'autres sequences ou non
+    //s'ils n'ont pas d'autre sequence, il faudra alors les ajouter à une liste d'entrainement à supprimer
     public void checkEntrainement(Entrainement entrainement){
 
         class RecupererEntrainementADelete extends android.os.AsyncTask<Void, Void, Integer>{
@@ -404,6 +434,8 @@ public class ListeTravail extends AppCompatActivity {
             protected void onPostExecute(Integer nbSequences){
                 super.onPostExecute(nbSequences);
 
+                //Si l'entrainement ne contient qu'une sequence (la sequence qui sera supprimé)
+                //on ajoute cet entrainement à une liste
                 if (nbSequences == 1){
                     entrainementAsupprimer.add(entrainement);
                 }
@@ -415,8 +447,10 @@ public class ListeTravail extends AppCompatActivity {
 
     }
 
+    //methode appelée uniquement si on a au moins un cycle à supprimer en plus du travail
     public void askSuppression(){
 
+        //préparation du message qui va contenir les noms des cycles à supprimer
         String space = " ";
         String message = strSuppressionSupplementaire + "\n";
         message += strCycle + space;
@@ -425,6 +459,7 @@ public class ListeTravail extends AppCompatActivity {
             message += cyclesAsupprimer.get(i).getNom() + space;
         }
 
+        //si on a des sequences à supprimer on va les ajouter dans le message
         if (!sequencesAsupprimer.isEmpty()){
 
             message += "\n";
@@ -435,6 +470,7 @@ public class ListeTravail extends AppCompatActivity {
             }
         }
 
+        //si on a des entrainements à supprimer on va les ajouter dans le message
         if (!entrainementAsupprimer.isEmpty()){
 
             message += "\n";
@@ -447,6 +483,8 @@ public class ListeTravail extends AppCompatActivity {
         }
 
 
+        //on prépare une popup de confirmation de suppression
+        // des elements en plus du travail cliqué
         popup2.setTitle(strSuppression);
         popup2.setMessage(message);
 
@@ -454,6 +492,7 @@ public class ListeTravail extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                //si oui on lance la suppression
                 suppression();
             }
         });
@@ -461,6 +500,7 @@ public class ListeTravail extends AppCompatActivity {
         popup2.setNegativeButton(non, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //sinon on stop l'activité et on ne supprimera pas le travail non plus
                 finish();
             }
         });
@@ -468,11 +508,12 @@ public class ListeTravail extends AppCompatActivity {
         popup2.show();
     }
 
+    //méthode qui va supprimer tout ce qu'on a besoin
     public void suppression(){
 
         class SupprimerToutAsync extends android.os.AsyncTask<Void, Void, Void> {
 
-            //suppression de l'objet de la bd
+            //suppression des objets de la bd
             @Override
             protected Void doInBackground(Void... voids) {
                 mDb.travailDao()

@@ -39,7 +39,7 @@ public class CreationEntrainement extends AppCompatActivity {
     private ArrayList<SequenceAvecCycles> sequenceAvecCycles = new ArrayList<SequenceAvecCycles>();
     private ArrayList<Sequence> sequences = new ArrayList<>();
     private String nomEntrainement;
-    private Sequence sequenceRecup;
+    private int nbRepet;
 
     //Views
     private ListView listSequenceClicked;
@@ -70,7 +70,12 @@ public class CreationEntrainement extends AppCompatActivity {
         if (extras != null) {
             sequenceAvecCycles = extras.getParcelableArrayList("arrayListSequenceClicked");
             nomEntrainement = extras.getString("nomEntrainement");
-            int nbRepet = extras.getInt("nbRepet");
+            nbRepet = extras.getInt("nbRepet");
+
+        }
+
+        //on set le nb de repetitions pour que cela apparaisse dans la liste
+        if (!sequenceAvecCycles.isEmpty()){
             sequenceAvecCycles.get(sequenceAvecCycles.size()-1).setNbRepet(nbRepet);
         }
 
