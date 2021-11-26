@@ -62,6 +62,18 @@ public class SequenceAvecCycles implements Parcelable {
         }
     };*/
 
+    /*public static final Creator<SequenceAvecCycles> CREATOR = new Creator<SequenceAvecCycles>() {
+        @Override
+        public SequenceAvecCycles createFromParcel(Parcel in) {
+            return new SequenceAvecCycles(in);
+        }
+
+        @Override
+        public SequenceAvecCycles[] newArray(int size) {
+            return new SequenceAvecCycles[size];
+        }
+    };*/
+
     public static final Creator<SequenceAvecCycles> CREATOR = new Creator<SequenceAvecCycles>() {
         @Override
         public SequenceAvecCycles createFromParcel(Parcel in) {
@@ -109,7 +121,13 @@ public class SequenceAvecCycles implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(sequence, flags);
-        //dest.writeInt(nbRepet);
         dest.writeTypedList(cycles);
     }
+
+    /*@Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(sequence, flags);
+        //dest.writeInt(nbRepet);
+        dest.writeTypedList(cycles);
+    }*/
 }
