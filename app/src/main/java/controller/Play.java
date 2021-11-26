@@ -426,6 +426,9 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         //iréation pour passer au prochain compteur
         iterateurCompteur++;
 
+        if(start == false){
+            compteurTempsTotal.start();
+        }
         //lancement du Compteur
         lancerEntrainement();
     }

@@ -40,6 +40,7 @@ public class CreationEntrainement extends AppCompatActivity {
     private ArrayList<Sequence> sequences = new ArrayList<>();
     private String nomEntrainement;
     private int nbRepet;
+    private ArrayList<Integer> repets = new ArrayList<Integer>();
 
     //Views
     private ListView listSequenceClicked;
@@ -71,12 +72,14 @@ public class CreationEntrainement extends AppCompatActivity {
             sequenceAvecCycles = extras.getParcelableArrayList("arrayListSequenceClicked");
             nomEntrainement = extras.getString("nomEntrainement");
             nbRepet = extras.getInt("nbRepet");
-
+            repets = (ArrayList<Integer>) getIntent().getSerializableExtra("repets");
         }
 
-        //on set le nb de repetitions pour que cela apparaisse dans la liste
-        if (!sequenceAvecCycles.isEmpty()){
-            sequenceAvecCycles.get(sequenceAvecCycles.size()-1).setNbRepet(nbRepet);
+        // on set le nombre de repetitions des sequences pour afficher dans la listView
+        if(!repets.isEmpty()){
+            for (int i = 0; i < repets.size(); i++){
+                sequenceAvecCycles.get(i).setNbRepet(repets.get(i));
+            }
         }
 
         //On test si on a reçu quelque chose via le getIntent et si oui on l'introduit dans l'editText
@@ -127,6 +130,7 @@ public class CreationEntrainement extends AppCompatActivity {
         Intent goToListSequence = new Intent(getApplicationContext(), ListeSequence.class);
 
         //envoie des sequences déja ajoutés au préalable
+        goToListSequence.putIntegerArrayListExtra("repets", repets);
         goToListSequence.putParcelableArrayListExtra("arrayListSequences", sequenceAvecCycles);
         goToListSequence.putExtra("nomEntrainement", nomEntrainement);
         startActivity(goToListSequence);

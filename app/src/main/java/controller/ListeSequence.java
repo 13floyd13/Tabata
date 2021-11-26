@@ -45,6 +45,7 @@ public class ListeSequence extends AppCompatActivity {
     private AlertDialog.Builder popup1;
     private AlertDialog.Builder popup2;
     private Sequence sequenceASupprimer;
+    private ArrayList<Integer> repets = new ArrayList<Integer>();
 
     //Views
     private ListView listSequence;
@@ -84,6 +85,7 @@ public class ListeSequence extends AppCompatActivity {
             sequences = extras.getParcelableArrayList("arrayListSequences");
             suppression = extras.getBoolean("SUPPRESSION_KEY");
             nomEntrainement = extras.getString("nomEntrainement");
+            repets = (ArrayList<Integer>) getIntent().getSerializableExtra("repets");
         }
 
         //on récupère les strings à concaténer
@@ -194,6 +196,8 @@ public class ListeSequence extends AppCompatActivity {
 
                         Intent goBacktoEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
                         sequences.add(sequenceClicked);
+                        repets.add(sequenceClicked.getNbRepet());
+                        goBacktoEntrainement.putIntegerArrayListExtra("repets", repets);
                         goBacktoEntrainement.putExtra("nbRepet", sequenceClicked.getNbRepet());
                         goBacktoEntrainement.putParcelableArrayListExtra("arrayListSequenceClicked", sequences);
                         goBacktoEntrainement.putExtra("nomEntrainement", nomEntrainement);

@@ -50,6 +50,7 @@ public class ListeCycle extends AppCompatActivity {
     private AlertDialog.Builder popup1;
     private AlertDialog.Builder popup2;
     private Cycle cycleASupprimer;
+    private ArrayList<Integer> repets = new ArrayList<Integer>();
 
     //Views
     private ListView listCycle;
@@ -90,6 +91,7 @@ public class ListeCycle extends AppCompatActivity {
             nomSequence = extras.getString("nomSequence");
             description = extras.getString("description");
             strTempsReposLong = extras.getString("strTempsReposLong");
+            repets = (ArrayList<Integer>) getIntent().getSerializableExtra("repets");
         }
 
         //on récupère les strings à concaténer
@@ -198,11 +200,12 @@ public class ListeCycle extends AppCompatActivity {
                     }else {
 
                         Intent goBacktoSequence = new Intent(getApplicationContext(), CreationSequence.class);
+                        repets.add(cycleClicked.getNbRepet());
                         cycles.add(cycleClicked);
+                        goBacktoSequence.putIntegerArrayListExtra("repets", repets);
                         goBacktoSequence.putParcelableArrayListExtra("arrayListCycleClicked", cycles);
                         goBacktoSequence.putExtra("nomSequence", nomSequence);
                         goBacktoSequence.putExtra("nbRepet", nbRepet);
-                        goBacktoSequence.putExtra("repet", cycleClicked.getNbRepet());
                         goBacktoSequence.putExtra("strTempsReposLong", strTempsReposLong);
                         goBacktoSequence.putExtra("description", description);
                         goBacktoSequence.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
