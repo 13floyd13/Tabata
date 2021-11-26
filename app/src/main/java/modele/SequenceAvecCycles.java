@@ -12,7 +12,9 @@ import java.util.List;
 public class SequenceAvecCycles implements Parcelable {
     @Embedded
     public Sequence sequence;
-    private int nbRepet;
+
+    //@Embedded
+    //private Integer nbRepet;
 
     //Relation de type many-to-many entre Sequence et Cycle
     @Relation(
@@ -26,7 +28,7 @@ public class SequenceAvecCycles implements Parcelable {
     public SequenceAvecCycles(Sequence sequence, List<Cycle> cycles){
         this.sequence = sequence;
         this.cycles = cycles;
-        this.nbRepet = sequence.getRepetition();
+        //this.nbRepet = sequence.getRepetition();
     }
 
     //Méthodes
@@ -92,11 +94,11 @@ public class SequenceAvecCycles implements Parcelable {
     }
 
     public int getNbRepet() {
-        return nbRepet;
+        return sequence.getRepetition();
     }
 
     public void setNbRepet(int nbRepet) {
-        this.nbRepet = nbRepet;
+        sequence.setRepetition(nbRepet);
     }
 
     @Override
@@ -107,7 +109,7 @@ public class SequenceAvecCycles implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(sequence, flags);
-        dest.writeInt(nbRepet);
+        //dest.writeInt(nbRepet);
         dest.writeTypedList(cycles);
     }
 }
