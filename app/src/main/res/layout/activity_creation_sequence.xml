@@ -78,7 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
-        app:layout_constraintTop_toBottomOf="@+id/textNbRepetitions"
+        app:layout_constraintTop_toBottomOf="@+id/textTempsRepos"
         android:layout_marginTop="20dp"
         android:id="@+id/buttonAjouterCycle"
         android:onClick="onAjouterCycle"/>
@@ -99,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/tempsReposLong"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCreerCycle"
+        app:layout_constraintTop_toBottomOf="@+id/nbRepetitions"
         tools:ignore="MissingConstraints"/>
 
     <EditText
@@ -110,14 +110,14 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         app:layout_constraintLeft_toRightOf="@+id/textTempsRepos"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCreerCycle"
+        app:layout_constraintTop_toBottomOf="@+id/nbRepetitions"
         android:id="@+id/tempsRepos"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCreerCycle"
+        app:layout_constraintTop_toBottomOf="@+id/nbRepetitions"
         app:layout_constraintLeft_toRightOf="@+id/tempsRepos"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="5dp"
@@ -126,7 +126,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tempsRepos"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCreerCycle"
         android:layout_marginTop="20dp"
         android:text="@string/save"
         android:id="@+id/buttonSave"
