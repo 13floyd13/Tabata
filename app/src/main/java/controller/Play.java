@@ -370,9 +370,15 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
             //on démarre le compteur
             compteurTravailEnCours.start();
 
+            if (compteurTempsTotal.getTimer() == null){
+                compteurTempsTotal.start();
+            }
+
             //boolean pour gérer le design du bouton start/pause
             start = true;
             btnPause.setText(strPause);
+
+
 
             //mise à jour du visuel du timer
             majCompteur();
