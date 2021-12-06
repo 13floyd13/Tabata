@@ -58,6 +58,9 @@ public class MenuCreation extends AppCompatActivity {
 
     }
 
+    //méthodes de redirections vers les listes choisies
+
+
     public void onCreationEntrainement(View view) {
         Intent goToCreationEntrainement = new Intent(getApplicationContext(), CreationEntrainement.class);
         startActivity(goToCreationEntrainement);

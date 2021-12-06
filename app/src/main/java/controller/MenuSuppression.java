@@ -59,6 +59,8 @@ public class MenuSuppression extends AppCompatActivity {
         bSuppressionTravail.setText(deleteTravail);
     }
 
+    //méthodes de redirections vers les listes choisies
+
     public void onSuppressionEntrainement(View view) {
         Intent goToListEntrainement = new Intent(getApplicationContext(), ListeEntrainement.class);
         goToListEntrainement.putExtra("SUPPRESSION_KEY", SUPPRESSION_KEY);
