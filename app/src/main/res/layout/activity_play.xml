@@ -120,6 +120,16 @@
         android:onClick="onNext"
         />
 
+    <Button
+        android:id="@+id/fin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        android:onClick="onFin"
+        />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

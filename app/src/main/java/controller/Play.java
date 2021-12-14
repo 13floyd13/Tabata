@@ -552,4 +552,8 @@ public class Play extends AppCompatActivity implements OnUpdateListener {
         goToFinEntrainement.putExtra("nomEntrainement", entrainement.getNom());
         startActivity(goToFinEntrainement);
     }
+
+    public void onFin(View view) {
+        finEntrainement();
+    }
 }
